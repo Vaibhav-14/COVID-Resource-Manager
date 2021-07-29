@@ -1,4 +1,4 @@
-package com.mycompany.beans;
+package com.mycompany.entity;
 
 import java.util.HashSet;
 import java.util.Set;
