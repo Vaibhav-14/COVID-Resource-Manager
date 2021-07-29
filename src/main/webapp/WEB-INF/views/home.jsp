@@ -5,11 +5,11 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Employee registration</title>
+<title>User registration</title>
 </head>
 <body>
 
-<b>Employee Registration Form</b> <br><br>
+<b>User Registration Form</b> <br><br>
 
 <sf:form  modelAttribute="user" method="POST">
 	
