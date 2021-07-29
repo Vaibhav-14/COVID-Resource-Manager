@@ -1,6 +1,6 @@
-package com.mycompany.entity;
+package com.mycompany.beans;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,41 +17,28 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+
 @Entity
 @Table(name = "users")
 public class User {
-	
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private int id;
-	
-	@Column
-	private String name;
-	
-	@Column
+	private String firstname;
+	private String lastname;
 	private String username;
-	
-	@Column
 	private String email;
-	
-	@Column
 	private String password;
-	
-	@Column(name="account_status")
+	private String mobile;
 	private String accountStatus;
-	
-	@Column(name="mobile")
-	private String mobileNumber;
-	
-	@Column
+
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date dateOfBirth;
 	private String gender;
-	
-	@Column(name = "date_of_birth")
-	private Date dob;
-	
-	@Column
-	private boolean enabled;
+	private int enabled;
 	
 	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, 
 			CascadeType.REFRESH}, fetch = FetchType.EAGER)
@@ -64,127 +51,106 @@ public class User {
 	
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private Set<Post> posts = new HashSet<>();
-
-	public User() {
-	}
 	
-	public User(String name, String username, String email, String password, String accountStatus, String mobileNumber,
-			String gender, Date dob, boolean enabled) {
-		this.name = name;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.accountStatus = accountStatus;
-		this.mobileNumber = mobileNumber;
-		this.gender = gender;
-		this.dob = dob;
-		this.enabled = enabled;
-		
-	}
-
+	
 	public int getId() {
 		return id;
 	}
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
+	
 	public String getUsername() {
 		return username;
 	}
-
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 	public String getPassword() {
 		return password;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	public String getMobile() {
+		return mobile;
+	}
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
 	public String getAccountStatus() {
 		return accountStatus;
 	}
-
 	public void setAccountStatus(String accountStatus) {
 		this.accountStatus = accountStatus;
 	}
-
-	public String getMobileNumber() {
-		return mobileNumber;
+	public Date getDateOfBirth() {
+		return dateOfBirth;
 	}
-
-	public void setMobileNumber(String mobileNumber) {
-		this.mobileNumber = mobileNumber;
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
-
 	public String getGender() {
 		return gender;
 	}
-
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-
-	public Date getDob() {
-		return dob;
-	}
-
-	public void setDob(Date dob) {
-		this.dob = dob;
-	}
-
-	public boolean isEnabled() {
+	public int getEnabled() {
 		return enabled;
 	}
-
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(int enabled) {
 		this.enabled = enabled;
 	}
-
-	public Set<Role> getRoles() {
-		return roles;
+	
+	public String getFirstname() {
+		return firstname;
 	}
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
-
-	public Set<Post> getPosts() {
-		return posts;
+	public String getLastname() {
+		return lastname;
 	}
-
-	public void setPosts(Set<Post> posts) {
-		this.posts = posts;
-	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", username=" + username + ", email=" + email + ", password="
-				+ password + ", accountStatus=" + accountStatus + ", mobileNumber=" + mobileNumber + ", gender="
-				+ gender + ", dob=" + dob + ", enabled=" + enabled + ", roles=" + roles + ", posts=" + posts + "]";
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 	
+	
+	
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", username=" + username
+				+ ", email=" + email + ", password=" + password + ", mobile=" + mobile + ", accountStatus="
+				+ accountStatus + ", dateOfBirth=" + dateOfBirth + ", gender=" + gender + ", enabled=" + enabled + "]";
+	}
+	public User()
+	{
+		
+	}
+	
+	
+	public User(int id, String firstname, String lastname, String username, String email, String password,
+			String mobile, String accountStatus, Date dateOfBirth, String gender, int enabled) {
+		super();
+		this.id = id;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.mobile = mobile;
+		this.accountStatus = accountStatus;
+		this.dateOfBirth = dateOfBirth;
+		this.gender = gender;
+		this.enabled = enabled;
+	}
 	public void addPost(Post tempPost) {
 		
 		if(posts == null)
