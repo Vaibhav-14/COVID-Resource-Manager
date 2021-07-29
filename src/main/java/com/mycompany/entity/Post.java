@@ -17,7 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table
+@Table(name="posts")
 public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +42,7 @@ public class Post {
 	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, 
 			CascadeType.REFRESH})
 	@JoinTable(
-		name="post_tag",
+		name="posts_tags",
 		joinColumns = @JoinColumn(name="post_id"),
 		inverseJoinColumns = @JoinColumn(name = "tag_name")
 	)

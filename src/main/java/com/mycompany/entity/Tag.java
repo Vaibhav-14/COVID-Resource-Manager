@@ -13,7 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table
+@Table(name="tags")
 public class Tag {
 	
 	@Id
@@ -23,7 +23,7 @@ public class Tag {
 	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, 
 			CascadeType.REFRESH})
 	@JoinTable(
-		name="post_tag",
+		name="posts_tags",
 		joinColumns = @JoinColumn(name="tag_name"),
 		inverseJoinColumns = @JoinColumn(name = "post_id")
 	)
