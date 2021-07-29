@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mycompany.beans.User;
+import com.mycompany.entity.User;
 import com.mycompany.service.UserService;
 
 
 @Controller
 @RequestMapping(value="/user")
-public class UserLoginController {
+public class UserController {
 	
 	@Autowired
 	private UserService userService;
