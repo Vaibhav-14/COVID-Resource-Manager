@@ -1,4 +1,4 @@
-package com.mycompany.entity;
+package com.mycompany.beans;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
