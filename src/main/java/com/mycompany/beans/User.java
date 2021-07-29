@@ -15,17 +15,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Entity
+@Table(name = "users")
 public class User {
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private int id;
-	private String name;
+	private String firstname;
+	private String lastname;
 	private String username;
 	private String email;
 	private String password;
@@ -56,12 +59,7 @@ public class User {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
+	
 	public String getUsername() {
 		return username;
 	}
@@ -111,16 +109,39 @@ public class User {
 		this.enabled = enabled;
 	}
 	
+	public String getFirstname() {
+		return firstname;
+	}
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+	public String getLastname() {
+		return lastname;
+	}
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+	
+	
+	
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", username=" + username
+				+ ", email=" + email + ", password=" + password + ", mobile=" + mobile + ", accountStatus="
+				+ accountStatus + ", dateOfBirth=" + dateOfBirth + ", gender=" + gender + ", enabled=" + enabled + "]";
+	}
 	public User()
 	{
 		
 	}
 	
-	public User(int id, String name, String username, String email, String password, String mobile,
-			String accountStatus, Date dateOfBirth, String gender, int enabled) {
+	
+	public User(int id, String firstname, String lastname, String username, String email, String password,
+			String mobile, String accountStatus, Date dateOfBirth, String gender, int enabled) {
 		super();
 		this.id = id;
-		this.name = name;
+		this.firstname = firstname;
+		this.lastname = lastname;
 		this.username = username;
 		this.email = email;
 		this.password = password;
@@ -130,15 +151,6 @@ public class User {
 		this.gender = gender;
 		this.enabled = enabled;
 	}
-	
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", username=" + username + ", email=" + email + ", password="
-				+ password + ", mobile=" + mobile + ", accountStatus=" + accountStatus + ", dateOfBirth=" + dateOfBirth
-				+ ", gender=" + gender + ", enabled=" + enabled + "]";
-	}
-	
-	
 	public void addPost(Post tempPost) {
 		
 		if(posts == null)
