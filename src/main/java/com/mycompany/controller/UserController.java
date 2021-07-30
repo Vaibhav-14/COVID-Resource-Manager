@@ -42,7 +42,7 @@ public class UserController {
 		User u = new User();
 		
 		model.addAttribute("user", u);
-		return "home";
+		return "signup";
 	}
 	
 	@PostMapping(value = "/register")
@@ -56,7 +56,7 @@ public class UserController {
 		//System.out.println(u);  
 		userService.addUser(u);
 		
-		return "home";
+		return "redirect:/home";
 	}
 
 }

@@ -122,7 +122,18 @@ public class User {
 		this.lastname = lastname;
 	}
 	
-	
+	public Set<Role> getRoles() {
+		return roles;
+	}
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+	public Set<Post> getPosts() {
+		return posts;
+	}
+	public void setPosts(Set<Post> posts) {
+		this.posts = posts;
+	}
 	
 	@Override
 	public String toString() {
@@ -136,10 +147,8 @@ public class User {
 	}
 	
 	
-	public User(int id, String firstname, String lastname, String username, String email, String password,
+	public User(String firstname, String lastname, String username, String email, String password,
 			String mobile, String accountStatus, Date dateOfBirth, String gender, int enabled) {
-		super();
-		this.id = id;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.username = username;
