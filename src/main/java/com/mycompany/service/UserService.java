@@ -1,6 +1,7 @@
 package com.mycompany.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mycompany.dao.IRoleFunctionDAO;
@@ -26,8 +27,10 @@ public class UserService {
 	}
 	public void addUser(User user)
 	{
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		Role role = roleDao.findById(1).get();
 		user.getRoles().add(role);
+		user.setPassword(encoder.encode(user.getPassword()));
 		userDao.save(user);
 	}
 

@@ -169,6 +169,11 @@ public class User {
 		
 		tempPost.setUser(this);  // bidirectional linkage
 	}
+	public boolean isEnabled() {
+		if (this.enabled == 1)
+			return true;
+		return false;
+	}
 	
 	
 	
