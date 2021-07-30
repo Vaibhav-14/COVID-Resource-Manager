@@ -56,7 +56,13 @@ public class UserController {
 		//System.out.println(u);  
 		userService.addUser(u);
 		
-		return "redirect:/home";
+		return "redirect:/user/login";
 	}
 
+	@GetMapping(value = "/login")
+	public String showLoginForm() {
+		return "login";
+	}
+	
+	
 }
