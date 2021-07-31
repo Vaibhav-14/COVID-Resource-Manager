@@ -13,7 +13,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        com.mycompany.entity.User user = userDao.getUserByUsername(username);
+        com.mycompany.entity.User user = userDao.findByUsername(username);
          
         if (user == null) {
             throw new UsernameNotFoundException("Could not find user");
