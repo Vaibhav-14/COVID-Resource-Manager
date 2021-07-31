@@ -40,6 +40,7 @@ public class User {
 	@NotBlank(message= "Please enter your last name")
 	private String lastname;
 	
+	@NotBlank(message= "Please enter a username")
 	private String username;
 	
 	@NotBlank(message= "Please enter your email")
