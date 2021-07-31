@@ -8,13 +8,12 @@
 <title>Add Post</title>
 </head>
 <body>
-<sf:form modelAttribute = "postform" method = "POST" >
-Type: <sf:input path="post.type"/><br>
-Message: <sf:textarea path="post.message"/><br>
-Tags: <sf:input path="tags"/>
-<sf:button name="Submit" value="Submit">Add Post</sf:button>
+<sf:form id="form1" modelAttribute = "post" method = "POST" >
+	Type: <sf:input path="type"/><br>
+	Message: <sf:textarea path="message"/><br>
+	Tags: <sf:input path="tagStr"/>
+	<sf:button value="Submit"> Create Post</sf:button>
 </sf:form>
-
 
 </body>
 </html>
