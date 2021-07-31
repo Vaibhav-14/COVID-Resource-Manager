@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+
 
 import com.mycompany.entity.User;
 import com.mycompany.service.UserService;
@@ -39,22 +38,22 @@ public class UserController {
 	
 	@GetMapping(value = "/register")
 	public String register(Model model) {
-		User u = new User();
+		User user = new User();
 		
-		model.addAttribute("user", u);
+		model.addAttribute("user", user);
 		return "signup";
 	}
 	
 	@PostMapping(value = "/register")
-	public String registerUser(Model model, @ModelAttribute User u, BindingResult results) {
+	public String registerUser(Model model, @ModelAttribute User user, BindingResult results) {
 		
-		u.setAccountStatus("ACTIVE");
-		u.setEnabled(1);
+		user.setAccountStatus("ACTIVE");
+		user.setEnabled(1);
 		
 		//Needs to be printed in the logs 
 		
 		//System.out.println(u);  
-		userService.addUser(u);
+		userService.addUser(user);
 		
 		return "redirect:/user/login";
 	}

@@ -33,5 +33,8 @@ public class UserService {
 		user.setPassword(encoder.encode(user.getPassword()));
 		userDao.save(user);
 	}
+	public User getUserFromUsername(String username) {
+		return userDao.findByUsername(username);
+	}
 
 }

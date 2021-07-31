@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="posts")
@@ -32,6 +33,9 @@ public class Post {
 	
 	@Column 
 	private String message;
+	
+	@Transient
+	private String tagStr;
 	
 	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, 
 					CascadeType.REFRESH})
@@ -104,11 +108,19 @@ public class Post {
 	public void setTags(Set<Tag> tags) {
 		this.tags = tags;
 	}
+	
+	public String getTagStr() {
+		return tagStr;
+	}
+
+	public void setTagStr(String tagStr) {
+		this.tagStr = tagStr;
+	}
 
 	@Override
 	public String toString() {
-		return "Post [id=" + id + ", type=" + type + ", dateTime=" + dateTime + ", message=" + message + ", user="
-				+ user + "]";
+		return "Post [id=" + id + ", type=" + type + ", dateTime=" + dateTime + ", message=" + message + ", tagStr="
+				+ tagStr + ", user=" + user + ", tags=" + tags + "]";
 	}
 		
 }
