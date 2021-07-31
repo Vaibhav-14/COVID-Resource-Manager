@@ -15,6 +15,13 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -26,16 +33,31 @@ public class User {
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private int id;
+	
+	@NotBlank(message ="Please enter your first name")
 	private String firstname;
+	
+	@NotBlank(message= "Please enter your last name")
 	private String lastname;
+	
+	@NotBlank(message= "Please enter a username")
 	private String username;
+	
+	@NotBlank(message= "Please enter your email")
+	@Email(message = "Please enter the email in the right format")
 	private String email;
+	
+	@Size(min = 8, message = "Password Must be 8 Characters Long")
 	private String password;
+	
+	@Pattern(regexp = "[0-9]{10,10}", message="Please enter a valid phone number")
 	private String mobile;
+	
 	private String accountStatus;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date dateOfBirth;
+	
 	private String gender;
 	private int enabled;
 	

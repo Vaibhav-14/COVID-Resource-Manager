@@ -1,5 +1,7 @@
 package com.mycompany.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,11 @@ public class UserService {
 	}
 	public User getUserFromUsername(String username) {
 		return userDao.findByUsername(username);
+	}
+	
+	public List<String> getListOfAllUsernames()
+	{
+		return userDao.getListOfAllUsernames();
 	}
 
 }
