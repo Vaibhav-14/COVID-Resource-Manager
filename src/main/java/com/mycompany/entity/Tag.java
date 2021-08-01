@@ -53,8 +53,4 @@ public class Tag {
 		this.tags = tags;
 	}
 
-	@Override
-	public String toString() {
-		return "Tag [name=" + name + ", tags=" + tags + "]";
-	}
 }

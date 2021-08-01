@@ -12,7 +12,6 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -50,15 +49,14 @@ public class UserController {
 	}
 	
 	@PostMapping(value = "/register")
-	public String registerUser(Model model,@Valid @ModelAttribute User user, BindingResult results) {
+	public String registerUser(Model model, @Valid @ModelAttribute User user, BindingResult results) {
 		
 		List<String> usernameList = userService.getListOfAllUsernames();
 		for(String currentUsername : usernameList)
-			if(user.getUsername().equals(currentUsername))
-				{
+			if(user.getUsername().equals(currentUsername)) {
 				results.rejectValue("username", "error.user", "Username is already registered");
 				break;
-				}
+			}
 		
 		if(results.hasErrors())
 			return "signup";

@@ -15,11 +15,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -155,13 +152,7 @@ public class User {
 	public void setPosts(Set<Post> posts) {
 		this.posts = posts;
 	}
-	
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", username=" + username
-				+ ", email=" + email + ", password=" + password + ", mobile=" + mobile + ", accountStatus="
-				+ accountStatus + ", dateOfBirth=" + dateOfBirth + ", gender=" + gender + ", enabled=" + enabled + "]";
-	}
+
 	public User()
 	{
 		
