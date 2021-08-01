@@ -7,28 +7,44 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mycompany.entity.Post;
 import com.mycompany.service.PostService;
 
 
 @Controller
+@RequestMapping("/post")
 public class PostController {
 	
 	@Autowired
-	private PostService postservice;
+	private PostService postService;
 	
-	@GetMapping("//{username}/createpost")
-	public String addPost(Model model) {
+	@GetMapping("/create")
+	public String createPost(Model model) {
 		Post post = new Post();
 		model.addAttribute("post", post);
 		return "create-post";
 	}
 	
 	
-	@PostMapping("/{username}/createpost")
-	public String savePost(@ModelAttribute("post") Post post, @PathVariable String username) {
-		postservice.addPost(post, username);
+	@PostMapping("/create")
+	public String savePost(@ModelAttribute("post") Post post) {
+		postService.addPost(post);
+		return "redirect:/home";
+	}
+	
+	@GetMapping("/update/{id}")
+	public String updatePost(@PathVariable int id, Model model) {
+		
+		Post post = postService.getPostById(id);
+		model.addAttribute("post", post);
+		return "update-post";
+	}
+	
+	@PostMapping("/update/{id}") 
+	public String updatePost(@ModelAttribute("post") Post post, Model model) {
+		postService.updatePost(post);
 		return "redirect:/home";
 	}
 

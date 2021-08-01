@@ -14,9 +14,10 @@
 	    </div>
 	    <ul class="nav navbar-nav">
 	      <li class="active"><a href="#">Home</a></li>
-	      <sec:authorize access="hasRole('USER')">
+	      <sec:authorize access="hasAuthority('USER')">
 	      	<li><a href="${pageContext.request.contextPath}/${pageContext.request.userPrincipal.name}/createpost">Create Post</a></li>
 	      </sec:authorize>
+	      
 	      <li><a href="#">Page 2</a></li>
 	    </ul>
 	    <sec:authorize access="!isAuthenticated()">

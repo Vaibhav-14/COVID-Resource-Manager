@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.mycompany.dao.IPostFunctionDAO;
@@ -31,9 +33,17 @@ public class PostService {
 		this.postDao = dao;
 	}
 	
-	public void addPost(Post post, String username) {
-		post.setUser(userservice.getUserFromUsername(username));
+	public void addPost(Post post) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		post.setUser(userservice.getUserFromUsername(auth.getName()));
 		post.setDateTime(new Timestamp(System.currentTimeMillis()));
+		addTagsToPost(post);
+		postDao.save(post);
+	}
+	
+	// retrieve tags from tagStr
+	private void addTagsToPost(Post post) {
 		Set<Tag> tags = new HashSet<Tag>();
 		Iterable<Tag> db_tags = tagservice.getAllTags();
 		for (String s : post.getTagStr().split(" ")) {
@@ -54,6 +64,20 @@ public class PostService {
 			}
 		}
 		post.setTags(tags);
+	}
+
+	public Post getPostById(int id) {
+		Post post = postDao.findById(id).get();
+		StringBuffer str = new StringBuffer();
+		for (Tag tag : post.getTags()) {
+			str.append(tag.getName() + " ");
+		}
+		post.setTagStr(str.toString()); 
+		return post;
+	}
+
+	public void updatePost(Post post) {
+		addTagsToPost(post);
 		postDao.save(post);
 	}
 	

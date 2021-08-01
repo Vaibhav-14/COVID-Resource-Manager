@@ -30,7 +30,9 @@ public class UserService {
 	public void addUser(User user)
 	{
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		Role role = roleDao.findById(1).get();
+		
+		int roleId = 1; // role id for role 'USER'
+		Role role = roleDao.findById(roleId).get();
 		user.getRoles().add(role);
 		user.setPassword(encoder.encode(user.getPassword()));
 		userDao.save(user);

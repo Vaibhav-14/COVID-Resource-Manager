@@ -116,11 +116,5 @@ public class Post {
 	public void setTagStr(String tagStr) {
 		this.tagStr = tagStr;
 	}
-
-	@Override
-	public String toString() {
-		return "Post [id=" + id + ", type=" + type + ", dateTime=" + dateTime + ", message=" + message + ", tagStr="
-				+ tagStr + ", user=" + user + ", tags=" + tags + "]";
-	}
 		
 }
