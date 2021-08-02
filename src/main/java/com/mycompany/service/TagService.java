@@ -1,19 +1,28 @@
 package com.mycompany.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.dao.ITagFunctionDAO;
 import com.mycompany.entity.Tag;
 
-@Service("tagservice")
+@Transactional
+@Service("tagService")
 public class TagService {
 	
 	@Autowired
-	private ITagFunctionDAO tagdao;
+	private ITagFunctionDAO tagDao;
 	
 	public Iterable<Tag> getAllTags(){
-		return tagdao.findAll();
+		return tagDao.findAll();
 	}
+
+	public List<String> searchTagsByKeyWord(String keyword) {
+		return tagDao.searchTagsByKeyWord(keyword);
+	}
+	
 
 }

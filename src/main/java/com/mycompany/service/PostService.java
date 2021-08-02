@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.entity.Post;
 import com.mycompany.entity.Tag;
 
+@Transactional
 @Service("postService")
 public class PostService {
 	
@@ -47,7 +49,7 @@ public class PostService {
 	private void addTagsToPost(Post post) {
 		Set<Tag> tags = new HashSet<Tag>();
 		Iterable<Tag> db_tags = tagservice.getAllTags();
-		for (String s : post.getTagStr().split(" ")) {
+		for (String s : post.getTagStr().split(", ")) {
 			int flag = 0;
 			for (Tag tag : db_tags) {
 				if(tag.getName().equals(s)) {
@@ -71,7 +73,7 @@ public class PostService {
 		Post post = postDao.findById(id).get();
 		StringBuffer str = new StringBuffer();
 		for (Tag tag : post.getTags()) {
-			str.append(tag.getName() + " ");
+			str.append(tag.getName() + ", ");
 		}
 		post.setTagStr(str.toString()); 
 		return post;
