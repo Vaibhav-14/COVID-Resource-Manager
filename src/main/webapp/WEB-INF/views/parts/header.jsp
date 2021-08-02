@@ -13,12 +13,13 @@
 	      <a class="navbar-brand" href="#">Covid Resource Manager</a>
 	    </div>
 	    <ul class="nav navbar-nav">
-	      <li class="active"><a href="#">Home</a></li>
+	      <li class="active"><a href="/">Home</a></li>
 	      <sec:authorize access="hasAuthority('USER')">
-	      	<li><a href="${pageContext.request.contextPath}/${pageContext.request.userPrincipal.name}/createpost">Create Post</a></li>
+	      	<li><a href="/post/create">Create Post</a></li>
 	      </sec:authorize>
 	      
 	      <li><a href="#">Page 2</a></li>
+	      
 	    </ul>
 	    <sec:authorize access="!isAuthenticated()">
 	    	<ul class="nav navbar-nav navbar-right">
@@ -29,7 +30,7 @@
 	
 	    <sec:authorize access="isAuthenticated()">
 	    	<ul class="nav navbar-nav navbar-right">
-		      <li><a href="#"><span class="glyphicon glyphicon-user"></span> ${pageContext.request.userPrincipal.name}</a></li>
+		      <li><a href="/user/profile"><span class="glyphicon glyphicon-user"></span> ${pageContext.request.userPrincipal.name}</a></li>
 		      <li><a href="${pageContext.request.contextPath}/user/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
 		    </ul>
 	    </sec:authorize>

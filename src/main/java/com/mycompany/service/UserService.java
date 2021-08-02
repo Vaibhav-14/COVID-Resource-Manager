@@ -3,11 +3,15 @@ package com.mycompany.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.dao.IRoleFunctionDAO;
 import com.mycompany.dao.IUserFunctionDAO;
+import com.mycompany.entity.Post;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.User;
 
@@ -20,6 +24,9 @@ public class UserService {
 	
 	@Autowired
 	private IRoleFunctionDAO roleDao;
+	
+	@Autowired
+	private IPostFunctionDAO postDao;
 	
 	public IUserFunctionDAO getUserDao() {
 		return userDao;
@@ -44,6 +51,16 @@ public class UserService {
 	public List<String> getListOfAllUsernames()
 	{
 		return userDao.getListOfAllUsernames();
+	}
+	
+	public List<Post> displayProfile(){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return postDao.findAllByUserIdOrderByDateTimeDesc(getUserFromUsername(auth.getName()).getId());
+	}
+	
+	public User getUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return userDao.findByUsername(auth.getName());
 	}
 
 }

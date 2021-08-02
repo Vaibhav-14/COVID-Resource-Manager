@@ -2,6 +2,7 @@ package com.mycompany.service;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,10 @@ public class PostService {
 	public void updatePost(Post post) {
 		addTagsToPost(post);
 		postDao.save(post);
+	}
+	
+	public List<Post> getAllPost(){
+		return postDao.findAllByOrderByDateTimeDesc();
 	}
 	
 }
