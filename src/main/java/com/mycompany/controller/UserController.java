@@ -16,10 +16,11 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
+import com.mycompany.entity.Post;
 import com.mycompany.entity.User;
 import com.mycompany.service.UserService;
 
@@ -75,6 +76,15 @@ public class UserController {
 	@GetMapping(value = "/login")
 	public String showLoginForm() {
 		return "login";
+	}
+	
+	@GetMapping(value = "/profile")
+	public String displayProfile(Model model) {
+		List<Post> posts = userService.displayProfile();
+		User user = userService.getUser();
+		model.addAttribute("user", user);
+		model.addAttribute("posts", posts);
+		return "profile";
 	}
 	
 	

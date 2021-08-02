@@ -49,8 +49,15 @@ public class Tag {
 		return tags;
 	}
 
+	@Override
+	public String toString() {
+		return "Tag [name=" + name + "]";
+	}
+
 	public void setTags(Set<Post> tags) {
 		this.tags = tags;
 	}
+	
+	
 
 }
