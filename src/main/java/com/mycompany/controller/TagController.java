@@ -22,9 +22,4 @@ public class TagController {
 		return tagService.searchTagsByKeyWord(term);
 	}
 	
-	@GetMapping("/tag/search")
-	public String tagPage() {
-		return "search-tag";
-	}
-
 }
