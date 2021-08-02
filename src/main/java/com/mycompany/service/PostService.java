@@ -88,4 +88,10 @@ public class PostService {
 		return postDao.findAllByOrderByDateTimeDesc();
 	}
 	
+	public List<Post> findPostByUsername(String username)
+	{
+		return postDao.findPostByUser(userservice.getUserFromUsername(username));
+	}
+	
+	
 }
