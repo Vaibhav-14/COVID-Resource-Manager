@@ -48,7 +48,7 @@ public class PostService {
 	private void addTagsToPost(Post post) {
 		Set<Tag> tags = new HashSet<Tag>();
 		Iterable<Tag> db_tags = tagservice.getAllTags();
-		for (String s : post.getTagStr().split(" ")) {
+		for (String s : post.getTagStr().split(", ")) {
 			int flag = 0;
 			for (Tag tag : db_tags) {
 				if(tag.getName().equals(s)) {
@@ -72,7 +72,7 @@ public class PostService {
 		Post post = postDao.findById(id).get();
 		StringBuffer str = new StringBuffer();
 		for (Tag tag : post.getTags()) {
-			str.append(tag.getName() + " ");
+			str.append(tag.getName() + ", ");
 		}
 		post.setTagStr(str.toString()); 
 		return post;

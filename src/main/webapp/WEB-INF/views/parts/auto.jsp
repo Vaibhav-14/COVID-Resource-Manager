@@ -1,31 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Search Auto Complete with Spring MVC</title>
-
-
-
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
 </head>
 <body>
-	${pageContext.request.contextPath }
-	Search Product
 	
-	<textarea name="" id="tags" cols="30" rows="10"></textarea>
-
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="${pageContext.request.contextPath }/js/jquery-ui.min.js"></script>
-	<script type="text/javascript">
+		<script>
 		function split(val) {
 			return val.split(/,\s*/);
 		}
 		function extractLast(term) {
 			return split(term).pop();
 		}
-
+	
 		$(document).ready(function() {
-
+	
 			$("#tags").autocomplete({
 				source: function (request, response) {
 					$.getJSON("${pageContext.request.contextPath}/tags", {
@@ -49,13 +41,7 @@
 					// remove the current input
 					terms.pop();
 					// add the selected item
-					var a = document.createElement('a');
-					var linkText = document.createTextNode(ui.item.value);
-					a.appendChild(linkText);
-					a.title = ui.item.value;
-					a.href = "#";
-					console.log(a);
-					terms.push(a);
+					terms.push(ui.item.value);
 					// add placeholder to get the comma-and-space at the end
 					terms.push("");
 					console.log(terms);
@@ -66,5 +52,6 @@
 			
 		});
 	</script>
+
 </body>
 </html>
