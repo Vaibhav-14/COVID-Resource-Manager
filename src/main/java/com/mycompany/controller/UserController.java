@@ -40,6 +40,7 @@ public class UserController {
 	public String register(Model model) {
 		
 		User user = new User();
+		user.setDateOfBirth(new Date());
 		
 		model.addAttribute("user", user);
 		return "signup";
@@ -58,6 +59,9 @@ public class UserController {
 	  int age = (int)((new Date().getTime() -  user.getDateOfBirth().getTime())/(1000l* 60 * 60 * 24 * 365));
 	  if(age<18)
 		  results.rejectValue("dateOfBirth", "error.user", "Must be at least 18 to register");
+	  
+	  if(!user.getPassword().equals(user.getRetypepassword()))
+		  results.rejectValue("retypepassword", "error.user","Confirmed Password is not the same");
 		
 		if(results.hasErrors())
 			return "signup";

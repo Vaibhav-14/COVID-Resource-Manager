@@ -20,6 +20,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.springframework.data.annotation.Transient;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
@@ -46,6 +47,9 @@ public class User {
 	
 	@Size(min = 8, message = "Password Must be 8 Characters Long")
 	private String password;
+	
+	@Transient
+    private String retypepassword;
 	
 	@Pattern(regexp = "[0-9]{10,10}", message="Please enter a valid phone number")
 	private String mobile;
@@ -132,6 +136,13 @@ public class User {
 	}
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;
+	}
+	
+	public String getRetypepassword() {
+		return retypepassword;
+	}
+	public void setRetypepassword(String retypepassword) {
+		this.retypepassword = retypepassword;
 	}
 	public String getLastname() {
 		return lastname;

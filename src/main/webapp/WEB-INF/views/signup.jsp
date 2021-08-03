@@ -17,6 +17,7 @@
 		<b>Last Name</b>: <sf:input path="lastname"/> <sf:errors path="lastname"/> <br>
 		<b>Username</b>: <sf:input path="username"/> <sf:errors path="username"/><br>
 		<b>Password</b>: <sf:input path="password"/> <sf:errors path="password"/> <br>
+		<b>Confirm Password</b>: <sf:input path="retypepassword"/> <sf:errors path="retypepassword"/> <br>
 		<b>Email</b>: <sf:input path="email"/> <sf:errors path="email"/> <br>
 		<b>Mobile Number</b>: +91 <sf:input path="mobile"/> <sf:errors path="mobile"/> <br>
 		<b>Date of Birth</b>: <sf:input path="dateOfBirth" type= "date"/> <sf:errors path="dateOfBirth"/> <br>

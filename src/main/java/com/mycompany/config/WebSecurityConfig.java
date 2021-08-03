@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
         	.regexMatchers("\\/tags\\?term=([^\\s]+)").permitAll()
-        	.antMatchers("/js/**").permitAll()
+        	.antMatchers("/js/**","/css/**").permitAll()
         	.antMatchers("/tag/search").permitAll()
         	.antMatchers("/user/register").permitAll()
             .antMatchers("/home").permitAll()
