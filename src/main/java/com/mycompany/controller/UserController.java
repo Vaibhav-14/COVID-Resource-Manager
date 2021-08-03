@@ -2,6 +2,7 @@ package com.mycompany.controller;
 
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -53,6 +54,10 @@ public class UserController {
 				results.rejectValue("username", "error.user", "Username is already registered");
 				break;
 			}
+		
+	  int age = (int)((new Date().getTime() -  user.getDateOfBirth().getTime())/(1000l* 60 * 60 * 24 * 365));
+	  if(age<18)
+		  results.rejectValue("dateOfBirth", "error.user", "Must be at least 18 to register");
 		
 		if(results.hasErrors())
 			return "signup";
