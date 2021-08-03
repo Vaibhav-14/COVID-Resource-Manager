@@ -2,6 +2,7 @@ package com.mycompany.controller;
 
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -32,11 +33,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@InitBinder     
-	public void initBinder(WebDataBinder binder){
-	     binder.registerCustomEditor(       Date.class,     
-	                         new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy"), true, 10));   
-	}
 	
 	//URL:  http://localhost:8080/user/register
 	
@@ -44,6 +40,7 @@ public class UserController {
 	public String register(Model model) {
 		
 		User user = new User();
+		user.setDateOfBirth(new Date());
 		
 		model.addAttribute("user", user);
 		return "signup";
@@ -58,6 +55,13 @@ public class UserController {
 				results.rejectValue("username", "error.user", "Username is already registered");
 				break;
 			}
+		
+	  int age = (int)((new Date().getTime() -  user.getDateOfBirth().getTime())/(1000l* 60 * 60 * 24 * 365));
+	  if(age<18)
+		  results.rejectValue("dateOfBirth", "error.user", "Must be at least 18 to register");
+	  
+	  if(!user.getPassword().equals(user.getRetypepassword()))
+		  results.rejectValue("retypepassword", "error.user","Confirmed Password is not the same");
 		
 		if(results.hasErrors())
 			return "signup";
