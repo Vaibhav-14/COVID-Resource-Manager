@@ -24,5 +24,10 @@ public class TagService {
 		return tagDao.searchTagsByKeyWord(keyword);
 	}
 	
+	public List<Integer> getListOfAllPostswithTag(String passedtag)
+	{
+		return tagDao.getListOfAllPostswithTag(passedtag);
+	}
+	
 
 }
