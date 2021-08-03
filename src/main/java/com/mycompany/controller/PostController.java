@@ -87,7 +87,7 @@ public class PostController {
 	    while(t.hasNext())
 	    	System.out.println(t.next().getMessage());
     
-	    model.addAttribute("posts",new ArrayList<Post>(searchList));
+	    model.addAttribute("posts", new ArrayList<Post>(searchList));
 
 		return "search-post-resultpage";	
 	}
