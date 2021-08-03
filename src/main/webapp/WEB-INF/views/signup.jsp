@@ -9,7 +9,7 @@
 </head>
 <body>
 
-	<b>User Registration Form</b> <br><br>
+	<b>User SignUp</b> <br><br>
 	
 	<sf:form  modelAttribute="user" method="POST">
 		
@@ -19,8 +19,10 @@
 		<b>Password</b>: <sf:input path="password"/> <sf:errors path="password"/> <br>
 		<b>Email</b>: <sf:input path="email"/> <sf:errors path="email"/> <br>
 		<b>Mobile Number</b>: +91 <sf:input path="mobile"/> <sf:errors path="mobile"/> <br>
-		<b>Date of Birth</b>: <sf:input path="dateOfBirth"/> <sf:errors path="dateOfBirth"/> <br>
-		<b>Gender</b>: <sf:input path="gender"/> <sf:errors path="gender"/> <br>
+		<b>Date of Birth</b>: <sf:input path="dateOfBirth" type= "date"/> <sf:errors path="dateOfBirth"/> <br>
+		<b>Gender</b>:  Male <sf:radiobutton path="Gender" value="M"/>   Female <sf:radiobutton path="Gender" value="F"/> <br> 
+		<sf:errors path="gender"/> 
+		<br>
 		
 		<sf:button name="Submit" value="Submit">Register</sf:button>
 	

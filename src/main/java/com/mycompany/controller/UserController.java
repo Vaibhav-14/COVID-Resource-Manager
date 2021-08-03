@@ -32,11 +32,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@InitBinder     
-	public void initBinder(WebDataBinder binder){
-	     binder.registerCustomEditor(       Date.class,     
-	                         new CustomDateEditor(new SimpleDateFormat("dd/MM/yyyy"), true, 10));   
-	}
 	
 	//URL:  http://localhost:8080/user/register
 	

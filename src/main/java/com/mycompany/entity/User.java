@@ -52,7 +52,7 @@ public class User {
 	
 	private String accountStatus;
 
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateOfBirth;
 	
 	private String gender;
