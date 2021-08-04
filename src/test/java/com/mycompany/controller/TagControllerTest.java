@@ -14,22 +14,22 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class HomeControllerTest {
+public class TagControllerTest {
 	
 	@Autowired
-	private HomeController homeController ; 
+	private TagController tagController ; 
 	@Autowired
 	private MockMvc mockMvc;
 	
 	@Test
 	public void contextLoads() throws Exception{
-		assertThat(homeController).isNotNull();
+		assertThat(tagController).isNotNull();
 	}
 	
 	@Test
 	@Transactional
 	public void validHTTPResponse() throws Exception{
-		this.mockMvc.perform(get("/home")).andExpect(status().isOk());
+		this.mockMvc.perform(get("/tags")).andExpect(status().isOk());
 	}
 
 }
