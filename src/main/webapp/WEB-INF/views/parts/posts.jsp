@@ -1,3 +1,9 @@
+<c:choose>
+	<c:when test="${empty posts}">
+    	    <h3>No posts available</h3>
+	</c:when>
+	
+<c:otherwise>
 <c:forEach items="${posts }" var="post" varStatus="tagStatus">
 
 	<c:if test="${username != post.user.username }">
@@ -35,3 +41,5 @@ Post Tags:
 	<br>
 	<br>
 </c:forEach>
+</c:otherwise>
+</c:choose>
