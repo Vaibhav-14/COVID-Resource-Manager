@@ -84,6 +84,10 @@ public class PostService {
 		postDao.save(post);
 	}
 	
+	public void deletePost(int id) {
+		postDao.deleteById(id);
+	}
+	
 	public List<Post> getAllPost(){
 		return postDao.findAllByOrderByDateTimeDesc();
 	}
