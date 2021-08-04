@@ -25,40 +25,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CovidResourceManagerApplicationTests {
-	
-	@Autowired
-	private PostService service;
-	
-	@MockBean
-	private IPostFunctionDAO repo;
-	
-	@Autowired
-	private PostController postController;
-	@Autowired
-	private HomeController homeController;
-	@Autowired
-	private UserController userController;
-	
-	@Autowired
-	private MockMvc mockMvc;
-
 
 	@Test
 	public void contextLoads() throws Exception {
-		assertThat(postController).isNotNull();
-		assertThat(homeController).isNotNull();
-		assertThat(userController).isNotNull();
-	}
-	
-	@Test
-	public void checkHTTPResponse() throws Exception {
-		this.mockMvc.perform(get("/user/login")).andExpect(status().isOk());
-		this.mockMvc.perform(get("/user/register")).andExpect(status().isOk());
+		
 	}
 	
 }

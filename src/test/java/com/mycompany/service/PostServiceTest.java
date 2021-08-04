@@ -41,7 +41,9 @@ public class PostServiceTest{
 	@Test
 	@Order(1)
 	public void contextLoads() {
-		
+		assertThat(userService).isNotNull() ; 
+		assertThat(postService).isNotNull() ; 
+		assertThat(postDao).isNotNull() ; 
 	}
 	
 	@Test
