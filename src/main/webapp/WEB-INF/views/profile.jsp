@@ -10,7 +10,14 @@
 </head>
 <%@ include file="parts/header.jsp"%>
 <body>
+	<%
+		Object username = request.getAttribute("username");
+	%>
 	<b>Profile Info</b>
+	<br> Username: ${user.username }
+	<%
+		if (username == null) {
+	%>
 	<a href="/user/update/${post.id }">
 		<button>Edit Profile</button>
 	</a>
@@ -24,16 +31,31 @@
 	<br>
 	<br>
 	<b>My Posts</b>
+	<%
+		} else {
+	%>
+	<br>
+	<br>
+	<b>Posts</b>
+	<%
+		}
+	%>
 	<br>
 	<br>
 	<c:forEach items="${posts }" var="post" varStatus="tagStatus">                                 
 Post Type: ${post.type }
-<a href="/post/update/${post.id }">
+<%
+	if (username == null) {
+%>
+		<a href="/post/update/${post.id }">
 			<button>Update Post</button>
 		</a>
 		<a href="/post/delete/${post.id }">
 			<button>Delete Post</button>
 		</a>
+		<%
+			}
+		%>
 		<br>
 Post Message: ${post.message }<br>
 Post Tags: 

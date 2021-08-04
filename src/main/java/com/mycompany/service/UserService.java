@@ -54,14 +54,24 @@ public class UserService {
 		return userDao.getListOfAllUsernames();
 	}
 	
-	public List<Post> displayProfile(){
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		return postDao.findAllByUserIdOrderByDateTimeDesc(getUserFromUsername(auth.getName()).getId());
+	public List<Post> displayProfile(String username){
+		if(username == null) {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			return postDao.findAllByUserIdOrderByDateTimeDesc(getUserFromUsername(auth.getName()).getId());
+		}
+		else {
+			return postDao.findAllByUserIdOrderByDateTimeDesc(getUserFromUsername(username).getId());
+		}
 	}
 	
-	public User getUser() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		return userDao.findByUsername(auth.getName());
+	public User getUser(String username) {
+		if(username == null) {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			return userDao.findByUsername(auth.getName());
+		}
+		else {
+			return userDao.findByUsername(username);
+		}
 	}
 
 }
