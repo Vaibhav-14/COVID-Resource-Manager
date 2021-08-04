@@ -7,5 +7,4 @@
 
 	<%@ include file="parts/posts.jsp"%>
 
-
 <%@ include file="parts/footer.jsp"%>

@@ -1,15 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
+<%@ include file="parts/meta.jsp" %> 
 <title>Profile</title>
-</head>
 <%@ include file="parts/header.jsp"%>
-<body>
+
 	<%
 		Object IsUsername = request.getAttribute("IsUsername");
 		Object tag = request.getAttribute("tag");
@@ -60,4 +52,3 @@
 			<button>Back</button>
 </body>
 <%@ include file="parts/footer.jsp"%>
-</html>
