@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mycompany.entity.Post;
 import com.mycompany.entity.User;
@@ -79,13 +80,13 @@ public class UserController {
 	}
 	
 	@GetMapping(value = "/profile")
-	public String displayProfile(Model model) {
-		List<Post> posts = userService.displayProfile();
-		User user = userService.getUser();
+	public String displayProfile(@RequestParam(required = false) String username, Model model) {
+		List<Post> posts = userService.displayProfile(username);
+		User user = userService.getUser(username);
+		model.addAttribute("username", username);
 		model.addAttribute("user", user);
 		model.addAttribute("posts", posts);
 		return "profile";
 	}
-	
 	
 }
