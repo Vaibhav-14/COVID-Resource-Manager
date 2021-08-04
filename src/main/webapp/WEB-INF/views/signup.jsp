@@ -5,37 +5,124 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>User registration</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
 </head>
 <body>
 
-	<b>User SignUp</b> <br><br>
 	
-	<sf:form  modelAttribute="user" method="POST">
+	
+  <div class="formcontainer w-100 h-100 p-5 d-flex justify-content-center">	
+	<sf:form modelAttribute="user" method="POST">
+		<div class="container bg-white rounded shadow-lg ">
+		  <div class="row p-2">
+		      <div class="col text-center">
+				<h1>User SignUp</h1>
+        	  </div>		  
+		  </div>
+		  
+		  <div class="row p-2" >
+		    <div class="col">
+		      
+		      <sf:input path="firstname" class="w-100 p-2" placeholder="First Name"/>
+		              <div class="small text-danger">
+				    	  <sf:errors path="firstname"/>
+        	 	      </div>       
+		    </div>
+		    <div class="col">
+		      
+		      <sf:input path="lastname" class="w-100 p-2" placeholder="Last Name"/>
+		              <div class="small text-danger">
+				    	  <sf:errors path="lastname"/>
+        	 	      </div>       
+		    </div>		    
+		  </div>
+		  <div class="row p-2">
+		      <div class="col">
+		      <sf:input path="username" class="w-100 p-2" placeholder="Username"/>
+		              <div class="small text-danger">
+				    	  <sf:errors path="username"/>
+        	 	      </div>
+        	  </div>		  
+		  </div>
+		  <div class="row p-2">
+		      <div class="col">
+		      <sf:input path="password" type="password" class="w-100 p-2" placeholder="Password"/>
+		              <div class="small text-danger">
+				    	  <sf:errors path="password"/>
+        	 	      </div>
+        	  </div>		  
+		  </div>	
+		  <div class="row p-2">
+		      <div class="col">
+		      <sf:input path="retypepassword" type="password" class="w-100 p-2" placeholder="Confirm Password"/>
+		              <div class="small text-danger">
+				    	  <sf:errors path="retypepassword"/>
+        	 	      </div>
+        	  </div>		  
+		  </div>	  
+		  <div class="row p-2">
+		      <div class="col">
+		      <sf:input path="email" class="w-100 p-2" placeholder="Email"/>
+		              <div class="small text-danger">
+				    	  <sf:errors path="email"/>
+        	 	      </div>
+        	  </div>		  
+		  </div>	
+		  <div class="row p-2">
+		      <div class="col">
+		      <sf:input path="mobile" class="w-100 p-2" placeholder="Mobile Number"/>
+		              <div class="small text-danger">
+				    	  <sf:errors path="mobile"/>
+        	 	      </div>
+        	  </div>		  
+		  </div>
+		  <div class="row p-2">
+		      <div class="col">
+		      <sf:input path="dateOfBirth" class="w-100 p-2" type="date" placeholder="Mobile Number"/>
+		              <div class="small text-danger">
+				    	  <sf:errors path="dateOfBirth"/>
+        	 	      </div>
+        	  </div>		  
+		  </div>
+		  <div class="row p-2">
+		      <div class="col">
+					
+					<div class="form-check">
+					  <sf:radiobutton class="form-check-input" path="Gender" value="M"/>
+					  <label class="form-check-label">
+					    Male
+					  </label>
+					</div>
+					<div class="form-check">
+					  <sf:radiobutton class="form-check-input" path="Gender" value="F"/>
+					  <label class="form-check-label">
+					    Female
+					  </label>
+					</div>
+
+		              <div class="small text-danger">
+				    	  <sf:errors path="gender"/>
+        	 	      </div>
+        	  </div>		  
+		  </div>
+		<sf:button name="Submit" class="btn btn-primary w-100 text-center p-2" value="Submit">Register</sf:button>
 		
-		<b>First Name</b>: <sf:input path="firstname"/> <sf:errors path="firstname"/> <br>
-		<b>Last Name</b>: <sf:input path="lastname"/> <sf:errors path="lastname"/> <br>
-		<b>Username</b>: <sf:input path="username"/> <sf:errors path="username"/><br>
-		<b>Password</b>: <sf:input path="password"/> <sf:errors path="password"/> <br>
-		<b>Confirm Password</b>: <sf:input path="retypepassword"/> <sf:errors path="retypepassword"/> <br>
-		<b>Email</b>: <sf:input path="email"/> <sf:errors path="email"/> <br>
-		<b>Mobile Number</b>: +91 <sf:input path="mobile"/> <sf:errors path="mobile"/> <br>
-		<b>Date of Birth</b>: <sf:input path="dateOfBirth" type= "date"/> <sf:errors path="dateOfBirth"/> <br>
-		<b>Gender</b>:  Male <sf:radiobutton path="Gender" value="M"/>   Female <sf:radiobutton path="Gender" value="F"/> 
-		<sf:errors path="gender"/> 
-		<br>
-		
-		<sf:button name="Submit" value="Submit">Register</sf:button>
-	
-	
+		<div class= "text-center p-2">
+		<p>
+		Already have an account? Log In
+		<a href="${pageContext.request.contextPath}/user/login" > here </a>
+		</p>
+		</div>
+		</div>
 	</sf:form>
+	
+	</div>
 
-	<p>
-		Already have an account? 
-		<a href="${pageContext.request.contextPath}/user/login" > log in </a>
-		here
-	</p>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 </body>
 </html>
