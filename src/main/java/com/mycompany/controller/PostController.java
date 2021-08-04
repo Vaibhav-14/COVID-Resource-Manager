@@ -1,10 +1,6 @@
 package com.mycompany.controller;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mycompany.entity.Post;
 import com.mycompany.service.PostService;
-import com.mycompany.service.TagService;
 
 
 @Controller
@@ -58,13 +53,19 @@ public class PostController {
 	
 	
 	@PostMapping("/searchresult")
-	public String searchPostResult(Model model, @RequestParam(name = "searchentry", required=false) String searchEntry) {
+	public String searchPostResult(Model model, @RequestParam(name = "searchentry") String searchEntry) {
 		
 		List<Post> searchList = postService.getPostOnSearch(searchEntry);
-    
+		
+		if (searchEntry.startsWith("#"))
+			model.addAttribute("tag", searchEntry);
+		else
+			model.addAttribute("tag", null);
+		model.addAttribute("username", searchEntry);
+		model.addAttribute("IsUsername", null);
+		model.addAttribute("user", null);
 	    model.addAttribute("posts", searchList);
-
-		return "search-post-resultpage";	
+		return "profile";	
 	}
 
 

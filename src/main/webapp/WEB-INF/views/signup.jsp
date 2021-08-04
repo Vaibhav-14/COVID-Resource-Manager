@@ -8,7 +8,7 @@
 <title>User registration</title>
 </head>
 <body>
-
+	<a href="${pageContext.request.contextPath}/home" > Home </a>
 	<b>User SignUp</b> <br><br>
 	
 	<sf:form  modelAttribute="user" method="POST">

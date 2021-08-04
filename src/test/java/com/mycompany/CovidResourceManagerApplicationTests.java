@@ -16,10 +16,6 @@ import com.mycompany.controller.HomeController;
 import com.mycompany.controller.PostController;
 import com.mycompany.controller.UserController;
 import com.mycompany.dao.IPostFunctionDAO;
-import com.mycompany.entity.Post;
-import com.mycompany.entity.User;
-import com.mycompany.service.PostService;
-
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -30,9 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class CovidResourceManagerApplicationTests {
-	
-	@Autowired
-	private PostService service;
 	
 	@MockBean
 	private IPostFunctionDAO repo;
