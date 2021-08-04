@@ -63,6 +63,29 @@ Post Tags:
 ${tag.name }
 </c:forEach>
 		<br>
+Post Comments:<br>
+		<c:forEach items="${post.comments }" var="comment"
+			varStatus="tagStatus">
+Comment By: <c:if test="${username != comment.user.username }">
+				<a href="/user/profile?username=${comment.user.username }"><b>@${comment.user.username }</b>
+				</a>
+			</c:if>
+			<c:if test="${username == comment.user.username }">
+				<a href="/user/profile"><b>@${comment.user.username }</b> </a>
+			</c:if>
+			<br>
+Comment Comment: ${comment.content }<br>
+Comment Created At: ${comment.dateTime }<br>
+			<br>
+		</c:forEach>
+		<c:if test="${isLoggedIn == true }">
+			<sf:form modelAttribute="comment">
+				<sf:input type="hidden" path="post" value="${ post.id}" />
+				<sf:input path="content" />
+				<sf:button name="Submit" value="Add Comment">Add Comment</sf:button>
+			</sf:form>
+		</c:if>
+		<br>
 		<br>
 		<br>
 	</c:forEach>
@@ -70,3 +93,4 @@ ${tag.name }
 </body>
 <%@ include file="parts/footer.jsp"%>
 </html>
+

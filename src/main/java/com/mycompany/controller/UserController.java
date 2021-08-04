@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.mycompany.entity.Comment;
 import com.mycompany.entity.Post;
 import com.mycompany.entity.User;
 import com.mycompany.service.UserService;
@@ -87,10 +88,23 @@ public class UserController {
 	public String displayProfile(@RequestParam(required = false) String username, Model model) {
 		List<Post> posts = userService.displayProfile(username);
 		User user = userService.getUser(username);
+		if(userService.getUser(null) == null) {
+			model.addAttribute("isLoggedIn", false);
+		}
+		else {
+			model.addAttribute("isLoggedIn", true);
+		}
 		model.addAttribute("username", username);
 		model.addAttribute("user", user);
 		model.addAttribute("posts", posts);
+		model.addAttribute("comment", new Comment());
 		return "profile";
+	}
+	
+	@PostMapping(value = "/profile")
+	public String displayProfile(@RequestParam(required = false) String username, @ModelAttribute("comment") Comment comment) {
+		
+		return "redirect:/profile";
 	}
 	
 }

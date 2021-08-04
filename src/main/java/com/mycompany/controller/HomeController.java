@@ -3,9 +3,15 @@ package com.mycompany.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.mycompany.entity.Comment;
 import com.mycompany.entity.User;
+import com.mycompany.service.CommentService;
 import com.mycompany.service.PostService;
 import com.mycompany.service.UserService;
 
@@ -18,7 +24,10 @@ public class HomeController {
 	@Autowired
 	private UserService userservice;
 	
-	@RequestMapping(value = {"/", "/home"})
+	@Autowired
+	private CommentService commentservice;
+	
+	@GetMapping({"/", "/home"})
 	public String showHomePage(Model model) {
 		User user = userservice.getUser(null);
 		String username;
@@ -30,6 +39,14 @@ public class HomeController {
 		}
 		model.addAttribute("username", username);
 		model.addAttribute("posts", postservice.getAllPost());
+		model.addAttribute("comment",new Comment());
 		return "home";
+	}
+	
+	@PostMapping({"/", "/home"})
+	public String saveComment(@ModelAttribute("comment") Comment comment) {
+		System.out.println(comment);
+		commentservice.addComment(comment);
+		return "redirect:/";
 	}
 }
