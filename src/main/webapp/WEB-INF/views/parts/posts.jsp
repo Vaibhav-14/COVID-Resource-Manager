@@ -22,7 +22,14 @@ Post Type: ${post.type }
 Post Message: ${post.message }<br>
 Post Tags: 
 <c:forEach items="${post.tags }" var="tag" varStatus="tagStatus">
-${tag.name }
+
+<form id="form-id" method = "POST" action = "/post/searchresult">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	<input type="hidden" name="searchentry" value="${tag.name }">
+  	<a href="#" onclick="document.getElementById('form-id').submit();"> ${tag.name } </a>
+
+</form>
+
 </c:forEach>
 	<br>
 	<br>
