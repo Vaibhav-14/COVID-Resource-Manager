@@ -27,10 +27,7 @@ public class PostController {
 	
 	@Autowired
 	private PostService postService;
-	
-	@Autowired
-	private TagService tagService;
-	
+		
 	@GetMapping("/create")
 	public String createPost(Model model) {
 		Post post = new Post();
@@ -59,35 +56,13 @@ public class PostController {
 		return "redirect:/home";
 	}
 	
-//	@GetMapping("/search")
-//	public String searchPost(Model model) {
-//		return "search-post";	
-//	}
 	
 	@PostMapping("/searchresult")
-	public String searchPostResult(Model model, @RequestParam(required=false) String searchentry) 
-	{
+	public String searchPostResult(Model model, @RequestParam(name = "searchentry", required=false) String searchEntry) {
 		
-		Set<Post> searchList = new HashSet<Post>();
-		
-		//finding posts by username
-		searchList.addAll(postService.findPostByUsername(searchentry));
-		
-		List<String> associatedTags = tagService.searchTagsByKeyWord(searchentry);
-		
-		for(String currentTag: associatedTags)
-		{
-			List<Integer> postsWithcurrentTag = tagService.getListOfAllPostswithTag(currentTag);
-			for(Integer i: postsWithcurrentTag)
-				searchList.add(postService.getPostById(i));		
-		}
-
-	
-		Iterator<Post> t= searchList.iterator();
-	    while(t.hasNext())
-	    	System.out.println(t.next().getMessage());
+		List<Post> searchList = postService.getPostOnSearch(searchEntry);
     
-	    model.addAttribute("posts", new ArrayList<Post>(searchList));
+	    model.addAttribute("posts", searchList);
 
 		return "search-post-resultpage";	
 	}

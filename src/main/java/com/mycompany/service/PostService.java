@@ -2,6 +2,8 @@ package com.mycompany.service;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,10 +25,10 @@ public class PostService {
 	private IPostFunctionDAO postDao;
 	
 	@Autowired
-	private UserService userservice;
+	private UserService userService;
 	
 	@Autowired
-	private TagService tagservice;
+	private TagService tagService;
 
 	public IPostFunctionDAO getDao() {
 		return postDao;
@@ -39,7 +41,7 @@ public class PostService {
 	public void addPost(Post post) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		post.setUser(userservice.getUserFromUsername(auth.getName()));
+		post.setUser(userService.getUserFromUsername(auth.getName()));
 		post.setDateTime(new Timestamp(System.currentTimeMillis()));
 		addTagsToPost(post);
 		postDao.save(post);
@@ -48,7 +50,7 @@ public class PostService {
 	// retrieve tags from tagStr
 	private void addTagsToPost(Post post) {
 		Set<Tag> tags = new HashSet<Tag>();
-		Iterable<Tag> db_tags = tagservice.getAllTags();
+		Iterable<Tag> db_tags = tagService.getAllTags();
 		for (String s : post.getTagStr().split(", ")) {
 			int flag = 0;
 			for (Tag tag : db_tags) {
@@ -88,9 +90,31 @@ public class PostService {
 		return postDao.findAllByOrderByDateTimeDesc();
 	}
 	
-	public List<Post> findPostByUsername(String username)
-	{
-		return postDao.findPostByUser(userservice.getUserFromUsername(username));
+	public List<Post> findPostByUsername(String username) {
+		return postDao.findPostByUser(userService.getUserFromUsername(username));
+	}
+	
+	public List<Post> getPostOnSearch(String searchEntry) {
+		List<Post> searchList = new LinkedList<>();
+		
+		//finding posts by username
+		searchList.addAll(findPostByUsername(searchEntry));
+		
+		List<String> associatedTags = tagService.searchTagsByKeyWord(searchEntry);
+		
+		for(String currentTag: associatedTags)
+		{
+			List<Integer> postsWithcurrentTag = tagService.getListOfAllPostswithTag(currentTag);
+			for(Integer integer: postsWithcurrentTag)
+				searchList.add(getPostById(integer));		
+		}
+
+	
+		Iterator<Post> t= searchList.iterator();
+	    while(t.hasNext())
+	    	System.out.println(t.next().getMessage());
+	    
+	    return searchList;
 	}
 	
 	
