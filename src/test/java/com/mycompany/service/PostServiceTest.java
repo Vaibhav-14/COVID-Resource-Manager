@@ -147,4 +147,20 @@ public class PostServiceTest{
 
 	}
 	
+//	@Test
+//	@Order(7)
+//	public void testPostUpdateByType() throws Exception {
+//       String type = "Required";
+//       Post post = new Post("Required", new Timestamp(System.currentTimeMillis()) , "urgent oxygen cyclinders requirement at ...");
+//       User user= new User("a","b","abc","abc@test.com","12345abcd","7410084485","ACTIVE",new SimpleDateFormat("dd/MM/yyyy").parse("12/04/2010"),"male",0);
+//       post.setUser(user);
+//       post.setId(1);
+//       Post savedPost = postDao.save(post);
+//       assertNotNull(post);
+//       Post updatePost = (Post) postDao.findPostByUser(user);
+//       assertThat(savedPost.getType()).isEqualTo(type);
+//       assertThat(updatePost.getType()).isEqualTo(type);
+//  
+//   }
+	
 }
