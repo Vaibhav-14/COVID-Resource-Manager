@@ -19,6 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.HdrHistogram.ConcurrentHistogram;
+
 @Entity
 @Table(name="posts")
 public class Post {
@@ -136,6 +138,23 @@ public class Post {
 		return "Post [id=" + id + ", type=" + type + ", dateTime=" + dateTime + ", message=" + message + ", tagStr="
 				+ tagStr + ", user=" + user + ", tags=" + tags + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return this.id;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		Post currPost = (Post)obj;
+		if(this.id == currPost.id)
+			return true;
+		
+		return false;
+	}
+	
 	
 		
 }
