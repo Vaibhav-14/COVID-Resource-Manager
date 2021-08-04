@@ -1,6 +1,6 @@
 package com.mycompany.controller;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -55,7 +55,7 @@ public class PostController {
 	@PostMapping("/searchresult")
 	public String searchPostResult(Model model, @RequestParam(name = "searchentry") String searchEntry) {
 		
-		List<Post> searchList = postService.getPostOnSearch(searchEntry);
+		Set<Post> searchList = postService.getPostOnSearch(searchEntry);
 		
 		if (searchEntry.startsWith("#"))
 			model.addAttribute("tag", searchEntry);

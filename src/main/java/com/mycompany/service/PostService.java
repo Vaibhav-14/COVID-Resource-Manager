@@ -94,8 +94,8 @@ public class PostService {
 		return postDao.findPostByUser(userService.getUserFromUsername(username));
 	}
 	
-	public List<Post> getPostOnSearch(String searchEntry) {
-		List<Post> searchList = new LinkedList<>();
+	public Set<Post> getPostOnSearch(String searchEntry) {
+		Set<Post> searchList = new HashSet<>();
 		
 		//finding posts by username
 		searchList.addAll(findPostByUsername(searchEntry));
@@ -108,11 +108,6 @@ public class PostService {
 			for(Integer integer: postsWithcurrentTag)
 				searchList.add(getPostById(integer));		
 		}
-
-	
-		Iterator<Post> t= searchList.iterator();
-	    while(t.hasNext())
-	    	System.out.println(t.next().getMessage());
 	    
 	    return searchList;
 	}
