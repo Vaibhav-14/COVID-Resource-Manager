@@ -42,6 +42,12 @@
 	%>
 	<br>
 	<br>
+	<c:choose>
+	<c:when test="${empty posts}">
+    	    <h3>You don't have any posts</h3>
+	</c:when>
+	
+	<c:otherwise>
 	<c:forEach items="${posts }" var="post" varStatus="tagStatus">                                 
 Post Type: ${post.type }
 <%
@@ -66,6 +72,13 @@ ${tag.name }
 		<br>
 		<br>
 	</c:forEach>
+	
+</c:otherwise>
+</c:choose>
+
+<%-- Back button to get back to home page --%>
+<a href="/home">
+			<button>Back</button>
 
 </body>
 <%@ include file="parts/footer.jsp"%>
