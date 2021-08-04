@@ -43,6 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         	.regexMatchers("\\/tags\\?term=([^\\s]+)").permitAll()
         	.antMatchers("/js/**","/css/**").permitAll()
         	.antMatchers("/tag/search").permitAll()
+        	.antMatchers("/post/searchresult").permitAll()
         	.antMatchers("/user/register").permitAll()
             .antMatchers("/home").permitAll()
             .antMatchers("/createpost").hasRole("USER")

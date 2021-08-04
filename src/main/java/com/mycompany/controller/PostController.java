@@ -59,12 +59,12 @@ public class PostController {
 		return "redirect:/home";
 	}
 	
-	@GetMapping("/search")
-	public String searchPost(Model model) {
-		return "search-post";	
-	}
+//	@GetMapping("/search")
+//	public String searchPost(Model model) {
+//		return "search-post";	
+//	}
 	
-	@GetMapping("/searchresult")
+	@PostMapping("/searchresult")
 	public String searchPostResult(Model model, @RequestParam(required=false) String searchentry) 
 	{
 		
