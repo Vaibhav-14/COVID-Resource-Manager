@@ -21,7 +21,7 @@
 		<b>Email</b>: <sf:input path="email"/> <sf:errors path="email"/> <br>
 		<b>Mobile Number</b>: +91 <sf:input path="mobile"/> <sf:errors path="mobile"/> <br>
 		<b>Date of Birth</b>: <sf:input path="dateOfBirth" type= "date"/> <sf:errors path="dateOfBirth"/> <br>
-		<b>Gender</b>:  Male <sf:radiobutton path="Gender" value="M"/>   Female <sf:radiobutton path="Gender" value="F"/> <br> 
+		<b>Gender</b>:  Male <sf:radiobutton path="Gender" value="M"/>   Female <sf:radiobutton path="Gender" value="F"/> 
 		<sf:errors path="gender"/> 
 		<br>
 		
