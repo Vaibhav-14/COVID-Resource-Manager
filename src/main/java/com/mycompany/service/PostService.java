@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.entity.Post;
 import com.mycompany.entity.Tag;
+import com.mycompany.entity.User;
 
 @Transactional
 @Service("postService")
@@ -85,7 +86,11 @@ public class PostService {
 	}
 	
 	public void deletePost(int id) {
-		postDao.deleteById(id);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userservice.getUserFromUsername(auth.getName());
+
+		if(postDao.findById(id).get().getUser().getId() == user.getId())
+			postDao.deleteById(id);
 	}
 	
 	public List<Post> getAllPost(){
