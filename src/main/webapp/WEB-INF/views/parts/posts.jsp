@@ -44,6 +44,9 @@ Comment By: <c:if test="${username != comment.user.username }">
 		</c:if>
 		<c:if test="${username == comment.user.username }">
 			<a href="/user/profile"><b>@${comment.user.username }</b> </a>
+			<a href="/comment/delete/${comment.id }">
+			<button>Delete Comment</button>
+		</a>
 		</c:if>
 		<br>
 Comment Comment: ${comment.content }<br>
