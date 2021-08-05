@@ -27,5 +27,9 @@ public class CommentService {
 		comment.setDateTime(new Timestamp(System.currentTimeMillis()));
 		commentDao.save(comment);
 	}
+	
+	public void deleteComment(int id) {
+		commentDao.deleteById(id);
+	}
 
 }
