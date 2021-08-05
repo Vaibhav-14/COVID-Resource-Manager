@@ -1,5 +1,6 @@
 package com.mycompany.controller;
 
+import java.security.ProviderException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,7 +46,7 @@ public class PostController {
 	}
 	
 	@GetMapping("/update/{id}")
-	public String updatePost(@PathVariable int id, Model model) throws IncorrectUserException {
+	public String updatePost(@PathVariable int id, Model model) throws ProviderException {
 		
 		Post post = postService.getPostById(id);
 		model.addAttribute("post", post);
@@ -79,8 +80,6 @@ public class PostController {
 		
 
 		Set<Post> searchList = postService.getPostOnSearch(searchEntry);
-
-	    
 		model.addAttribute("posts", searchList);
 		return "home";	
 	}
