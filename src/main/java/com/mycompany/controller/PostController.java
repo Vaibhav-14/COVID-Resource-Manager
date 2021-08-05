@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mycompany.entity.Comment;
 import com.mycompany.entity.Post;
-import com.mycompany.entity.User;
 import com.mycompany.service.PostService;
 import com.mycompany.service.UserService;
 
@@ -64,16 +61,6 @@ public class PostController {
 	
 	@PostMapping("/searchresult")
 	public String searchPostResult(Model model, @RequestParam(name = "searchentry") String searchEntry) {
-		
-		Set<Post> searchList;
-		try {
-			searchList = postService.getPostOnSearch(searchEntry);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			searchList = new HashSet<Post>();
-			e.printStackTrace();
-		}
-		
 		if (searchEntry.startsWith("#"))
 			model.addAttribute("tag", searchEntry);
 		else
@@ -88,7 +75,12 @@ public class PostController {
 		model.addAttribute("username", searchEntry);
 		model.addAttribute("IsUsername", null);
 		model.addAttribute("user", null);
-	    model.addAttribute("posts", searchList);
+		
+
+		Set<Post> searchList = postService.getPostOnSearch(searchEntry);
+
+	    
+		model.addAttribute("posts", searchList);
 		return "profile";	
 	}
 	
