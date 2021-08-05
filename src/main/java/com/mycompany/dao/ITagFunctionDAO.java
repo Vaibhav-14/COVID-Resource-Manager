@@ -10,8 +10,7 @@ import com.mycompany.entity.Tag;
 
 public interface ITagFunctionDAO extends CrudRepository<Tag, String>{
 
-	@Query(value = "select post_id from posts_tags where tag_name= :passedtag ", nativeQuery = true)
-	List<Integer> getListOfAllPostswithTag(@Param("passedtag") String passedtag);
+	List<Tag> getAllTagsByName(String passedTag);
 	
 	@Query("SELECT name FROM Tag WHERE name LIKE %:keyword%")
 	public List<String> searchTagsByKeyWord(@Param("keyword") String keyword);

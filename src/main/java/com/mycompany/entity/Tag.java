@@ -27,14 +27,14 @@ public class Tag {
 		joinColumns = @JoinColumn(name="tag_name"),
 		inverseJoinColumns = @JoinColumn(name = "post_id")
 	)
-	private Set<Post> tags = new HashSet<>();
+	private Set<Post> posts = new HashSet<>();
 
 	public Tag() {
 	}
 	
-	public Tag(String name, Set<Post> tags) {
+	public Tag(String name, Set<Post> posts) {
 		this.name = name;
-		this.tags = tags;
+		this.posts = posts;
 	}
 
 	public String getName() {
@@ -45,8 +45,8 @@ public class Tag {
 		this.name = name;
 	}
 
-	public Set<Post> getTags() {
-		return tags;
+	public Set<Post> getPosts() {
+		return posts;
 	}
 
 	@Override
@@ -54,8 +54,8 @@ public class Tag {
 		return "Tag [name=" + name + "]";
 	}
 
-	public void setTags(Set<Post> tags) {
-		this.tags = tags;
+	public void setPosts(Set<Post> posts) {
+		this.posts = posts;
 	}
 	
 	

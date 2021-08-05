@@ -19,7 +19,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.HdrHistogram.ConcurrentHistogram;
 
 @Entity
 @Table(name="posts")
