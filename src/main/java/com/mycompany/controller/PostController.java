@@ -81,7 +81,7 @@ public class PostController {
 
 	    
 		model.addAttribute("posts", searchList);
-		return "profile";	
+		return "home";	
 	}
 	
 	@GetMapping("/delete/{id}")
