@@ -92,12 +92,14 @@ public class PostService {
 		postDao.save(post);
 	}
 	
-	public void deletePost(int id) {
+	public void deletePost(int id) throws IncorrectUserException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.getUserFromUsername(auth.getName());
 
 		if(postDao.findById(id).get().getUser().getId() == user.getId())
 			postDao.deleteById(id);
+		else
+			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
 	}
 	
 	public List<Post> getAllPost(){

@@ -85,7 +85,7 @@ public class PostController {
 	}
 	
 	@GetMapping("/delete/{id}")
-	public String deletePosts(@PathVariable int id) {
+	public String deletePosts(@PathVariable int id) throws IncorrectUserException {
 		postService.deletePost(id);
 		return "redirect:/user/profile";
 	}
