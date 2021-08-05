@@ -15,7 +15,7 @@
 	</c:if>
 
 	<br>                               
-Post Type: ${post.type }
+Post Type: ${post.type }	
 <c:if test="${pageContext.request.userPrincipal.name == post.user.username }">
 		<a href="/post/update/${post.id }">
 			<button>Update Post</button>
@@ -28,21 +28,13 @@ Post Type: ${post.type }
 Post Message: ${post.message }<br>
 Post Tags: 
 <c:forEach items="${post.tags }" var="tag" varStatus="tagStatus">
-
 <form id="form-id" method = "POST" action = "/post/searchresult">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 	<input type="hidden" name="searchentry" value="${tag.name }">
   	<a href="#" onclick="document.getElementById('form-id').submit();"> ${tag.name } </a>
 
 </form>
-
 </c:forEach>
-	<br>
-	<br>
-	<br>
-</c:forEach>
-
-	<br>
 Post Comments:<br>
 	<c:forEach items="${post.comments }" var="comment"
 		varStatus="tagStatus">
@@ -58,8 +50,9 @@ Comment Comment: ${comment.content }<br>
 Comment At: ${comment.dateTime }<br>
 		<br>
 	</c:forEach>
-	<c:if test="${username != null }">
-		<sf:form modelAttribute="comment">
+	<c:if test="${isLoggedIn == true }">
+		<sf:form modelAttribute="comment" action="/comment/create" method="post">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			<sf:input type="hidden" path="post" value="${ post.id}" />
 			<sf:input path="content" />
 			<sf:button name="Submit" value="Add Comment">Add Comment</sf:button>

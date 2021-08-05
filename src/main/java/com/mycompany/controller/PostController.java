@@ -1,5 +1,6 @@
 package com.mycompany.controller;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.mycompany.entity.Comment;
 import com.mycompany.entity.Post;
 import com.mycompany.entity.User;
 import com.mycompany.service.PostService;
+import com.mycompany.service.UserService;
 
 
 @Controller
@@ -25,6 +28,9 @@ public class PostController {
 	
 	@Autowired
 	private PostService postService;
+	
+	@Autowired
+	private UserService userService;
 		
 	@GetMapping("/create")
 	public String createPost(Model model) {
@@ -59,12 +65,26 @@ public class PostController {
 	@PostMapping("/searchresult")
 	public String searchPostResult(Model model, @RequestParam(name = "searchentry") String searchEntry) {
 		
-		Set<Post> searchList = postService.getPostOnSearch(searchEntry);
+		Set<Post> searchList;
+		try {
+			searchList = postService.getPostOnSearch(searchEntry);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			searchList = new HashSet<Post>();
+			e.printStackTrace();
+		}
 		
 		if (searchEntry.startsWith("#"))
 			model.addAttribute("tag", searchEntry);
 		else
 			model.addAttribute("tag", null);
+		if(userService.getUser(null) == null) {
+			model.addAttribute("isLoggedIn", false);
+		}
+		else {
+			model.addAttribute("isLoggedIn", true);
+		}
+		model.addAttribute("comment", new Comment());
 		model.addAttribute("username", searchEntry);
 		model.addAttribute("IsUsername", null);
 		model.addAttribute("user", null);

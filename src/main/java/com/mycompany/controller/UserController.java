@@ -98,10 +98,4 @@ public class UserController {
 		return "profile";
 	}
 	
-	@PostMapping(value = "/profile")
-	public String displayProfile(@RequestParam(required = false) String username, @ModelAttribute("comment") Comment comment) {
-		
-		return "redirect:/profile";
-	}
-	
 }

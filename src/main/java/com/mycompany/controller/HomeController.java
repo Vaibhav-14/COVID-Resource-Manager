@@ -33,8 +33,10 @@ public class HomeController {
 		String username;
 		if(user == null) {
 			username = null;
+			model.addAttribute("isLoggedIn", false);
 		}
 		else {
+			model.addAttribute("isLoggedIn", true);
 			username = user.getUsername();
 		}
 		model.addAttribute("username", username);
@@ -43,10 +45,4 @@ public class HomeController {
 		return "home";
 	}
 	
-	@PostMapping({"/", "/home"})
-	public String saveComment(@ModelAttribute("comment") Comment comment) {
-		System.out.println(comment);
-		commentservice.addComment(comment);
-		return "redirect:/";
-	}
 }
