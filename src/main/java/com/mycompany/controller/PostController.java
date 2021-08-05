@@ -1,5 +1,6 @@
 package com.mycompany.controller;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,6 @@ public class PostController {
 	@PostMapping("/searchresult")
 	public String searchPostResult(Model model, @RequestParam(name = "searchentry") String searchEntry) {
 		
-		Set<Post> searchList = postService.getPostOnSearch(searchEntry);
 		
 		if (searchEntry.startsWith("#"))
 			model.addAttribute("tag", searchEntry);
@@ -68,7 +68,18 @@ public class PostController {
 		model.addAttribute("username", searchEntry);
 		model.addAttribute("IsUsername", null);
 		model.addAttribute("user", null);
-	    model.addAttribute("posts", searchList);
+		
+
+		Set<Post> searchList = new HashSet<Post>();
+		
+		try {
+			postService.getPostOnSearch(searchEntry);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
+		model.addAttribute("posts", searchList);
 		return "profile";	
 	}
 	
