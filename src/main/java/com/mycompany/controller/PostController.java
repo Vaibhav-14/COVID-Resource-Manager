@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mycompany.entity.Comment;
 import com.mycompany.entity.Post;
+import com.mycompany.exception.IncorrectUserException;
 import com.mycompany.service.PostService;
 import com.mycompany.service.UserService;
 
@@ -44,7 +45,7 @@ public class PostController {
 	}
 	
 	@GetMapping("/update/{id}")
-	public String updatePost(@PathVariable int id, Model model) throws Exception {
+	public String updatePost(@PathVariable int id, Model model) throws IncorrectUserException {
 		
 		Post post = postService.getPostById(id);
 		model.addAttribute("post", post);
