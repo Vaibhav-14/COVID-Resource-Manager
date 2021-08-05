@@ -10,6 +10,7 @@
 <title>log in</title>
 </head>
 <body>
+	<a href="${pageContext.request.contextPath}/home" > Home </a>
 	<h3>Log in Page</h3>
 	<sf:form action="${pageContext.request.contextPath}/authenticateTheUser" method="POST">
 		<c:if test="${param.error != null}">
