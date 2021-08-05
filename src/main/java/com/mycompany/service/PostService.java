@@ -2,8 +2,6 @@ package com.mycompany.service;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -89,7 +87,7 @@ public class PostService {
 	
 	public void deletePost(int id) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userservice.getUserFromUsername(auth.getName());
+		User user = userService.getUserFromUsername(auth.getName());
 
 		if(postDao.findById(id).get().getUser().getId() == user.getId())
 			postDao.deleteById(id);
