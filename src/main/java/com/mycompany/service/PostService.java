@@ -107,21 +107,19 @@ public class PostService {
 		return postDao.findPostByUser(userService.getUserFromUsername(username));
 	}
 	
-	public Set<Post> getPostOnSearch(String searchEntry) throws Exception {
+	public Set<Post> getPostOnSearch(String searchEntry) {
 		Set<Post> searchList = new HashSet<>();
 		
 		//finding posts by username
 		searchList.addAll(findPostByUsername(searchEntry));
+				
+		List<Tag> associatedTags = tagService.getAllTagsByName(searchEntry);
 		
-		List<String> associatedTags = tagService.searchTagsByKeyWord(searchEntry);
-		
-		for(String currentTag: associatedTags)
-		{
-			List<Integer> postsWithcurrentTag = tagService.getListOfAllPostswithTag(currentTag);
-			for(Integer integer: postsWithcurrentTag)
-				searchList.add(getPostById(integer));		
+		for(Tag currentTag: associatedTags) {
+			Set<Post> postsWithcurrentTag = currentTag.getPosts();
+			searchList.addAll(postsWithcurrentTag);		
 		}
-	    
+
 	    return searchList;
 	}
 	

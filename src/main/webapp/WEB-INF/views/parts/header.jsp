@@ -7,7 +7,7 @@
 	      <a class="navbar-brand" href="#">Covid Resource Manager</a>
 	    </div>
 	    <ul class="nav navbar-nav">
-	      <li class="active"><a href="/">Home</a></li>
+	      <li class="active"><a href="/home">Home</a></li>
 	      <sec:authorize access="hasAuthority('USER')">
 	      	<li><a href="/post/create">Create Post</a></li>
 	      </sec:authorize>
