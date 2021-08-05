@@ -13,14 +13,14 @@ import com.mycompany.service.UserService;
 public class HomeController {
 	
 	@Autowired
-	private PostService postservice;
+	private PostService postService;
 	
 	@Autowired
-	private UserService userservice;
+	private UserService userService;
 	
 	@RequestMapping(value = {"/", "/home"})
 	public String showHomePage(Model model) {
-		User user = userservice.getUser(null);
+		User user = userService.getUser(null);
 		String username;
 		if(user == null) {
 			username = null;
@@ -29,7 +29,7 @@ public class HomeController {
 			username = user.getUsername();
 		}
 		model.addAttribute("username", username);
-		model.addAttribute("posts", postservice.getAllPost());
+		model.addAttribute("posts", postService.getAllPost());
 		return "home";
 	}
 }

@@ -2,8 +2,6 @@ package com.mycompany.service;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -72,8 +70,13 @@ public class PostService {
 		post.setTags(tags);
 	}
 
-	public Post getPostById(int id) {
+	public Post getPostById(int id) throws Exception {
 		Post post = postDao.findById(id).get();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getUserFromUsername(auth.getName());
+
+		if(post.getUser().getId() != user.getId())
+			throw new RuntimeException();
 		StringBuffer str = new StringBuffer();
 		for (Tag tag : post.getTags()) {
 			str.append(tag.getName() + ", ");
@@ -83,13 +86,14 @@ public class PostService {
 	}
 
 	public void updatePost(Post post) {
+
 		addTagsToPost(post);
 		postDao.save(post);
 	}
 	
 	public void deletePost(int id) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userservice.getUserFromUsername(auth.getName());
+		User user = userService.getUserFromUsername(auth.getName());
 
 		if(postDao.findById(id).get().getUser().getId() == user.getId())
 			postDao.deleteById(id);
@@ -103,7 +107,7 @@ public class PostService {
 		return postDao.findPostByUser(userService.getUserFromUsername(username));
 	}
 	
-	public Set<Post> getPostOnSearch(String searchEntry) {
+	public Set<Post> getPostOnSearch(String searchEntry) throws Exception {
 		Set<Post> searchList = new HashSet<>();
 		
 		//finding posts by username

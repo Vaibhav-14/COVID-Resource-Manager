@@ -16,7 +16,7 @@
 
 	<br>                               
 Post Type: ${post.type }
-<c:if test="${username == post.user.username }">
+<c:if test="${pageContext.request.userPrincipal.name == post.user.username }">
 		<a href="/post/update/${post.id }">
 			<button>Update Post</button>
 		</a>
