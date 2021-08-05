@@ -73,5 +73,15 @@ public class UserService {
 			return userDao.findByUsername(username);
 		}
 	}
+	
+	public void updateUser(User user) {
+		System.out.println(user);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User admin_user = userDao.findByUsername(auth.getName());
+		Role role = roleDao.findById(2).get(); // for admin use only
+		if(admin_user.getRoles().contains(role)) {
+			userDao.save(user);
+		}
+	}
 
 }

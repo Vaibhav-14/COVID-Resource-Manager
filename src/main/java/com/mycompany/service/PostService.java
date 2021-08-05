@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.dao.IPostFunctionDAO;
+import com.mycompany.dao.IRoleFunctionDAO;
 import com.mycompany.entity.Post;
+import com.mycompany.entity.Role;
 import com.mycompany.entity.Tag;
 import com.mycompany.entity.User;
 
@@ -22,6 +24,9 @@ public class PostService {
 	
 	@Autowired
 	private IPostFunctionDAO postDao;
+	
+	@Autowired
+	private IRoleFunctionDAO roleDao;
 	
 	@Autowired
 	private UserService userService;
@@ -94,9 +99,10 @@ public class PostService {
 	public void deletePost(int id) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.getUserFromUsername(auth.getName());
-
-		if(postDao.findById(id).get().getUser().getId() == user.getId())
+		Role role = roleDao.findById(2).get();
+		if(postDao.findById(id).get().getUser().getId() == user.getId() || user.getRoles().contains(role)) {
 			postDao.deleteById(id);
+		}
 	}
 	
 	public List<Post> getAllPost(){
