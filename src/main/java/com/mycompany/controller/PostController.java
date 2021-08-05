@@ -41,6 +41,7 @@ public class PostController {
 	public String updatePost(@PathVariable int id, Model model) throws Exception {
 		
 		Post post = postService.getPostById(id);
+		System.out.println(post);
 		model.addAttribute("post", post);
 		return "update-post";
 	}

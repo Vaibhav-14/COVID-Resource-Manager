@@ -1,8 +1,7 @@
 <%@ include file="parts/meta.jsp" %> 
-
-	<title>Add Post</title>
-	<script src="${pageContext.request.contextPath }/js/jquery-3.6.0.min.js"></script>
-	<script src="${pageContext.request.contextPath }/js/jquery-ui.min.js"></script>
+<title>Add Post</title>
+<script src="${pageContext.request.contextPath }/js/jquery-3.6.0.min.js"></script>
+<script src="${pageContext.request.contextPath }/js/jquery-ui.min.js"></script>
 <%@ include file="parts/header.jsp" %> 
 	<sf:form id="form1" modelAttribute = "post" method = "POST" >
 		<sf:hidden path="id"/>
