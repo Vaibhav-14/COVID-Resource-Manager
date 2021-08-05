@@ -38,6 +38,7 @@ public class PostServiceTest{
 	@Autowired
 	private IPostFunctionDAO postDao;
 	
+	
 	@Test
 	@Order(1)
 	public void contextLoads() {
@@ -48,7 +49,7 @@ public class PostServiceTest{
 	
 //	@Test
 //	@Order(2)
-//	public void addPost() {
+//	public void addPost() throws Exception {
 //		// Creating Post
 //		Post post = new Post() ; 
 //		post.setId(1);
@@ -110,57 +111,63 @@ public class PostServiceTest{
 //	
 //	@Test
 //	@Order(3)
-//	public void updatePost() {
+//	public void updatePost() throws Exception {
 //		Post post = postService.getPostById(1) ; 
 //		String message = "All Fine" ; 
 //		post.setMessage(message);
 //		postService.updatePost(post);
 //		assertTrue(postService.getPostById(1).getMessage().equals(message));
 //	}
-	
-	@Test 
-	@Order(4)
-	public void getAllPost() {
-		assertTrue(postService.getAllPost().size() > 0 ) ; 
-	}
-	
-	@Test
-	@Order(5)
-	public void findPostByUsername() {
-		String username = "Champ" ; 
-		List<Post> posts = postService.findPostByUsername(username) ; 
-		for(Post post : posts) {
-			assertTrue(post.getUser().getUsername().equals(username)) ; 
-		}
-	} 
-	
-	@Test
-	@Order(6)
-	public void searchPost(){
-		// Positive Test Cases 
-		// By username
-		assertTrue(postService.findPostByUsername("champ").size() > 0 , "Result should be greater than zero" ) ; 
-		
-		// Negative Test Cases 
-		// By username
-		assertTrue(postService.findPostByUsername("cham").size() == 0  , "Result should be zero" ) ; 
-
-	}
-	
+//	
+//	@Test 
+//	@Order(4)
+//	public void getAllPost() {
+//		assertTrue(postService.getAllPost().size() > 0 ) ; 
+//	}
+//	
 //	@Test
+//	@Order(5)
+//	public void findPostByUsername() {
+//		String username = "Champ" ; 
+//		List<Post> posts = postService.findPostByUsername(username) ; 
+//		for(Post post : posts) {
+//			assertTrue(post.getUser().getUsername().equals(username)) ; 
+//		}
+//	} 
+//	
+//	@Test
+//	@Order(6)
+//	public void searchPost(){
+//		// Positive Test Cases 
+//		// By username
+//		assertTrue(postService.findPostByUsername("champ").size() > 0 , "Result should be greater than zero" ) ; 
+//		
+//		// Negative Test Cases 
+//		// By username
+//		assertTrue(postService.findPostByUsername("cham").size() == 0  , "Result should be zero" ) ; 
+//
+//	}
 //	@Order(7)
-//	public void testPostUpdateByType() throws Exception {
-//       String type = "Required";
-//       Post post = new Post("Required", new Timestamp(System.currentTimeMillis()) , "urgent oxygen cyclinders requirement at ...");
-//       User user= new User("a","b","abc","abc@test.com","12345abcd","7410084485","ACTIVE",new SimpleDateFormat("dd/MM/yyyy").parse("12/04/2010"),"male",0);
-//       post.setUser(user);
-//       post.setId(1);
-//       Post savedPost = postDao.save(post);
-//       assertNotNull(post);
-//       Post updatePost = (Post) postDao.findPostByUser(user);
-//       assertThat(savedPost.getType()).isEqualTo(type);
-//       assertThat(updatePost.getType()).isEqualTo(type);
-//  
-//   }
+	@Test
+	public void testPostUpdate() throws Exception {
+       String type = "Required";
+       Post post = new Post("Urgent", new Timestamp(System.currentTimeMillis()) , "urgent oxygen cyclinders requirement at ...");
+       User user= new User("a","b","abc","abc@test.com","12345abcd","7410084485","ACTIVE",new SimpleDateFormat("dd/MM/yyyy").parse("12/04/2010"),"male",0);
+       post.setUser(user);
+       post.setId(1);
+       assertNotNull(post);
+       //Updating Type.....
+       post.setType(type);
+       Post savedPost = postDao.save(post);
+       assertThat(savedPost.getType()).isEqualTo(type);
+       
+       //updating Message.....
+       String message = "All Fine" ; 
+       post.setMessage(message);
+       savedPost = postDao.save(post);
+       assertThat(savedPost.getMessage()).isEqualTo(message);
+
+  
+   }
 	
 }
