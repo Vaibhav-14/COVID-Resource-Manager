@@ -24,6 +24,13 @@ Post Type: ${post.type }
 			<button>Delete Post</button>
 		</a>
 	</c:if>
+<c:if test="${pageContext.request.userPrincipal.name != post.user.username }">
+		<sec:authorize access="hasAuthority('ADMIN')">
+		<a href="/post/delete/${post.id }">
+			<button>Delete Post</button>
+		</a>
+		</sec:authorize>
+	</c:if>
 	<br>
 Post Message: ${post.message }<br>
 Post Tags: 
