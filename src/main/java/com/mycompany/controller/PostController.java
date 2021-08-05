@@ -1,12 +1,10 @@
 package com.mycompany.controller;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mycompany.entity.Post;
+import com.mycompany.entity.User;
 import com.mycompany.service.PostService;
-import com.mycompany.service.TagService;
 
 
 @Controller
@@ -27,10 +25,7 @@ public class PostController {
 	
 	@Autowired
 	private PostService postService;
-	
-	@Autowired
-	private TagService tagService;
-	
+		
 	@GetMapping("/create")
 	public String createPost(Model model) {
 		Post post = new Post();
@@ -46,7 +41,7 @@ public class PostController {
 	}
 	
 	@GetMapping("/update/{id}")
-	public String updatePost(@PathVariable int id, Model model) {
+	public String updatePost(@PathVariable int id, Model model) throws Exception {
 		
 		Post post = postService.getPostById(id);
 		model.addAttribute("post", post);
@@ -55,41 +50,32 @@ public class PostController {
 	
 	@PostMapping("/update/{id}") 
 	public String updatePost(@ModelAttribute("post") Post post, Model model) {
+		
 		postService.updatePost(post);
 		return "redirect:/home";
 	}
 	
-	@GetMapping("/search")
-	public String searchPost(Model model) {
-		return "search-post";	
+	
+	@PostMapping("/searchresult")
+	public String searchPostResult(Model model, @RequestParam(name = "searchentry") String searchEntry) {
+		
+		Set<Post> searchList = postService.getPostOnSearch(searchEntry);
+		
+		if (searchEntry.startsWith("#"))
+			model.addAttribute("tag", searchEntry);
+		else
+			model.addAttribute("tag", null);
+		model.addAttribute("username", searchEntry);
+		model.addAttribute("IsUsername", null);
+		model.addAttribute("user", null);
+	    model.addAttribute("posts", searchList);
+		return "profile";	
 	}
 	
-	@GetMapping("/searchresult")
-	public String searchPostResult(Model model, @RequestParam(required=false) String searchentry) 
-	{
-		
-		Set<Post> searchList = new HashSet<Post>();
-		
-		//finding posts by username
-		searchList.addAll(postService.findPostByUsername(searchentry));
-		
-		List<String> associatedTags = tagService.searchTagsByKeyWord(searchentry);
-		
-		for(String currentTag: associatedTags)
-		{
-			List<Integer> postsWithcurrentTag = tagService.getListOfAllPostswithTag(currentTag);
-			for(Integer i: postsWithcurrentTag)
-				searchList.add(postService.getPostById(i));		
-		}
-
-	
-		Iterator<Post> t= searchList.iterator();
-	    while(t.hasNext())
-	    	System.out.println(t.next().getMessage());
-    
-	    model.addAttribute("posts", new ArrayList<Post>(searchList));
-
-		return "search-post-resultpage";	
+	@GetMapping("/delete/{id}")
+	public String deletePosts(@PathVariable int id) {
+		postService.deletePost(id);
+		return "redirect:/user/profile";
 	}
 
 

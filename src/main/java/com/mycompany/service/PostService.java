@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.entity.Post;
 import com.mycompany.entity.Tag;
+import com.mycompany.entity.User;
 
 @Transactional
 @Service("postService")
@@ -23,10 +24,10 @@ public class PostService {
 	private IPostFunctionDAO postDao;
 	
 	@Autowired
-	private UserService userservice;
+	private UserService userService;
 	
 	@Autowired
-	private TagService tagservice;
+	private TagService tagService;
 
 	public IPostFunctionDAO getDao() {
 		return postDao;
@@ -39,7 +40,7 @@ public class PostService {
 	public void addPost(Post post) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		post.setUser(userservice.getUserFromUsername(auth.getName()));
+		post.setUser(userService.getUserFromUsername(auth.getName()));
 		post.setDateTime(new Timestamp(System.currentTimeMillis()));
 		addTagsToPost(post);
 		postDao.save(post);
@@ -48,7 +49,7 @@ public class PostService {
 	// retrieve tags from tagStr
 	private void addTagsToPost(Post post) {
 		Set<Tag> tags = new HashSet<Tag>();
-		Iterable<Tag> db_tags = tagservice.getAllTags();
+		Iterable<Tag> db_tags = tagService.getAllTags();
 		for (String s : post.getTagStr().split(", ")) {
 			int flag = 0;
 			for (Tag tag : db_tags) {
@@ -69,8 +70,13 @@ public class PostService {
 		post.setTags(tags);
 	}
 
-	public Post getPostById(int id) {
+	public Post getPostById(int id) throws Exception {
 		Post post = postDao.findById(id).get();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getUserFromUsername(auth.getName());
+
+		if(post.getUser().getId() != user.getId())
+			throw new RuntimeException();
 		StringBuffer str = new StringBuffer();
 		for (Tag tag : post.getTags()) {
 			str.append(tag.getName() + ", ");
@@ -80,17 +86,43 @@ public class PostService {
 	}
 
 	public void updatePost(Post post) {
+
 		addTagsToPost(post);
 		postDao.save(post);
+	}
+	
+	public void deletePost(int id) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getUserFromUsername(auth.getName());
+
+		if(postDao.findById(id).get().getUser().getId() == user.getId())
+			postDao.deleteById(id);
 	}
 	
 	public List<Post> getAllPost(){
 		return postDao.findAllByOrderByDateTimeDesc();
 	}
 	
-	public List<Post> findPostByUsername(String username)
-	{
-		return postDao.findPostByUser(userservice.getUserFromUsername(username));
+	public List<Post> findPostByUsername(String username) {
+		return postDao.findPostByUser(userService.getUserFromUsername(username));
+	}
+	
+	public Set<Post> getPostOnSearch(String searchEntry) throws Exception {
+		Set<Post> searchList = new HashSet<>();
+		
+		//finding posts by username
+		searchList.addAll(findPostByUsername(searchEntry));
+		
+		List<String> associatedTags = tagService.searchTagsByKeyWord(searchEntry);
+		
+		for(String currentTag: associatedTags)
+		{
+			List<Integer> postsWithcurrentTag = tagService.getListOfAllPostswithTag(currentTag);
+			for(Integer integer: postsWithcurrentTag)
+				searchList.add(getPostById(integer));		
+		}
+	    
+	    return searchList;
 	}
 	
 	
