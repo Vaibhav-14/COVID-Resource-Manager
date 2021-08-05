@@ -193,7 +193,7 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `comments`;
  
 CREATE TABLE `comments` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `content` varchar(45) NOT NULL,
   `created_at` timestamp NOT NULL,
   `post_id` int NOT NULL,
