@@ -45,10 +45,10 @@
 	%>
 	<br>
 	<br>
-	
 	<%@ include file="parts/posts.jsp"%>
 
 <a href="/home">
 			<button>Back</button>
 </body>
 <%@ include file="parts/footer.jsp"%>
+</html>
