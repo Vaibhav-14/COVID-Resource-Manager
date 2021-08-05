@@ -60,28 +60,3 @@ Comment At: ${comment.dateTime }<br>
 </c:forEach>
 
 <%@ include file="parts/footer.jsp"%>
-
-<script>
-	function displayForm(postId) {
-		var comment_form = document.getElementById("COMMENT_FORM");
-		var br = document.createElement("br");
-		var form = document.createElement("form");
-		form.setAttribute("method", "POST");
-		form.setAttribute("action", "/comment/create");
-		var a = document.createElement("input");
-		a.setAttribute("type", "hidden");
-		a.setAttribute("name", "${_csrf.parameterName}");
-		a.setAttribute("value", "${_csrf.token}");
-		var commentContent = document.createElement("input");
-		commentContent.setAttribute("type", "text");
-		commentContent.setAttribute("name", "content");
-		var s = document.createElement("input");
-		s.setAttribute("type", "submit");
-		s.setAttribute("value", "Post Comment");
-		form.appendChild(a);
-		form.appendChild(commentContent);
-		form.appendChild(br);
-		form.appendChild(s);
-		comment_form.appendChild(form);
-	}
-</script>
