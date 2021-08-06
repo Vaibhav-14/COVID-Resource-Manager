@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mycompany.entity.Comment;
 import com.mycompany.service.CommentService;
@@ -26,9 +27,9 @@ public class CommentController {
 		return "redirect:/";
 	}
 	
-	@GetMapping("/delete/{id}")
-	public String deleteComment(@PathVariable int id) {
-		commentService.deleteComment(id);
+	@PostMapping("/delete")
+	public String deleteComment(@ModelAttribute("comment") Comment comment) {
+		commentService.deleteComment(comment.getId());
 		return "redirect:/";
 	}
 

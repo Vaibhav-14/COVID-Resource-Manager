@@ -26,19 +26,26 @@
 
 	    <h6 class="card-subtitle mb-2 text-muted">${post.type }</h6>
 		<c:if test="${pageContext.request.userPrincipal.name == post.user.username }">
-				<a href="/post/update/${post.id }">
-					<button class="btn btn-primary btn-sm">Update Post</button>
-				</a>
-				<a href="/post/delete/${post.id }">
-					<button class="btn btn-primary btn-sm btn-danger">Delete Post</button>
-				</a>
+					<form method="post" action = "/post/updatepost">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<input type="hidden" name="id" value="${post.id }"/>
+					<button name="submit" type="submit" class ="btn btn-primary btn-sm btn-danger">Update Post</button>
+					</form>
+					<br>
+				<form method="post" action = "/post/delete">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<input type="hidden" name="id" value="${post.id }"/>
+					<button name="submit" type="submit" class ="btn btn-primary btn-sm btn-danger">Delete Post</button>
+					</form>
 			</c:if>	 
 			 <c:if
 				test="${pageContext.request.userPrincipal.name != post.user.username }">
 				<sec:authorize access="hasAuthority('ADMIN')">
-					<a href="/post/delete/${post.id }">
-						<button>Delete Post</button>
-					</a>
+					<form method="post" action = "/post/delete">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<input type="hidden" name="id" value="${post.id }"/>
+					<button name="submit" type="submit" class ="btn btn-primary btn-sm btn-danger">Delete Post</button>
+					</form>
 				</sec:authorize>
 			</c:if>  
 		<br><br>	   
@@ -65,22 +72,27 @@
 			 <c:if test="${pageContext.request.userPrincipal.name != comment.user.username }">	 
 			 	<p class="card-text fw-light">
 					<a href="/user/profile?username=${comment.user.username }"><b>@${comment.user.username }</b></a>
-					:${comment.content }
+					:${comment.content }<br>
 					<sec:authorize access="hasAuthority('ADMIN')">
-					<a href="/comment/delete/${comment.id }">
-						<button>Delete Comment</button>
-					</a>
+					 Comment At: ${comment.dateTime }
+					<sf:form  modelAttribute="comment" method="post" action = "/comment/delete">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<sf:input type="hidden" path="id" value="${comment.id }"/>
+					<sf:button name="submit" type="submit" class ="btn btn-primary btn-sm btn-danger">Delete Comment</sf:button>
+					</sf:form>
 				</sec:authorize>
 				</c:if>
 				<c:if test="${pageContext.request.userPrincipal.name == comment.user.username }">
 					<a href="/user/profile"><b>@${comment.user.username }</b> </a>
-					<a style="text-decoration: none; color: black;" href="/comment/delete/${comment.id }">
-					:${comment.content }
-					<button class ="btn btn-primary btn-sm btn-danger">Delete Comment</button>
-					</a>
+					:${comment.content }<br>
+					 Comment At: ${comment.dateTime }
+					<sf:form  modelAttribute="comment" method="post" action = "/comment/delete">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<sf:input type="hidden" path="id" value="${comment.id }"/>
+					<sf:button name="submit" type="submit" class ="btn btn-primary btn-sm btn-danger">Delete Comment</sf:button>
+					</sf:form>
 					</c:if>
 				 </p>
-		    Comment At: ${comment.dateTime }<br>
 		    </c:if>
 			</c:forEach>
 	    
