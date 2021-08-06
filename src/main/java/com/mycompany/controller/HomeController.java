@@ -1,5 +1,9 @@
 package com.mycompany.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.jsp.PageContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,10 +37,8 @@ public class HomeController {
 		String username;
 		if(user == null) {
 			username = null;
-			model.addAttribute("isLoggedIn", false);
 		}
 		else {
-			model.addAttribute("isLoggedIn", true);
 			username = user.getUsername();
 		}
 		model.addAttribute("username", username);
