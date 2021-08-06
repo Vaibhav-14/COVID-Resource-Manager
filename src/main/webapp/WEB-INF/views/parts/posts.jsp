@@ -3,7 +3,7 @@
   
 <c:choose>
 	<c:when test="${empty posts}">
-    	    <h3>No posts available</h3>
+		<h3>No posts available</h3>
 	</c:when>
 <c:otherwise>
 <c:forEach items="${posts }" var="post" varStatus="tagStatus">
@@ -12,7 +12,7 @@
 	  <div class="card p-2">
 	  <div class="card-body">
 	    <div class= "bg-light p-2">
-	    
+	    	<c:if test="${post.user.enabled == true}">
 			<c:if test="${username != post.user.username }">
 				<a class="card-link" href="/user/profile?username=${post.user.username }"><h5 class="p1 card-title"><i class="p-1 material-icons align-middle">account_circle</i>@${post.user.username }</h5>
 				</a>
@@ -33,7 +33,14 @@
 					<button class="btn btn-primary btn-sm btn-danger">Delete Post</button>
 				</a>
 			</c:if>	 
-			   
+			 <c:if
+				test="${pageContext.request.userPrincipal.name != post.user.username }">
+				<sec:authorize access="hasAuthority('ADMIN')">
+					<a href="/post/delete/${post.id }">
+						<button>Delete Post</button>
+					</a>
+				</sec:authorize>
+			</c:if>  
 		<br><br>	   
 	    <p class="card-text">${post.message }</p>
 	    <p class="card-text">
@@ -54,28 +61,33 @@
 	    
 	    
 			<c:forEach items="${post.comments }" var="comment" varStatus="tagStatus">
-			
-			 <c:if test="${username != comment.user.username }">	 
+			<c:if test="${comment.user.enabled == true}">
+			 <c:if test="${pageContext.request.userPrincipal.name != comment.user.username }">	 
 			 	<p class="card-text fw-light">
 					<a href="/user/profile?username=${comment.user.username }"><b>@${comment.user.username }</b></a>
 					:${comment.content }
+					<sec:authorize access="hasAuthority('ADMIN')">
+					<a href="/comment/delete/${comment.id }">
+						<button>Delete Comment</button>
+					</a>
+				</sec:authorize>
 				</c:if>
-				<c:if test="${username == comment.user.username }">
+				<c:if test="${pageContext.request.userPrincipal.name == comment.user.username }">
 					<a href="/user/profile"><b>@${comment.user.username }</b> </a>
 					<a style="text-decoration: none; color: black;" href="/comment/delete/${comment.id }">
 					:${comment.content }
 					<button class ="btn btn-primary btn-sm btn-danger">Delete Comment</button>
 					</a>
-				</c:if>
+					</c:if>
 				 </p>
 		    Comment At: ${comment.dateTime }<br>
+		    </c:if>
 			</c:forEach>
 	    
   
 	     
 	  </div>
-	  
-	  	<c:if test="${isLoggedIn == true }">
+	  	<c:if test="${pageContext.request.userPrincipal.name != null}">
 		<sf:form modelAttribute="comment" action="/comment/create" method="post">
 
 			  <div class="container">
@@ -98,33 +110,10 @@
 	</div>
 	
 	
-	
+	</c:if>
 	</c:forEach>
 </c:otherwise>
 </c:choose>
 	
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-
-
-
-
-
-
-	
-
-

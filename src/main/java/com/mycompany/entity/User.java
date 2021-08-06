@@ -229,7 +229,13 @@ public class User {
 			return true;
 		return false;
 	}
-	
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", username=" + username
+				+ ", email=" + email + ", password=" + password + ", retypepassword=" + retypepassword + ", mobile="
+				+ mobile + ", accountStatus=" + accountStatus + ", dateOfBirth=" + dateOfBirth + ", gender=" + gender
+				+ ", enabled=" + enabled + ", roles=" + roles + "]";
+	}
 	
 	
 }

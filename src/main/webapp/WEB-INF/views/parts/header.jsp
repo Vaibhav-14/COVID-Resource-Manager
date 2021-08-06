@@ -21,6 +21,11 @@
           <a class="nav-link active" href="/post/create">Create Post</a>
         </li>
         </sec:authorize>
+        <sec:authorize access="hasAuthority('ADMIN')">
+        <li class="nav-item"> 
+          <a class="nav-link active" href="/createTag">Add Tag</a>
+        </li>
+        </sec:authorize>
         </ul>
         
         <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
