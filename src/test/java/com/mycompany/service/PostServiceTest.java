@@ -52,7 +52,7 @@ public class PostServiceTest{
 		// Creating Post
 		Post post = new Post() ; 
 		post.setId(1);
-		post.setType("Urgent") ; 
+		post.setType("Required") ; 
 		try {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		    Date parsedDate = dateFormat.parse("2000-01-01 00:00:01");
