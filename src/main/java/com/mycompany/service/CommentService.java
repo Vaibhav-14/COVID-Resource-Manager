@@ -9,11 +9,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.mycompany.dao.ICommentFunctionDAO;
-import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.dao.IRoleFunctionDAO;
 import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.Comment;
-import com.mycompany.entity.Notification;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.User;
 
@@ -44,16 +42,34 @@ public class CommentService {
 		comment.setDateTime(new Timestamp(System.currentTimeMillis()));
 		commentDao.save(comment);
 		
+		String activityType = "@" + loggedInUser.getUsername() + " commented on your post: " + 
+									comment.getContent();
+		
+		notificationService.saveNotification(loggedInUser, activityType,
+				"post", "post/" + comment.getPost().getId(), comment.getPost().getUser());
+		
 		Set<User> mentionedUsers = userService.getUsersFromString(comment.getContent());
-		notificationService.saveNotification(loggedInUser, "comment", "post/" + comment.getPost().getId(), mentionedUsers);
+		activityType = "@" + loggedInUser.getUsername() + " mentioned you in a comment" ;
+		notificationService.saveNotification(loggedInUser, activityType,
+				"comment", "post/" + comment.getPost().getId(), mentionedUsers);
+		
 	}
 	
 	public void deleteComment(int id) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userDao.findByUsername(auth.getName());
-		Role role = roleDao.findById(2).get();
-		if(commentDao.findById(id).get().getUser().getId() == user.getId() || user.getRoles().contains(role)) {
+		Role role = roleDao.findByName("ADMIN");
+		boolean isAdmin = false;
+		Comment comment = commentDao.findById(id).get();
+		if(comment.getUser().getId() == user.getId() || (isAdmin = user.getRoles().contains(role))) {
 			commentDao.deleteById(id);
+			if (isAdmin) {
+				String activityType = "Your comment violets the Covid Resource Manager Policies. "
+						+ "So It has been removed.";
+
+				notificationService.saveNotification(null, activityType, "post", 
+									"post/" + id, comment.getUser());
+			}
 		}
 	}
 

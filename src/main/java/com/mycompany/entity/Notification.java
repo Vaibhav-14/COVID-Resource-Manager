@@ -26,7 +26,7 @@ public class Notification {
 	private User receiver;
 	
 	@Column(name="sender_id")
-	private int senderId;
+	private Integer senderId;
 	
 	@Column(name="activity_type")
 	private String activityType;
@@ -46,7 +46,7 @@ public class Notification {
 	public Notification() {
 	}
 
-	public Notification(int senderId, String activityType, String objectType, String objectURL) {
+	public Notification(Integer senderId, String activityType, String objectType, String objectURL) {
 		this.senderId = senderId;
 		this.activityType = activityType;
 		this.objectType = objectType;
@@ -69,11 +69,11 @@ public class Notification {
 		this.receiver = receiver;
 	}
 
-	public int getSenderId() {
+	public Integer getSenderId() {
 		return senderId;
 	}
 
-	public void setSenderId(int senderId) {
+	public void setSenderId(Integer senderId) {
 		this.senderId = senderId;
 	}
 
