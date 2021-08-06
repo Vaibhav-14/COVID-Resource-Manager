@@ -8,7 +8,7 @@
 <%@ include file="parts/header.jsp" %> 
 	<div class="formcontainer w-100 d-flex justify-content-center">
 		<div class="container bg-white rounded shadow-lg ">
-			<sf:form id="form1" modelAttribute = "post" method = "POST" >
+			<sf:form id="form1" modelAttribute = "post" method = "POST" action="/post/update">
 				<sf:hidden path="id"/>
 				
 				<div class = "row">

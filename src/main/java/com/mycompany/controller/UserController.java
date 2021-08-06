@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -83,12 +84,6 @@ public class UserController {
 	public String displayProfile(@RequestParam(required = false) String username, Model model) {
 		List<Post> posts = userService.displayProfile(username);
 		User user = userService.getUser(username);
-		if(userService.getUser(null) == null) {
-			model.addAttribute("isLoggedIn", false);
-		}
-		else {
-			model.addAttribute("isLoggedIn", true);
-		}
 		model.addAttribute("IsUsername", username);
 		model.addAttribute("username", user.getUsername());
 		model.addAttribute("tag", null);
@@ -96,6 +91,23 @@ public class UserController {
 		model.addAttribute("posts", posts);
 		model.addAttribute("comment", new Comment());
 		return "profile";
+	}
+	
+	@GetMapping(value = "/block/{username}")
+	public String blockUser(@PathVariable String username) {
+		User user = userService.getUser(username);
+		user.setEnabled(0);
+		userService.updateUser(user);
+		return "redirect:/user/profile?username="+username;
+		
+	}
+	
+	@GetMapping(value = "/unblock/{username}")
+	public String unblockUser(@PathVariable String username) {
+		User user = userService.getUser(username);
+		user.setEnabled(1);
+		userService.updateUser(user);
+		return "redirect:/user/profile?username="+username;
 	}
 	
 }
