@@ -5,14 +5,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mycompany.dao.INotificationDAO;
 import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.dao.IRoleFunctionDAO;
+import com.mycompany.entity.Notification;
 import com.mycompany.entity.Post;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.Tag;
@@ -34,6 +38,9 @@ public class PostService {
 	
 	@Autowired
 	private TagService tagService;
+	
+	@Autowired
+	private NotificationService notificationService;
 
 	public IPostFunctionDAO getDao() {
 		return postDao;
@@ -44,14 +51,19 @@ public class PostService {
 	}
 	
 	public void addPost(Post post) {
+		Set<User> mentionedUsers = userService.getUsersFromString(post.getMessage());
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		post.setUser(userService.getUserFromUsername(auth.getName()));
+		User loggedInUser = userService.getUserFromUsername(auth.getName());
+		post.setUser(loggedInUser);
 		post.setDateTime(new Timestamp(System.currentTimeMillis()));
 		addTagsToPost(post);
 		postDao.save(post);
+		
+		notificationService.saveNotification(loggedInUser, "post", "post/" + post.getId(), mentionedUsers);
 	}
-	
+
 	// retrieve tags from tagStr
 	private void addTagsToPost(Post post) {
 		Set<Tag> tags = new HashSet<Tag>();

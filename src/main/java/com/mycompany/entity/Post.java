@@ -19,6 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 @Entity
 @Table(name="posts")
@@ -32,6 +34,7 @@ public class Post {
 	private String type;
 	
 	@Column(name="date_time")
+	@DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss[.fffffffff]")
 	private Timestamp dateTime;
 	
 	@Column 

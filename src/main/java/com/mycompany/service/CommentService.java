@@ -1,6 +1,7 @@
 package com.mycompany.service;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,7 @@ import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.dao.IRoleFunctionDAO;
 import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.Comment;
+import com.mycompany.entity.Notification;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.User;
 
@@ -27,11 +29,23 @@ public class CommentService {
 	@Autowired
 	private IRoleFunctionDAO roleDao;
 	
+	@Autowired
+	private NotificationService notificationService;
+	
+	@Autowired
+	private UserService userService;
+	
 	public void addComment(Comment comment) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		comment.setUser(userDao.findByUsername(auth.getName()));
+		
+		User loggedInUser = userService.getUserFromUsername(auth.getName());
+
+		comment.setUser(loggedInUser);
 		comment.setDateTime(new Timestamp(System.currentTimeMillis()));
 		commentDao.save(comment);
+		
+		Set<User> mentionedUsers = userService.getUsersFromString(comment.getContent());
+		notificationService.saveNotification(loggedInUser, "comment", "post/" + comment.getPost().getId(), mentionedUsers);
 	}
 	
 	public void deleteComment(int id) {
