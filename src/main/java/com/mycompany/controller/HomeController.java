@@ -37,10 +37,8 @@ public class HomeController {
 		String username;
 		if(user == null) {
 			username = null;
-			model.addAttribute("isLoggedIn", false);
 		}
 		else {
-			model.addAttribute("isLoggedIn", true);
 			username = user.getUsername();
 		}
 		model.addAttribute("username", username);

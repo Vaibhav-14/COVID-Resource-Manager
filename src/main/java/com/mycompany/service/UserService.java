@@ -78,7 +78,7 @@ public class UserService {
 		System.out.println(user);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User admin_user = userDao.findByUsername(auth.getName());
-		Role role = roleDao.findById(2).get(); // for admin use only
+		Role role = roleDao.findByName("ADMIN"); // for admin use only
 		if(admin_user.getRoles().contains(role)) {
 			userDao.save(user);
 		}

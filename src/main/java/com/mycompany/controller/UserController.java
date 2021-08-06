@@ -84,12 +84,6 @@ public class UserController {
 	public String displayProfile(@RequestParam(required = false) String username, Model model) {
 		List<Post> posts = userService.displayProfile(username);
 		User user = userService.getUser(username);
-		if(userService.getUser(null) == null) {
-			model.addAttribute("isLoggedIn", false);
-		}
-		else {
-			model.addAttribute("isLoggedIn", true);
-		}
 		model.addAttribute("IsUsername", username);
 		model.addAttribute("username", user.getUsername());
 		model.addAttribute("tag", null);
