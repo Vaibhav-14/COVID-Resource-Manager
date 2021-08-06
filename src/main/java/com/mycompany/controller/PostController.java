@@ -1,5 +1,6 @@
 package com.mycompany.controller;
 
+import java.security.ProviderException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.mycompany.entity.Comment;
 import com.mycompany.entity.Post;
 import com.mycompany.entity.User;
+
+import com.mycompany.exception.IncorrectUserException;
+
 import com.mycompany.service.PostService;
 import com.mycompany.service.UserService;
 
@@ -45,7 +49,7 @@ public class PostController {
 	}
 	
 	@GetMapping("/update/{id}")
-	public String updatePost(@PathVariable int id, Model model) throws Exception {
+	public String updatePost(@PathVariable int id, Model model) throws ProviderException {
 		
 		Post post = postService.getPostById(id);
 		model.addAttribute("post", post);
@@ -83,14 +87,12 @@ public class PostController {
 		
 
 		Set<Post> searchList = postService.getPostOnSearch(searchEntry);
-
-	    
 		model.addAttribute("posts", searchList);
 		return "profile";	
 	}
 	
 	@GetMapping("/delete/{id}")
-	public String deletePosts(@PathVariable int id) {
+	public String deletePosts(@PathVariable int id) throws IncorrectUserException {
 		postService.deletePost(id);
 		return "redirect:/";
 	}

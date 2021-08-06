@@ -17,6 +17,7 @@ import com.mycompany.entity.Post;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.Tag;
 import com.mycompany.entity.User;
+import com.mycompany.exception.IncorrectUserException;
 
 @Transactional
 @Service("postService")
@@ -75,13 +76,13 @@ public class PostService {
 		post.setTags(tags);
 	}
 
-	public Post getPostById(int id) throws Exception {
+	public Post getPostById(int id) throws IncorrectUserException {
 		Post post = postDao.findById(id).get();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.getUserFromUsername(auth.getName());
 
 		if(post.getUser().getId() != user.getId())
-			throw new RuntimeException();
+			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
 		StringBuffer str = new StringBuffer();
 		for (Tag tag : post.getTags()) {
 			str.append(tag.getName() + ", ");
@@ -96,13 +97,15 @@ public class PostService {
 		postDao.save(post);
 	}
 	
-	public void deletePost(int id) {
+	public void deletePost(int id) throws IncorrectUserException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.getUserFromUsername(auth.getName());
 		Role role = roleDao.findById(2).get();
 		if(postDao.findById(id).get().getUser().getId() == user.getId() || user.getRoles().contains(role)) {
 			postDao.deleteById(id);
 		}
+		else
+			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
 	}
 	
 	public List<Post> getAllPost(){
