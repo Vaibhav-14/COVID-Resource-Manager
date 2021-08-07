@@ -2,9 +2,10 @@
 <title>Create Post</title>
 <script src="${pageContext.request.contextPath }/js/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath }/js/jquery-ui.min.js"></script>
+<link href="${pageContext.request.contextPath }/css/auto_complete.css" rel="stylesheet" type="text/css" />
 
 <%@ include file="parts/header.jsp" %> 
-	<div class="formcontainer p-5 w-75 justify-content-start">
+	<div class="formcontainer w-100 d-flex justify-content-center">
 		<div class="container bg-white rounded shadow-lg ">
 			<sf:form id="form1" modelAttribute = "post" method = "POST" >
 				<sf:hidden path="id"/>
@@ -15,12 +16,18 @@
 					</div>
 				</div>
 				
+				
 				<div class = "row">
 					<div class="col-3 p-1 m-1 text-end fw-bold">
 						<h5>Type</h5>
 					</div>
 					<div class="col-6 p-1 m-1 fw-normal">
-						<sf:input path="type" class="form-control" />
+						<sf:select path="type" class="form-select" >
+						  <sf:option value="Required" label="Required"/>  
+						  <sf:option value="Available" label="Available"/>  
+						  <sf:option value="Other" label="Other"/>  
+						</sf:select>
+						
 					</div>
 				</div>
 				
