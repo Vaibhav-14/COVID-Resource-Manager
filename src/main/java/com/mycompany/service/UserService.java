@@ -83,5 +83,9 @@ public class UserService {
 			userDao.save(user);
 		}
 	}
+	
+	public List<String> searchUsersByKeyWord(String keyword) {
+		return userDao.searchUserByKeyWord(keyword);
+	}
 
 }

@@ -85,7 +85,7 @@ public class PostService {
 			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
 		StringBuffer str = new StringBuffer();
 		for (Tag tag : post.getTags()) {
-			str.append(tag.getName() + ", ");
+			str.append(tag.getName() + " ");
 		}
 		post.setTagStr(str.toString()); 
 		return post;
