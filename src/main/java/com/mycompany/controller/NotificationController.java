@@ -28,4 +28,9 @@ public class NotificationController {
 		notificationService.deleteNotification(id);
 		return "redirect:/notifications/";
 	}
+	
+	@GetMapping("/post/{id}") 
+	public String showPost(@PathVariable int id) {
+		return "redirect:/post/"+id;
+	}
 }

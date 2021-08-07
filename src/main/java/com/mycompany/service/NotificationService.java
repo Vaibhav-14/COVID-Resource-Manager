@@ -3,6 +3,8 @@ package com.mycompany.service;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +25,9 @@ public class NotificationService {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ServletContext context;
 
 	public void save(Notification notification) {
 		notificationDao.save(notification);
@@ -31,7 +36,7 @@ public class NotificationService {
 	public void saveNotification(User sender, String activityType, String objectType,
 						String objectURL, Set<User> receivers) {
 		for (User user : receivers) {
-			Notification notification = new Notification(sender.getId(), activityType, objectType, objectURL);
+			Notification notification = new Notification(sender.getId(), activityType, objectType, context.getContextPath() + objectURL);
 			notification.setReceiver(user);
 			save(notification);
 		}
@@ -43,7 +48,7 @@ public class NotificationService {
 		if (sender != null)
 			notification = new Notification(sender.getId(), activityType, objectType, objectURL);
 		else
-			notification = new Notification(null, activityType, objectType, objectURL);
+			notification = new Notification(null, activityType, objectType, context.getContextPath() + objectURL);
 		notification.setReceiver(receiver);
 		save(notification);
 	}

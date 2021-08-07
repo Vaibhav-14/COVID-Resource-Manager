@@ -1,6 +1,7 @@
 package com.mycompany.controller;
 
 import java.security.ProviderException;
+import java.util.LinkedList;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +95,22 @@ public class PostController {
 	public String deletePosts(@PathVariable int id) throws IncorrectUserException {
 		postService.deletePost(id);
 		return "redirect:/";
+	}
+	
+	@GetMapping("/{id}")
+	public String showPost(@PathVariable int id, Model model) {
+		User user = userService.getUser(null);
+		String username;
+		if(user == null) {
+			username = null;
+		}
+		else {
+			username = user.getUsername();
+		}
+		model.addAttribute("username", username);
+		model.addAttribute("posts", postService.getPostById(id));
+		model.addAttribute("comment", new Comment());
+		return "post";
 	}
 
 
