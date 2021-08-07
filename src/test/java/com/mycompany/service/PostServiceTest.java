@@ -47,68 +47,68 @@ public class PostServiceTest{
 		assertThat(postDao).isNotNull() ; 
 	}
 	
-//	@Test
-//	@Order(2)
-//	public void addPost() throws Exception {
-//		// Creating Post
-//		Post post = new Post() ; 
-//		post.setId(1);
-//		post.setType("Urgent") ; 
-//		try {
-//			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-//		    Date parsedDate = dateFormat.parse("2000-01-01 00:00:01");
-//		    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
-//			post.setDateTime(timestamp);
-//		}catch(Exception e) {
-//			System.out.println("Error : In Allocation the Time Stamp for Post");
-//			e.printStackTrace();
-//		}
-//		post.setMessage("medicine required");
-//		
-//		// Creating User for Post
-//		User user = new User() ; 
-//		user.setId(1);
-//		user.setUsername("Champ");
-//		user.setEmail("Champ@gmail.com");
-//		user.setFirstname("Champ");
-//		user.setLastname("OK");
-//		user.setPassword("Thor");
-//		user.setMobile("1123456789") ; 
-//		user.setAccountStatus("active");
-//		try {
-//		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//		    Date parsedDate = dateFormat.parse(String.valueOf("2000-01-01"));
-//		    user.setDateOfBirth(parsedDate);
-//		} catch(Exception e) { 
-//			System.out.println("Error : In Allocation of DOB to user");
-//			e.printStackTrace();
-//		}
-//		user.setGender("male");
-//		user.setEnabled(1);
-//		
-//		// Saving User in Database 
-//		userService.addUser(user);
-//		
-//		// Adding User --> Post
-//		post.setUser(user);
-//		
-//		// Generating Tags
-//		Set<Tag> tagsObj = new HashSet<Tag>() ; 
-//		tagsObj.add(new Tag("#Available" , null )) ; 
-//		tagsObj.add(new Tag("#Urgent" , null )) ; 
-//		
-//		// Adding Tags --> Post
-//		post.setTags(tagsObj);
-//		
-//		// Saving Post to Database 
-//		postDao.save(post) ; 
-//		
-//		System.out.println("Done Till Here");
-//		
-//		// Check ! Is Valid Post
-//		assertEquals(postService.getPostById(1).getMessage() , post.getMessage());
-//	}
-//	
+	@Test
+	@Order(2)
+	public void addPost() throws Exception {
+		// Creating Post
+		Post post = new Post() ; 
+		post.setId(1);
+		post.setType("Urgent") ; 
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		    Date parsedDate = dateFormat.parse("2000-01-01 00:00:01");
+		    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+			post.setDateTime(timestamp);
+		}catch(Exception e) {
+			System.out.println("Error : In Allocation the Time Stamp for Post");
+			e.printStackTrace();
+		}
+		post.setMessage("medicine required");
+		
+		// Creating User for Post
+		User user = new User() ; 
+		user.setId(1);
+		user.setUsername("Champ");
+		user.setEmail("Champ@gmail.com");
+		user.setFirstname("Champ");
+		user.setLastname("OK");
+		user.setPassword("Thor");
+		user.setMobile("1123456789") ; 
+		user.setAccountStatus("active");
+		try {
+		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		    Date parsedDate = dateFormat.parse(String.valueOf("2000-01-01"));
+		    user.setDateOfBirth(parsedDate);
+		} catch(Exception e) { 
+			System.out.println("Error : In Allocation of DOB to user");
+			e.printStackTrace();
+		}
+		user.setGender("male");
+		user.setEnabled(1);
+		
+		// Saving User in Database 
+		userService.addUser(user);
+		
+		// Adding User --> Post
+		post.setUser(user);
+		
+		// Generating Tags
+		Set<Tag> tagsObj = new HashSet<Tag>() ; 
+		tagsObj.add(new Tag("#Available" , null )) ; 
+		tagsObj.add(new Tag("#Urgent" , null )) ; 
+		
+		// Adding Tags --> Post
+		post.setTags(tagsObj);
+		
+		// Saving Post to Database 
+		postDao.save(post) ; 
+		
+		System.out.println("Done Till Here");
+		
+		// Check ! Is Valid Post
+		assertEquals(postService.getPostById(1).getMessage() , post.getMessage());
+	}
+	
 //	@Test
 //	@Order(3)
 //	public void updatePost() throws Exception {
@@ -118,36 +118,36 @@ public class PostServiceTest{
 //		postService.updatePost(post);
 //		assertTrue(postService.getPostById(1).getMessage().equals(message));
 //	}
-//	
-//	@Test 
-//	@Order(4)
-//	public void getAllPost() {
-//		assertTrue(postService.getAllPost().size() > 0 ) ; 
-//	}
-//	
-//	@Test
-//	@Order(5)
-//	public void findPostByUsername() {
-//		String username = "Champ" ; 
-//		List<Post> posts = postService.findPostByUsername(username) ; 
-//		for(Post post : posts) {
-//			assertTrue(post.getUser().getUsername().equals(username)) ; 
-//		}
-//	} 
-//	
-//	@Test
-//	@Order(6)
-//	public void searchPost(){
-//		// Positive Test Cases 
-//		// By username
-//		assertTrue(postService.findPostByUsername("champ").size() > 0 , "Result should be greater than zero" ) ; 
-//		
-//		// Negative Test Cases 
-//		// By username
-//		assertTrue(postService.findPostByUsername("cham").size() == 0  , "Result should be zero" ) ; 
-//
-//	}
-//	@Order(7)
+	
+	@Test 
+	@Order(4)
+	public void getAllPost() {
+		assertTrue(postService.getAllPost().size() > 0 ) ; 
+	}
+	
+	@Test
+	@Order(5)
+	public void findPostByUsername() {
+		String username = "Champ" ; 
+		List<Post> posts = postService.findPostByUsername(username) ; 
+		for(Post post : posts) {
+			assertTrue(post.getUser().getUsername().equals(username)) ; 
+		}
+	} 
+	
+	@Test
+	@Order(6)
+	public void searchPost(){
+		// Positive Test Cases 
+		// By username
+		assertTrue(postService.findPostByUsername("champ").size() > 0 , "Result should be greater than zero" ) ; 
+		
+		// Negative Test Cases 
+		// By username
+		assertTrue(postService.findPostByUsername("noUser").size() == 0  , "Result should be zero" ) ; 
+
+	}
+	@Order(7)
 	@Test
 	public void testPostUpdate() throws Exception {
        String type = "Required";
@@ -169,5 +169,19 @@ public class PostServiceTest{
 
   
    }
+	
+	@Test
+	public void testSetDao() {
+		PostService postService = new PostService();
+		postService.setDao(postDao);
+		assertTrue(postService.getDao() == this.postDao);
+	}
+	
+	@Test
+	public void testGetDao() {
+		PostService postService = new PostService();
+		postService.setDao(postDao);
+		assertTrue(postService.getDao() == this.postDao);
+	}
 	
 }

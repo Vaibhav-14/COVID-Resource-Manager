@@ -23,7 +23,7 @@ public class CommentController {
 	
 	@PostMapping("/create")
 	public String saveComment(@ModelAttribute("comment") Comment comment) {
-		System.out.println(comment);
+		//System.out.println(comment);
 		commentService.addComment(comment);
 		return "redirect:/";
 	}

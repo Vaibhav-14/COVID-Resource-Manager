@@ -15,7 +15,9 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 
+import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.User;
 
 @SpringBootTest
@@ -25,14 +27,20 @@ public class UserServiceTest {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private IUserFunctionDAO userDao;
+	
+	
+	static ApplicationContext applicationContext = null;
+    
 	@Test
 	@Order(1)
 	public void contextLoads() {
 		assertThat(userService).isNotNull() ; 
 	}
-	
-	@Test
+
 	@Order(2)
+	@Test//(expected=Exception.class)
 	public void addUser() {
 		User user = new User() ; 
 		user.setId(1);
@@ -69,5 +77,20 @@ public class UserServiceTest {
 	public void getUser() {
 		assertEquals(userService.getUser("Champ").getId() , 1);
 	}
+	
+	@Test
+	public void testSetDao() {
+		UserService userService = new UserService();
+		userService.setUserDao(userDao);
+		assertTrue(userService.getUserDao() == this.userDao);
+	}
+	
+	@Test
+	public void testGetDao() {
+		UserService userService = new UserService();
+		userService.setUserDao(userDao);
+		assertTrue(userService.getUserDao() == this.userDao);
+	}
+	
 
 }

@@ -20,25 +20,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class CovidResourceManagerApplicationTests {
 	
-	@MockBean
-	private IPostFunctionDAO repo;
-	
-	@Autowired
-	private PostController postController;
-	@Autowired
-	private HomeController homeController;
-	@Autowired
-	private UserController userController;
-	
-	@Autowired
-	private MockMvc mockMvc;
 
+	public void contextLoads() {
 
-	@Test
-	public void contextLoads() throws Exception {
-		assertThat(postController).isNotNull();
-		assertThat(homeController).isNotNull();
-		assertThat(userController).isNotNull();
 	}
 	
 
