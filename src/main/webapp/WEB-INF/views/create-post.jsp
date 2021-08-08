@@ -1,7 +1,5 @@
 <%@ include file="parts/meta.jsp" %> 
 <title>Create Post</title>
-<script src="${pageContext.request.contextPath }/js/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath }/js/jquery-ui.min.js"></script>
 
 <%@ include file="parts/header.jsp" %> 
 	<div class="formcontainer p-5 w-75 justify-content-start">

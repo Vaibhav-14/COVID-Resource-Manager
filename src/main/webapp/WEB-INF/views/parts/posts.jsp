@@ -95,7 +95,7 @@
 		            <div class="col-9">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<sf:input type="hidden" path="post" value="${ post.id}" />
-						<sf:input path="content" class="form-control" />
+						<sf:input path="content" class="form-control autocomplete" />
 		    		</div>
 		    		<div class="col-1">
 		      		<sf:button type="submit" class="btn btn-primary">Comment</sf:button>
@@ -108,8 +108,7 @@
 	  
  
 	</div>
-	
-	
+
 	</c:if>
 	</c:forEach>
 </c:otherwise>
@@ -117,3 +116,4 @@
 	
   </div>
 </div>
+
