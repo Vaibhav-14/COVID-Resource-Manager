@@ -9,6 +9,19 @@
 
 	$(document).ready(function() {
 
+		$("#searchbar").autocomplete({
+			source: function (request, response) {
+				$.getJSON("${pageContext.request.contextPath}/autocomplete", {
+					term: extractLast(request.term)
+				}, response);
+			},
+			search: function () {
+				// custom minLength
+				var term = extractLast(this.value);
+				return (term.length > 1) && (term.startsWith("@") || term.startsWith("#"));
+			}
+		});
+
 		$(".autocomplete").autocomplete({
 			source: function (request, response) {
 				$.getJSON("${pageContext.request.contextPath}/autocomplete", {

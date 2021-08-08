@@ -51,5 +51,4 @@
 		</div>
 	  </div>
 	
-<%@ include file="parts/auto.jsp" %>
 <%@ include file="parts/footer.jsp" %> 
