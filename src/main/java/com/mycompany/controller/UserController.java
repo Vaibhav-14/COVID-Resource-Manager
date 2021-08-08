@@ -110,4 +110,6 @@ public class UserController {
 		return "redirect:/user/profile?username="+username;
 	}
 	
+	
+	
 }

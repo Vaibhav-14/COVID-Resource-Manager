@@ -73,6 +73,9 @@ public class User {
 	)
 	private Set<Role> roles = new HashSet<>();
 	
+	@OneToMany(mappedBy = "receiver", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+	private Set<Notification> notifications = new HashSet<>();
+	
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private Set<Post> posts = new HashSet<>();
 	
@@ -176,6 +179,12 @@ public class User {
 		this.comments = comments;
 	}
 
+	public Set<Notification> getNotifications() {
+		return notifications;
+	}
+	public void setNotifications(Set<Notification> notifications) {
+		this.notifications = notifications;
+	}
 	public User()
 	{
 		
@@ -204,6 +213,17 @@ public class User {
 		
 		tempPost.setUser(this);  // bidirectional linkage
 	}
+	
+	public void addNotification(Notification theNotification) {
+		
+		if(notifications == null)
+			notifications = new HashSet<>();
+		else
+			notifications.add(theNotification);
+		
+		theNotification.setReceiver(this);  // bidirectional linkage
+	}
+	
 	public boolean isEnabled() {
 		if (this.enabled == 1)
 			return true;

@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +36,10 @@ public class PostService {
 	
 	@Autowired
 	private TagService tagService;
+	
+	
+	@Autowired
+	private NotificationService notificationService;
 
 	public IPostFunctionDAO getDao() {
 		return postDao;
@@ -44,14 +50,21 @@ public class PostService {
 	}
 	
 	public void addPost(Post post) {
+		Set<User> mentionedUsers = userService.getUsersFromString(post.getMessage());
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		post.setUser(userService.getUserFromUsername(auth.getName()));
+		User loggedInUser = userService.getUserFromUsername(auth.getName());
+		post.setUser(loggedInUser);
 		post.setDateTime(new Timestamp(System.currentTimeMillis()));
 		addTagsToPost(post);
 		postDao.save(post);
+		
+		String activityType = "@" + loggedInUser.getUsername() + " mentioned you in a post";
+
+		notificationService.saveNotification(loggedInUser, activityType, "post", "post/" + post.getId(), mentionedUsers);
 	}
-	
+
 	// retrieve tags from tagStr
 	private void addTagsToPost(Post post) {
 		Set<Tag> tags = new HashSet<Tag>();
@@ -100,9 +113,18 @@ public class PostService {
 	public void deletePost(int id) throws IncorrectUserException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.getUserFromUsername(auth.getName());
-		Role role = roleDao.findById(2).get();
-		if(postDao.findById(id).get().getUser().getId() == user.getId() || user.getRoles().contains(role)) {
+		Role role = roleDao.findByName("ADMIN");
+		boolean isAdmin = false;
+		Post post = postDao.findPostById(id);
+		if(post.getUser().getId() == user.getId() || (isAdmin = user.getRoles().contains(role))) {
 			postDao.deleteById(id);
+			if (isAdmin) {
+				String activityType = "Your post violets the Covid Resource Manager Policies. "
+						+ "So It has been removed.";
+
+				notificationService.saveNotification(null, activityType, "post", 
+									"post/" + id, post.getUser());
+			}
 		}
 		else
 			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
