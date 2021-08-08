@@ -1,0 +1,22 @@
+@charset "ISO-8859-1";
+
+.ui-autocomplete {
+	background: white;
+	font-weight: normal;
+	color: #000000;
+	width: 300px ; 
+	list-style: none;
+    list-style-type: none;
+    padding: 1px;
+    margin: 1px;
+    z-index: 2;
+}
+.ui-state-active, .ui-widget-content .ui-state-active, 
+.ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, 
+.ui-state-active.ui-button:hover 
+{
+  border: 1px solid #000;
+  background: grey;
+  font-weight: normal;
+  color: #fff;
+}

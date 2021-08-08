@@ -1,6 +1,7 @@
 package com.mycompany.controller;
 
-import java.util.HashSet;
+import java.security.ProviderException;
+import java.util.LinkedList;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mycompany.entity.Comment;
 import com.mycompany.entity.Post;
+import com.mycompany.entity.User;
+
+import com.mycompany.exception.IncorrectUserException;
+
 import com.mycompany.service.PostService;
 import com.mycompany.service.UserService;
 
@@ -43,15 +48,15 @@ public class PostController {
 		return "redirect:/home";
 	}
 	
-	@GetMapping("/update/{id}")
-	public String updatePost(@PathVariable int id, Model model) throws Exception {
+	@PostMapping("/updatepost")
+	public String updatePost(@RequestParam(name = "id") int id, Model model) throws ProviderException {
 		
 		Post post = postService.getPostById(id);
 		model.addAttribute("post", post);
 		return "update-post";
 	}
 	
-	@PostMapping("/update/{id}") 
+	@PostMapping("/update") 
 	public String updatePost(@ModelAttribute("post") Post post, Model model) {
 		
 		postService.updatePost(post);
@@ -61,11 +66,15 @@ public class PostController {
 	
 	@PostMapping("/searchresult")
 	public String searchPostResult(Model model, @RequestParam(name = "searchentry") String searchEntry) {
-		if (searchEntry.startsWith("#"))
+		User user = null;
+		if (searchEntry.startsWith("#")) {
 			model.addAttribute("tag", searchEntry);
-		else
+		}
+		else {
+			user = userService.getUser(searchEntry);
 			model.addAttribute("tag", null);
-		if(userService.getUser(null) == null) {
+		}
+		if( userService.getUser(null) == null) {
 			model.addAttribute("isLoggedIn", false);
 		}
 		else {
@@ -74,20 +83,34 @@ public class PostController {
 		model.addAttribute("comment", new Comment());
 		model.addAttribute("username", searchEntry);
 		model.addAttribute("IsUsername", null);
-		model.addAttribute("user", null);
+		model.addAttribute("user", user);
 		
 
 		Set<Post> searchList = postService.getPostOnSearch(searchEntry);
-
-	    
 		model.addAttribute("posts", searchList);
 		return "profile";	
 	}
 	
-	@GetMapping("/delete/{id}")
-	public String deletePosts(@PathVariable int id) {
+	@PostMapping("/delete")
+	public String deletePosts(@RequestParam(name = "id") int id) throws IncorrectUserException {
 		postService.deletePost(id);
-		return "redirect:/user/profile";
+		return "redirect:/";
+	}
+	
+	@GetMapping("/{id}")
+	public String showPost(@PathVariable int id, Model model) {
+		User user = userService.getUser(null);
+		String username;
+		if(user == null) {
+			username = null;
+		}
+		else {
+			username = user.getUsername();
+		}
+		model.addAttribute("username", username);
+		model.addAttribute("posts", postService.getPostById(id));
+		model.addAttribute("comment", new Comment());
+		return "post";
 	}
 
 

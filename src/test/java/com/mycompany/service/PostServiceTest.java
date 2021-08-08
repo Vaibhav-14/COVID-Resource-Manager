@@ -49,11 +49,13 @@ public class PostServiceTest{
 	
 	@Test
 	@Order(2)
-	public void addPost() throws Exception {
+
+	public void addPost() {
 		// Creating Post
 		Post post = new Post() ; 
 		post.setId(1);
-		post.setType("Urgent") ; 
+		post.setType("Required") ; 
+
 		try {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		    Date parsedDate = dateFormat.parse("2000-01-01 00:00:01");
@@ -106,17 +108,33 @@ public class PostServiceTest{
 		System.out.println("Done Till Here");
 		
 		// Check ! Is Valid Post
-		assertEquals(postService.getPostById(1).getMessage() , post.getMessage());
+		try {
+			assertEquals(postService.getPostById(1).getMessage() , post.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 	
 //	@Test
 //	@Order(3)
-//	public void updatePost() throws Exception {
-//		Post post = postService.getPostById(1) ; 
+
+//	public void updatePost() {
+//		Post post = new Post();
+//		try {
+//			post = postService.getPostById(1);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} 
+//		System.out.println(post);
 //		String message = "All Fine" ; 
 //		post.setMessage(message);
 //		postService.updatePost(post);
-//		assertTrue(postService.getPostById(1).getMessage().equals(message));
+//		try {
+//			assertTrue(postService.getPostById(1).getMessage().equals(message));
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 //	}
 	
 	@Test 

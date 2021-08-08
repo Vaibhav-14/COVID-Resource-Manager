@@ -1,6 +1,8 @@
 package com.mycompany.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -72,6 +74,29 @@ public class UserService {
 		else {
 			return userDao.findByUsername(username);
 		}
+	}
+	
+	public void updateUser(User user) {
+		System.out.println(user);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User admin_user = userDao.findByUsername(auth.getName());
+		Role role = roleDao.findByName("ADMIN"); // for admin use only
+		if(admin_user.getRoles().contains(role)) {
+			userDao.save(user);
+		}
+	}
+	
+	public Set<User> getUsersFromString(String message) {
+		Set<User> mentionedUsers = new HashSet<>();
+		String[] strs = message.split(" ");
+		for (String string : strs) {
+			if (string.startsWith("@")) {
+				User user = getUser(string.substring(1));
+				if (user != null)
+					mentionedUsers.add(user);
+			}
+		}
+		return mentionedUsers;
 	}
 
 }

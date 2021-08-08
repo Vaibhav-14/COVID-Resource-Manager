@@ -1,66 +1,131 @@
+<div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
+  <div class="p-2 w-50 bd-highlight" style="min-width: 500px;">
+  
 <c:choose>
 	<c:when test="${empty posts}">
-    	    <h3>No posts available</h3>
+		<h3>No posts available</h3>
 	</c:when>
-	
 <c:otherwise>
 <c:forEach items="${posts }" var="post" varStatus="tagStatus">
 
-	<c:if test="${username != post.user.username }">
-		<a href="/user/profile?username=${post.user.username }"><b>@${post.user.username }</b>
-		</a>
-	</c:if>
-	<c:if test="${username == post.user.username }">
-		<a href="/user/profile"><b>@${post.user.username }</b> </a>
-	</c:if>
+  
+	  <div class="card p-2">
+	  <div class="card-body">
+	    <div class= "bg-light p-2">
+	    	<c:if test="${post.user.enabled == true}">
+			<c:if test="${username != post.user.username }">
+				<a class="card-link" href="/user/profile?username=${post.user.username }"><h5 class="p1 card-title"><i class="p-1 material-icons align-middle">account_circle</i>@${post.user.username }</h5>
+				</a>
+			</c:if>
+			<c:if test="${username == post.user.username }">
+			 <a class="card-link" href="/user/profile?"><h5 class="p1 card-title"><i class="p-1 material-icons align-middle">account_circle</i>@${post.user.username }</h5>
+				</a>
+			</c:if>	    
+	    
+	    
 
-	<br>                               
-Post Type: ${post.type }	
-<c:if test="${pageContext.request.userPrincipal.name == post.user.username }">
-		<a href="/post/update/${post.id }">
-			<button>Update Post</button>
-		</a>
-		<a href="/post/delete/${post.id }">
-			<button>Delete Post</button>
-		</a>
-	</c:if>
-	<br>
-Post Message: ${post.message }<br>
-Post Tags: 
-<c:forEach items="${post.tags }" var="tag" varStatus="tagStatus">
-<form id="form-id" method = "POST" action = "/post/searchresult">
-	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-	<input type="hidden" name="searchentry" value="${tag.name }">
-  	<a href="#" onclick="document.getElementById('form-id').submit();"> ${tag.name } </a>
-
-</form>
-</c:forEach>
-Post Comments:<br>
-	<c:forEach items="${post.comments }" var="comment"
-		varStatus="tagStatus">
-Comment By: <c:if test="${username != comment.user.username }">
-			<a href="/user/profile?username=${comment.user.username }"><b>@${comment.user.username }</b>
-			</a>
-		</c:if>
-		<c:if test="${username == comment.user.username }">
-			<a href="/user/profile"><b>@${comment.user.username }</b> </a>
-		</c:if>
-		<br>
-Comment Comment: ${comment.content }<br>
-Comment At: ${comment.dateTime }<br>
-		<br>
-	</c:forEach>
-	<c:if test="${isLoggedIn == true }">
+	    <h6 class="card-subtitle mb-2 text-muted">${post.type }</h6>
+		<c:if test="${pageContext.request.userPrincipal.name == post.user.username }">
+					<form method="post" action = "/post/updatepost">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<input type="hidden" name="id" value="${post.id }"/>
+					<button name="submit" type="submit" class ="btn btn-primary btn-sm btn-danger">Update Post</button>
+					</form>
+					<br>
+				<form method="post" action = "/post/delete">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<input type="hidden" name="id" value="${post.id }"/>
+					<button name="submit" type="submit" class ="btn btn-primary btn-sm btn-danger">Delete Post</button>
+					</form>
+			</c:if>	 
+			 <c:if
+				test="${pageContext.request.userPrincipal.name != post.user.username }">
+				<sec:authorize access="hasAuthority('ADMIN')">
+					<form method="post" action = "/post/delete">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<input type="hidden" name="id" value="${post.id }"/>
+					<button name="submit" type="submit" class ="btn btn-primary btn-sm btn-danger">Delete Post</button>
+					</form>
+				</sec:authorize>
+			</c:if>  
+		<br><br>	   
+	    <p class="card-text">${post.message }</p>
+	    <p class="card-text">
+	    	<small class="text-muted">
+				<c:forEach items="${post.tags }" var="tag" varStatus="tagStatus">
+				<form id="form-id" method = "POST" action = "/post/searchresult">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<input type="hidden" name="searchentry" value="${tag.name }">
+				  	<a href="#" onclick="document.getElementById('form-id').submit();"> ${tag.name } </a>
+				</form>
+				</c:forEach>	    		
+	    	</small>
+	    </p>
+	    </div>
+	    
+	    <p class="text-center fw-bold">Comments</p>
+	    
+	    
+	    
+			<c:forEach items="${post.comments }" var="comment" varStatus="tagStatus">
+			<c:if test="${comment.user.enabled == true}">
+			 <c:if test="${pageContext.request.userPrincipal.name != comment.user.username }">	 
+			 	<p class="card-text fw-light">
+					<a href="/user/profile?username=${comment.user.username }"><b>@${comment.user.username }</b></a>
+					:${comment.content }<br>
+					<sec:authorize access="hasAuthority('ADMIN')">
+					 Comment At: ${comment.dateTime }
+					<sf:form  modelAttribute="comment" method="post" action = "/comment/delete">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<sf:input type="hidden" path="id" value="${comment.id }"/>
+					<sf:button name="submit" type="submit" class ="btn btn-primary btn-sm btn-danger">Delete Comment</sf:button>
+					</sf:form>
+				</sec:authorize>
+				</c:if>
+				<c:if test="${pageContext.request.userPrincipal.name == comment.user.username }">
+					<a href="/user/profile"><b>@${comment.user.username }</b> </a>
+					:${comment.content }<br>
+					 Comment At: ${comment.dateTime }
+					<sf:form  modelAttribute="comment" method="post" action = "/comment/delete">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<sf:input type="hidden" path="id" value="${comment.id }"/>
+					<sf:button name="submit" type="submit" class ="btn btn-primary btn-sm btn-danger">Delete Comment</sf:button>
+					</sf:form>
+					</c:if>
+				 </p>
+		    </c:if>
+			</c:forEach>
+	    
+  
+	     
+	  </div>
+	  	<c:if test="${pageContext.request.userPrincipal.name != null}">
 		<sf:form modelAttribute="comment" action="/comment/create" method="post">
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-			<sf:input type="hidden" path="post" value="${ post.id}" />
-			<sf:input path="content" />
-			<sf:button name="Submit" value="Add Comment">Add Comment</sf:button>
+
+			  <div class="container">
+		         <div class="row">
+		            <div class="col-9">
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+						<sf:input type="hidden" path="post" value="${ post.id}" />
+						<sf:input path="content" class="form-control" />
+		    		</div>
+		    		<div class="col-1">
+		      		<sf:button type="submit" class="btn btn-primary">Comment</sf:button>
+		    		</div>
+		  		 </div>
+			 </div>
+			 
 		</sf:form>
+		</c:if>
+	  
+ 
+	</div>
+	
+	
 	</c:if>
-	<br>
-	<br>
-	<br>
-</c:forEach>
+	</c:forEach>
 </c:otherwise>
 </c:choose>
+	
+  </div>
+</div>

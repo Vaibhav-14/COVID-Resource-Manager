@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,9 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.dao.IPostFunctionDAO;
+import com.mycompany.dao.IRoleFunctionDAO;
 import com.mycompany.entity.Post;
+import com.mycompany.entity.Role;
 import com.mycompany.entity.Tag;
 import com.mycompany.entity.User;
+import com.mycompany.exception.IncorrectUserException;
 
 @Transactional
 @Service("postService")
@@ -24,10 +29,17 @@ public class PostService {
 	private IPostFunctionDAO postDao;
 	
 	@Autowired
+	private IRoleFunctionDAO roleDao;
+	
+	@Autowired
 	private UserService userService;
 	
 	@Autowired
 	private TagService tagService;
+	
+	
+	@Autowired
+	private NotificationService notificationService;
 
 	public IPostFunctionDAO getDao() {
 		return postDao;
@@ -38,14 +50,21 @@ public class PostService {
 	}
 	
 	public void addPost(Post post) {
+		Set<User> mentionedUsers = userService.getUsersFromString(post.getMessage());
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		post.setUser(userService.getUserFromUsername(auth.getName()));
+		User loggedInUser = userService.getUserFromUsername(auth.getName());
+		post.setUser(loggedInUser);
 		post.setDateTime(new Timestamp(System.currentTimeMillis()));
 		addTagsToPost(post);
 		postDao.save(post);
+		
+		String activityType = "@" + loggedInUser.getUsername() + " mentioned you in a post";
+
+		notificationService.saveNotification(loggedInUser, activityType, "post", "post/" + post.getId(), mentionedUsers);
 	}
-	
+
 	// retrieve tags from tagStr
 	private void addTagsToPost(Post post) {
 		Set<Tag> tags = new HashSet<Tag>();
@@ -70,13 +89,13 @@ public class PostService {
 		post.setTags(tags);
 	}
 
-	public Post getPostById(int id) throws Exception {
+	public Post getPostById(int id) throws IncorrectUserException {
 		Post post = postDao.findById(id).get();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.getUserFromUsername(auth.getName());
 
 		if(post.getUser().getId() != user.getId())
-			throw new RuntimeException();
+			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
 		StringBuffer str = new StringBuffer();
 		for (Tag tag : post.getTags()) {
 			str.append(tag.getName() + ", ");
@@ -91,12 +110,24 @@ public class PostService {
 		postDao.save(post);
 	}
 	
-	public void deletePost(int id) {
+	public void deletePost(int id) throws IncorrectUserException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.getUserFromUsername(auth.getName());
-
-		if(postDao.findById(id).get().getUser().getId() == user.getId())
+		Role role = roleDao.findByName("ADMIN");
+		boolean isAdmin = false;
+		Post post = postDao.findPostById(id);
+		if(post.getUser().getId() == user.getId() || (isAdmin = user.getRoles().contains(role))) {
 			postDao.deleteById(id);
+			if (isAdmin) {
+				String activityType = "Your post violets the Covid Resource Manager Policies. "
+						+ "So It has been removed.";
+
+				notificationService.saveNotification(null, activityType, "post", 
+									"post/" + id, post.getUser());
+			}
+		}
+		else
+			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
 	}
 	
 	public List<Post> getAllPost(){
