@@ -14,6 +14,7 @@ import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.Comment;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.User;
+import com.mycompany.exception.IncorrectUserException;
 
 @Service("commentService")
 public class CommentService {
@@ -55,7 +56,7 @@ public class CommentService {
 		
 	}
 	
-	public void deleteComment(int id) {
+	public void deleteComment(int id) throws IncorrectUserException{
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userDao.findByUsername(auth.getName());
 		Role role = roleDao.findByName("ADMIN");
@@ -70,6 +71,9 @@ public class CommentService {
 				notificationService.saveNotification(null, activityType, "post", 
 									"post/" + id, comment.getUser());
 			}
+		}
+		else {
+			throw new IncorrectUserException("This comment doesn't belong to User " + user.getUsername());
 		}
 	}
 

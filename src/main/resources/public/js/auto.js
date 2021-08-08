@@ -8,6 +8,11 @@ function extractLast(term) {
 $(document).ready(function() {
 
 	$("#tags").autocomplete({
+		minLength : 1, 
+		autoFocus : true , 
+		maxHeight : 100 , 
+		width : auto , 
+		
 		source: function (request, response) {
 			$.getJSON("${pageContext.request.contextPath}/tags", {
 				term: extractLast(request.term)
@@ -37,6 +42,7 @@ $(document).ready(function() {
 			this.value = terms.join(", ");
 			return false;
 		}
+		
 	});
 	
 });
