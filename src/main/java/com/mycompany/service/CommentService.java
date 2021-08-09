@@ -62,14 +62,21 @@ public class CommentService {
 		Role role = roleDao.findByName("ADMIN");
 		boolean isAdmin = false;
 		Comment comment = commentDao.findById(id).get();
-		if(comment.getUser().getId() == user.getId() || (isAdmin = user.getRoles().contains(role))) {
+		User commentUser = comment.getUser();
+		if(commentUser.getId() == user.getId() || (isAdmin = user.getRoles().contains(role))) {
 			commentDao.deleteById(id);
 			if (isAdmin) {
+				commentUser.setWarnings(commentUser.getWarnings()+1);
 				String activityType = "Your comment violets the Covid Resource Manager Policies. "
-						+ "So It has been removed.";
+						+ "So It has been removed. "+"You got "+commentUser.getWarnings() +
+						" out of 5. After 5 warnings your account will get suspended.";
 
 				notificationService.saveNotification(null, activityType, "post", 
-									"post/" + id, comment.getUser());
+									"post/" + id, commentUser);
+				if(commentUser.getWarnings()>5) {
+					commentUser.setEnabled(0);
+					userService.updateUser(commentUser);
+				}
 			}
 		}
 		else {

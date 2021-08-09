@@ -108,9 +108,15 @@ public class PostController {
 			username = user.getUsername();
 		}
 		model.addAttribute("username", username);
-		model.addAttribute("posts", postService.getPostById(id));
+		model.addAttribute("post", postService.getPostById(id));
 		model.addAttribute("comment", new Comment());
 		return "post";
+	}
+	
+	@PostMapping("/report")
+	public String reportPost(@RequestParam(name = "id") int id ) {
+		postService.reportPost(id);
+		return "redirect:/";
 	}
 
 
