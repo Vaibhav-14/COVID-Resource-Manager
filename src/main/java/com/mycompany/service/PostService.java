@@ -56,10 +56,10 @@ public class PostService {
 	private void addTagsToPost(Post post) {
 		Set<Tag> tags = new HashSet<Tag>();
 		Iterable<Tag> db_tags = tagService.getAllTags();
-		for (String s : post.getTagStr().split(", ")) {
+		for (String tagString : post.getTagStr().replaceAll("#", "").split(" ")) {
 			int flag = 0;
 			for (Tag tag : db_tags) {
-				if(tag.getName().equals(s)) {
+				if(tag.getName().equals(tagString)) {
 					flag = 1;
 					tags.add(tag);
 					break;
@@ -67,7 +67,7 @@ public class PostService {
 			}
 			if(flag == 0) {
 				Tag tag = new Tag();
-				tag.setName(s);
+				tag.setName(tagString);
 				Set<Post> tag_post = new HashSet<Post>();
 				tag_post.add(post);
 				tags.add(tag);

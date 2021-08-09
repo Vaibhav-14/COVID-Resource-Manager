@@ -67,7 +67,7 @@ CREATE TABLE `posts_tags` (
 
 LOCK TABLES `posts_tags` WRITE;
 /*!40000 ALTER TABLE `posts_tags` DISABLE KEYS */;
-INSERT INTO `posts_tags` VALUES (1,'#Required'),(1,'#hydroxychloroquine');
+INSERT INTO `posts_tags` VALUES (1,'Required'),(1,'hydroxychloroquine');
 /*!40000 ALTER TABLE `posts_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 

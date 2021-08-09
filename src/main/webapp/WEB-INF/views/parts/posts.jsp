@@ -49,7 +49,7 @@
 				<form id="form-id" method = "POST" action = "/post/searchresult">
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					<input type="hidden" name="searchentry" value="${tag.name }">
-				  	<a href="#" onclick="document.getElementById('form-id').submit();"> ${tag.name } </a>
+				  	<a href="#" onclick="document.getElementById('form-id').submit();"> #${tag.name } </a>
 				</form>
 				</c:forEach>	    		
 	    	</small>
@@ -57,8 +57,6 @@
 	    </div>
 	    
 	    <p class="text-center fw-bold">Comments</p>
-	    
-	    
 	    
 			<c:forEach items="${post.comments }" var="comment" varStatus="tagStatus">
 			<c:if test="${comment.user.enabled == true}">
