@@ -113,6 +113,12 @@ public class PostController {
 		model.addAttribute("comment", new Comment());
 		return "post";
 	}
+	
+	@PostMapping("/report")
+	public String reportPost(@RequestParam(name = "id") int id ) {
+		postService.reportPost(id);
+		return "redirect:/";
+	}
 
 
 }
