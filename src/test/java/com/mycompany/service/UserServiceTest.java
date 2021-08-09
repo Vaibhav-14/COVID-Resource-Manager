@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -69,13 +71,13 @@ public class UserServiceTest {
 	@Test
 	@Order(3)
 	public void displayProfile() {
-		assertTrue(userService.displayProfile("Champ").size() >= 0 );
+		assertTrue(userService.displayProfile("q").size() >= 0 );
 	}
 	
 	@Test
 	@Order(4)
 	public void getUser() {
-		assertEquals(userService.getUser("Champ").getId() , 1);
+		assertEquals(userService.getUser("q").getId() , 20);
 	}
 	
 	@Test

@@ -1,6 +1,7 @@
 package com.mycompany.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -13,6 +14,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.Model;
+
+import com.mycompany.entity.User;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -30,17 +33,14 @@ public class UserControllerTest {
 	
 	@Test
 	@Transactional
-	public void validHTTPResponse() throws Exception{
-		this.mockMvc.perform(get("/user/register")).andExpect(status().is3xxRedirection());
-		this.mockMvc.perform(post("/user/register")).andExpect(status().isOk());
-		this.mockMvc.perform(get("/user/login")).andExpect(status().isOk());
-		this.mockMvc.perform(get("/user/profile")).andExpect(status().isOk());
-	}
-	
-	@Test
-	@Transactional
 	public void testshowLoginForm() throws Exception {
-		this.mockMvc.perform(get("/login")).andExpect(status().isOk());
+		this.mockMvc.perform(get("/user/login")).andExpect(status().isOk());
 	}
 
+	@Test
+	@Transactional
+	public void testshowRegisterForm() throws Exception {
+		this.mockMvc.perform(get("/user/register")).andExpect(status().isOk());
+	}
+	
 }

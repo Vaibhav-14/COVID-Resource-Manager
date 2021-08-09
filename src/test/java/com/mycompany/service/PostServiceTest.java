@@ -146,7 +146,7 @@ public class PostServiceTest{
 	@Test
 	@Order(5)
 	public void findPostByUsername() {
-		String username = "Champ" ; 
+		String username = "q" ; 
 		List<Post> posts = postService.findPostByUsername(username) ; 
 		for(Post post : posts) {
 			assertTrue(post.getUser().getUsername().equals(username)) ; 
@@ -158,11 +158,11 @@ public class PostServiceTest{
 	public void searchPost(){
 		// Positive Test Cases 
 		// By username
-		assertTrue(postService.findPostByUsername("champ").size() > 0 , "Result should be greater than zero" ) ; 
+		assertTrue(postService.findPostByUsername("z").size() > 0 , "Result should be greater than zero" ) ; 
 		
 		// Negative Test Cases 
 		// By username
-		assertTrue(postService.findPostByUsername("noUser").size() == 0  , "Result should be zero" ) ; 
+		assertTrue(postService.findPostByUsername("q").size() == 0  , "Result should be zero" ) ; 
 
 	}
 	@Order(7)

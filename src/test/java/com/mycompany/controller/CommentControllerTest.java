@@ -28,12 +28,5 @@ public class CommentControllerTest {
 		assertThat(commentController).isNotNull();
 	}
 	
-	@Test
-	@Transactional
-	public void validHTTPResponse() throws Exception{
-		this.mockMvc.perform(post("/create")).andExpect(status().isOk());
-	}
-
-	
 
 }
