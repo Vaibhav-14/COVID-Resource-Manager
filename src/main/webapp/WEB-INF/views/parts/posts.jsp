@@ -93,7 +93,7 @@
 				<form id="form-id" method = "POST" action = "/post/searchresult">
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					<input type="hidden" name="searchentry" value="${tag.name }">
-				  	<a href="#" onclick="document.getElementById('form-id').submit();"> ${tag.name } </a>
+				  	<a href="#" onclick="document.getElementById('form-id').submit();"> #${tag.name } </a>
 				</form>
 				</c:forEach>	    		
 	    	</small>
@@ -102,7 +102,6 @@
 	    
 	    <p class="text-center fw-bold">Comments</p>
 	    
-
 			<c:forEach items="${post.comments }" var="comment" varStatus="tagStatus">
 			<br>
 			<c:if test="${comment.user.enabled == true}">
@@ -190,7 +189,7 @@
 		            <div class="col-9">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<sf:input type="hidden" path="post" value="${ post.id}" />
-						<sf:input path="content" class="form-control" />
+						<sf:input path="content" class="form-control autocomplete" />
 		    		</div>
 		    		<div class="col-1">
 		      		<sf:button type="submit" class="btn btn-primary">Comment</sf:button>
@@ -240,3 +239,4 @@
 	
   </div>
 </div>
+

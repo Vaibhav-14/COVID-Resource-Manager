@@ -4,6 +4,7 @@
 -- ------------------------------------------------------
 -- Server version	5.6.48-log
 use `covid_resource_manager`;
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -67,7 +68,7 @@ CREATE TABLE `posts_tags` (
 
 LOCK TABLES `posts_tags` WRITE;
 /*!40000 ALTER TABLE `posts_tags` DISABLE KEYS */;
-INSERT INTO `posts_tags` VALUES (1,'#Required'),(1,'#hydroxychloroquine');
+INSERT INTO `posts_tags` VALUES (1,'Required'),(1,'hydroxychloroquine');
 /*!40000 ALTER TABLE `posts_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -114,7 +115,7 @@ CREATE TABLE `tags` (
 
 LOCK TABLES `tags` WRITE;
 /*!40000 ALTER TABLE `tags` DISABLE KEYS */;
-INSERT INTO `tags` VALUES ('#Available'),('#hydroxychloroquine'),('#Required'),('#Urgent'),('#vaccine');
+INSERT INTO `tags` VALUES ('Available'),('hydroxychloroquine'),('Required'),('Urgent'),('vaccine');
 /*!40000 ALTER TABLE `tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -181,10 +182,10 @@ UNLOCK TABLES;
 
 -- Dump completed on 2021-07-29 16:05:48
 
+
 --
 -- Table structure for table `comments`
 --
-
 DROP TABLE IF EXISTS `comments`;
  
 CREATE TABLE `comments` (
@@ -221,7 +222,8 @@ CREATE TABLE `notifications` (
   KEY `sender_id_fk_idx` (`sender_id`),
   CONSTRAINT `receiver_id_fk` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`),
   CONSTRAINT `sender_id_fk` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
