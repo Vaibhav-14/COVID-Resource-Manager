@@ -41,7 +41,6 @@
 				</div>
 				
 				<sf:hidden path="user" />  
-				<sf:hidden path="comments" />  
 				<div class = "row p-2 m-2">
 					<div class="col text-center">
 						<sf:button value="Submit" class="btn btn-success">Update Post</sf:button>
