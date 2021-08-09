@@ -11,9 +11,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mycompany.dao.ICommentFunctionDAO;
 import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.dao.IRoleFunctionDAO;
 import com.mycompany.dao.IUserFunctionDAO;
+import com.mycompany.entity.Comment;
 import com.mycompany.entity.Post;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.User;
@@ -30,6 +32,9 @@ public class UserService {
 	
 	@Autowired
 	private IPostFunctionDAO postDao;
+
+	@Autowired
+	private ICommentFunctionDAO commentDao;
 	
 	public IUserFunctionDAO getUserDao() {
 		return userDao;
@@ -97,6 +102,26 @@ public class UserService {
 			}
 		}
 		return mentionedUsers;
+	}
+	
+	public void deleteUserAccount(String username)
+	{
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = getUserFromUsername(auth.getName());
+		
+		if(user.getId() == getUserFromUsername(username).getId())
+			System.out.println("Deleted user"+ username);
+		
+		List<Comment> commentsToDelete = commentDao.findAllByUserId(user.getId());
+		for(Comment currentComment: commentsToDelete)
+			commentDao.deleteById(currentComment.getId());
+		
+		List<Post> postsToDelete = postDao.findPostByUser(user);
+		for(Post currentPost: postsToDelete)
+			postDao.deleteById(currentPost.getId());
+		
+		userDao.deleteById(user.getId());
+	
 	}
 
 }
