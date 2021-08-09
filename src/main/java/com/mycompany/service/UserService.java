@@ -86,6 +86,9 @@ public class UserService {
 		}
 	}
 	
+	public List<String> searchUsersByKeyWord(String keyword) {
+		return userDao.searchUserByKeyWord(keyword);	
+	}
 	public Set<User> getUsersFromString(String message) {
 		Set<User> mentionedUsers = new HashSet<>();
 		String[] strs = message.split(" ");

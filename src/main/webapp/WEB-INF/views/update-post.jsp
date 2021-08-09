@@ -1,8 +1,5 @@
 <%@ include file="parts/meta.jsp" %> 
-
 <title>Update Post</title>
-<script src="${pageContext.request.contextPath }/js/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath }/js/jquery-ui.min.js"></script>
 <link href="${pageContext.request.contextPath }/css/auto_complete.css" rel="stylesheet" type="text/css" />
 
 <%@ include file="parts/header.jsp" %> 
@@ -36,7 +33,7 @@
 						<h5>Message</h5>
 					</div>
 					<div class="col-6 p-1 m-1 fw-normal">
-						<sf:textarea path="message" class="form-control" rows="5"/>
+						<sf:textarea path="message" class="form-control autocomplete" rows="5"/>
 					</div>
 				</div>
 				
@@ -45,11 +42,10 @@
 						<h5>Tags</h5>
 					</div>
 					<div class="col-6 p-1 m-1 fw-normal">
-						<sf:textarea id="tags" path="tagStr" class="form-control" rows="2" />
+						<sf:textarea path="tagStr" class="form-control autocomplete" rows="2" />
 					</div>
 				</div>
 				
-				<sf:hidden path="dateTime"/>
 				<sf:hidden path="user" />  
 				<div class = "row p-2 m-2">
 					<div class="col text-center">
@@ -60,5 +56,4 @@
 		</div>
 	  </div>
 	
-<%@ include file="parts/auto.jsp" %>
 <%@ include file="parts/footer.jsp" %> 

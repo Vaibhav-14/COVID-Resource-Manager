@@ -1,7 +1,5 @@
 package com.mycompany.controller;
 
-
-
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mycompany.entity.Comment;
 import com.mycompany.entity.Post;
@@ -110,6 +109,10 @@ public class UserController {
 		return "redirect:/user/profile?username="+username;
 	}
 	
-	
+	@GetMapping("/search")
+	@ResponseBody
+	public List<String> getUsersByKeyword(@RequestParam String term) {
+		return userService.searchUsersByKeyWord(term);
+	}
 	
 }

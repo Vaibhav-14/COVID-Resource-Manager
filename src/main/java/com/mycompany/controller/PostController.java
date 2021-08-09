@@ -67,11 +67,12 @@ public class PostController {
 	@PostMapping("/searchresult")
 	public String searchPostResult(Model model, @RequestParam(name = "searchentry") String searchEntry) {
 		User user = null;
+		String[] searchBy = searchEntry.split(" ");
 		if (searchEntry.startsWith("#")) {
-			model.addAttribute("tag", searchEntry);
+			model.addAttribute("tag", searchBy[0]);
 		}
 		else {
-			user = userService.getUser(searchEntry);
+			user = userService.getUser(searchBy[0].substring(1));
 			model.addAttribute("tag", null);
 		}
 		if( userService.getUser(null) == null) {
@@ -81,12 +82,12 @@ public class PostController {
 			model.addAttribute("isLoggedIn", true);
 		}
 		model.addAttribute("comment", new Comment());
-		model.addAttribute("username", searchEntry);
+		model.addAttribute("username", searchBy[0]);
 		model.addAttribute("IsUsername", null);
 		model.addAttribute("user", user);
 		
 
-		Set<Post> searchList = postService.getPostOnSearch(searchEntry);
+		Set<Post> searchList = postService.getPostOnSearch(searchBy[0].substring(1));
 		model.addAttribute("posts", searchList);
 		return "profile";	
 	}
@@ -108,7 +109,7 @@ public class PostController {
 			username = user.getUsername();
 		}
 		model.addAttribute("username", username);
-		model.addAttribute("posts", postService.getPostById(id));
+		model.addAttribute("post", postService.getPostById(id));
 		model.addAttribute("comment", new Comment());
 		return "post";
 	}
