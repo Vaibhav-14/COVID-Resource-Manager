@@ -126,6 +126,25 @@ public class UserController {
 	public List<String> getUsersByKeyword(@RequestParam String term) {
 		return userService.searchUsersByKeyWord(term);
 	}
+	
+	@GetMapping("/update")
+	public String updateProfile(@RequestParam(required = false) String username, Model model) throws Exception {
+		User user = userService.getUser(username);
+		model.addAttribute("user", user);
+		return "update-profile";
+	}
+	
+
+	@PostMapping("/update") 
+	public String updateProfile(@ModelAttribute("user") User user, Model model, BindingResult results) {
+		System.out.println(user);
+		if(!user.getPassword().equals(user.getRetypepassword()))
+			  results.rejectValue("retypepassword", "error.user","Confirmed Password is not the same");
+		if(results.hasErrors())
+			return "update-profile";
+		userService.updateUserProfile(user);
+		return "redirect:/home";
+	}
 
 	
 }
