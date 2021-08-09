@@ -112,14 +112,21 @@ public class UserService {
 		if(user.getId() != getUserFromUsername(username).getId())
 			return;
 		
+		//deleting comments by the user
 		List<Comment> commentsToDelete = commentDao.findAllByUserId(user.getId());
 		for(Comment currentComment: commentsToDelete)
 			commentDao.deleteById(currentComment.getId());
 		
+		//deleting posts by the user
 		List<Post> postsToDelete = postDao.findPostByUser(user);
 		for(Post currentPost: postsToDelete)
 			postDao.deleteById(currentPost.getId());
 		
+		/*
+		 * Any more entities added in the db need to be listed and deleted here
+		 * */
+		
+		//finally the user is deleted
 		userDao.deleteById(user.getId());
 	
 	}
