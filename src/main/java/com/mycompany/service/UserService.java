@@ -108,9 +108,9 @@ public class UserService {
 	{
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = getUserFromUsername(auth.getName());
-		
-		if(user.getId() == getUserFromUsername(username).getId())
-			System.out.println("Deleted user"+ username);
+
+		if(user.getId() != getUserFromUsername(username).getId())
+			return;
 		
 		List<Comment> commentsToDelete = commentDao.findAllByUserId(user.getId());
 		for(Comment currentComment: commentsToDelete)
