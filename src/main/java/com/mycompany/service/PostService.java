@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.dao.IRoleFunctionDAO;
+import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.Post;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.Tag;
@@ -36,6 +37,9 @@ public class PostService {
 	
 	@Autowired
 	private TagService tagService;
+	
+	@Autowired
+	private IUserFunctionDAO userDao;
 	
 	
 	@Autowired
@@ -69,10 +73,10 @@ public class PostService {
 	private void addTagsToPost(Post post) {
 		Set<Tag> tags = new HashSet<Tag>();
 		Iterable<Tag> db_tags = tagService.getAllTags();
-		for (String s : post.getTagStr().split(", ")) {
+		for (String tagString : post.getTagStr().replaceAll("#", "").split(" ")) {
 			int flag = 0;
 			for (Tag tag : db_tags) {
-				if(tag.getName().equals(s)) {
+				if(tag.getName().equals(tagString)) {
 					flag = 1;
 					tags.add(tag);
 					break;
@@ -80,7 +84,7 @@ public class PostService {
 			}
 			if(flag == 0) {
 				Tag tag = new Tag();
-				tag.setName(s);
+				tag.setName(tagString);
 				Set<Post> tag_post = new HashSet<Post>();
 				tag_post.add(post);
 				tags.add(tag);
@@ -89,25 +93,33 @@ public class PostService {
 		post.setTags(tags);
 	}
 
-	public Post getPostById(int id) throws IncorrectUserException {
+	public Post getPostById(int id) {
 		Post post = postDao.findById(id).get();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.getUserFromUsername(auth.getName());
-
-		if(post.getUser().getId() != user.getId())
+		Role role = roleDao.findByName("ADMIN");
+		if(post.getUser().getId() != user.getId() && !user.getRoles().contains(role))
 			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
 		StringBuffer str = new StringBuffer();
 		for (Tag tag : post.getTags()) {
-			str.append(tag.getName() + ", ");
+			str.append("#" + tag.getName() + " ");
 		}
 		post.setTagStr(str.toString()); 
 		return post;
 	}
 
-	public void updatePost(Post post) {
-
+	public void updatePost(Post post) throws IncorrectUserException {
+		Post oldPost = getPostById(post.getId());
+		post.setDateTime(oldPost.getDateTime());
 		addTagsToPost(post);
-		postDao.save(post);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		User loggedInUser = userService.getUserFromUsername(auth.getName());
+		if(post.getUser().getId() == loggedInUser.getId())
+			postDao.save(post);
+		else
+			throw new IncorrectUserException("We are sorry but you do not have that permission.");
+
 	}
 	
 	public void deletePost(int id) throws IncorrectUserException {
@@ -116,18 +128,25 @@ public class PostService {
 		Role role = roleDao.findByName("ADMIN");
 		boolean isAdmin = false;
 		Post post = postDao.findPostById(id);
-		if(post.getUser().getId() == user.getId() || (isAdmin = user.getRoles().contains(role))) {
+		User postUser = post.getUser();
+		if(postUser.getId() == user.getId() || (isAdmin = user.getRoles().contains(role))) {
 			postDao.deleteById(id);
 			if (isAdmin) {
 				String activityType = "Your post violets the Covid Resource Manager Policies. "
-						+ "So It has been removed.";
+						+ "So It has been removed. "+"You got "+postUser.getWarnings() +
+						" out of 5. After 5 warnings your account will get suspended.";
 
 				notificationService.saveNotification(null, activityType, "post", 
-									"post/" + id, post.getUser());
+									"post/" + id, postUser);
+				postUser.setWarnings(postUser.getWarnings()+1);
+				if(postUser.getWarnings()>5) {
+					postUser.setEnabled(0);
+					userService.updateUser(postUser);
+				}
 			}
 		}
 		else
-			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
+			throw new IncorrectUserException("We are sorry but you do not have that permission.");
 	}
 	
 	public List<Post> getAllPost(){
@@ -152,6 +171,18 @@ public class PostService {
 		}
 
 	    return searchList;
+	}
+	
+	public void reportPost(int id) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User senderUser = userService.getUserFromUsername(auth.getName());
+		Post post = postDao.findPostById(id);
+		String activityType = "This post doesn't concern Covid";
+		List<User> admins = userDao.getAllAdmin();
+		for (User user : admins) {
+			notificationService.saveNotification(senderUser, activityType, "post", "post/" + id, user);
+		}
+		
 	}
 	
 	

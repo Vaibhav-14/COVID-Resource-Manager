@@ -60,6 +60,7 @@ public class PostServiceTest{
 	}
 	
 	@Test
+	@Order(2)
 	public void addPost() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
@@ -77,6 +78,7 @@ public class PostServiceTest{
 		// Creating Post
 		Post post = new Post() ; 
 		post.setType("Required") ; 
+
 		try {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		    Date parsedDate = dateFormat.parse("2000-01-01 00:00:01");
@@ -97,7 +99,7 @@ public class PostServiceTest{
 		user.setLastname("OK");
 		user.setPassword("Thor");
 		user.setMobile("1123456789") ; 
-		user.setAccountStatus("active");
+		user.setWarnings(0);
 		try {
 		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		    Date parsedDate = dateFormat.parse(String.valueOf("2000-01-01"));
@@ -122,8 +124,7 @@ public class PostServiceTest{
 		
 		// Adding Tags --> Post
 		post.setTags(tagsObj);
-		post.setTagStr("Urgent, ");
-		post.setTagStr(post.getDateTime().toString()+", ");
+		post.setTagStr(post.getDateTime().toString()+", Urgent, ");
 		// Saving Post to Database 
 		postService.addPost(post);
 		// Check ! Is Valid Post
@@ -134,11 +135,24 @@ public class PostServiceTest{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 	
 	@Test
 	@Transactional
 	public void updatePost() {
+		// User Authentication
+		UsernamePasswordAuthenticationToken authReq
+			      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
+		AuthenticationManager auth = new AuthenticationManager() {
+					
+		@Override
+		public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+				return authentication;
+			}
+		};    
+		SecurityContext sc = SecurityContextHolder.getContext();
+		sc.setAuthentication(auth.authenticate(authReq));
 		List<Post> posts = postService.findPostByUsername("Champ") ; 
 		Post post = posts.get(0) ; 
 		System.out.println(post);
@@ -148,7 +162,7 @@ public class PostServiceTest{
 		postService.updatePost(post);
 		
 	}
-	
+
 	@Test 
 	public void getAllPost() {
 		assertTrue(postService.getAllPost().size() > 0 ) ; 
@@ -171,25 +185,45 @@ public class PostServiceTest{
 		
 		// Negative Test Cases 
 		// By username
-		assertTrue(postService.findPostByUsername("cham").size() == 0  , "Result should be zero" ) ; 
+		assertTrue(postService.findPostByUsername("noUser").size() == 0  , "Result should be zero" ) ; 
 
 	}
 	
-//	@Test
 //	@Order(7)
-//	public void testPostUpdateByType() throws Exception {
+//	@Test
+//	public void testPostUpdate() throws Exception {
 //       String type = "Required";
-//       Post post = new Post("Required", new Timestamp(System.currentTimeMillis()) , "urgent oxygen cyclinders requirement at ...");
+//       Post post = new Post("Urgent", new Timestamp(System.currentTimeMillis()) , "urgent oxygen cyclinders requirement at ...");
 //       User user= new User("a","b","abc","abc@test.com","12345abcd","7410084485","ACTIVE",new SimpleDateFormat("dd/MM/yyyy").parse("12/04/2010"),"male",0);
 //       post.setUser(user);
 //       post.setId(1);
-//       Post savedPost = postDao.save(post);
 //       assertNotNull(post);
-//       Post updatePost = (Post) postDao.findPostByUser(user);
+//       //Updating Type.....
+//       post.setType(type);
+//       Post savedPost = postDao.save(post);
 //       assertThat(savedPost.getType()).isEqualTo(type);
-//       assertThat(updatePost.getType()).isEqualTo(type);
-//  
+//       
+//       //updating Message.....
+//       String message = "All Fine" ; 
+//       post.setMessage(message);
+//       savedPost = postDao.save(post);
+//       assertThat(savedPost.getMessage()).isEqualTo(message);
+//
 //   }
+	
+	@Test
+	public void testSetDao() {
+		PostService postService = new PostService();
+		postService.setDao(postDao);
+		assertTrue(postService.getDao() == this.postDao);
+	}
+	
+	@Test
+	public void testGetDao() {
+		PostService postService = new PostService();
+		postService.setDao(postDao);
+		assertTrue(postService.getDao() == this.postDao);
+	}
 	
 	@Test
 	@Order(8)
@@ -222,9 +256,31 @@ public class PostServiceTest{
 	}
 	
 	@Test
-	@Order(9)
+	@Order(10)
 	public void testGetterSetter() {
 		assertDoesNotThrow(() -> postService.setDao(postService.getDao()));
+	}
+	
+	@Test
+	@Order(11)
+	public void reportPostTest() {
+		// User Authentication
+		UsernamePasswordAuthenticationToken authReq
+					      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
+		AuthenticationManager auth = new AuthenticationManager() {
+							
+		@Override
+		public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+				return authentication;
+			}
+		};
+					    
+		SecurityContext sc = SecurityContextHolder.getContext();
+		sc.setAuthentication(auth.authenticate(authReq));
+				
+		List<Post> posts = postService.findPostByUsername("Champ") ; 
+		Post post = posts.get(0) ; 
+		assertDoesNotThrow(() -> postService.reportPost(post.getId()));
 	}
 	
 }

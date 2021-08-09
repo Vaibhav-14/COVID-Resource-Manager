@@ -25,6 +25,9 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.mycompany.entity.Post;
+import org.springframework.context.ApplicationContext;
+
+import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.User;
 
 @SpringBootTest
@@ -34,14 +37,20 @@ public class UserServiceTest {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private IUserFunctionDAO userDao;
+	
+	
+	static ApplicationContext applicationContext = null;
+    
 	@Test
 	@Order(1)
 	public void contextLoads() {
 		assertThat(userService).isNotNull() ; 
 	}
-	
-	@Test
+
 	@Order(2)
+	@Test//(expected=Exception.class)
 	public void addUser() {
 		User user = new User() ; 
 		user.setId(1);
@@ -51,7 +60,7 @@ public class UserServiceTest {
 		user.setLastname("OK");
 		user.setPassword("Thor");
 		user.setMobile("1123456789") ; 
-		user.setAccountStatus("active");
+		user.setWarnings(0);
 		try {
 		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		    Date parsedDate = dateFormat.parse(String.valueOf("2000-01-01"));
@@ -126,5 +135,51 @@ public class UserServiceTest {
 	public void testGetterSetter() {
 		assertDoesNotThrow(() -> userService.setUserDao(userService.getUserDao()));
 	}
+	
+	@Test
+	public void testSetDao() {
+		UserService userService = new UserService();
+		userService.setUserDao(userDao);
+		assertTrue(userService.getUserDao() == this.userDao);
+	}
+	
+	@Test
+	public void testGetDao() {
+		UserService userService = new UserService();
+		userService.setUserDao(userDao);
+		assertTrue(userService.getUserDao() == this.userDao);
+	}
+	
+	@Test
+	public void updateUserProfile() {
+		User user = userService.getUser("Champ") ; 
+		assertDoesNotThrow(() -> userService.updateUserProfile(user));
+	}
+	
+	@Test
+	public void searchUsersByKeyWordTest() {
+		assertTrue(userService.searchUsersByKeyWord("Champ").size() >= 1 ) ; 
+	}
+	
+	@Test
+	public void deleteUserAccount() {
+		// User Authentication
+		UsernamePasswordAuthenticationToken authReq
+							      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
+		AuthenticationManager auth = new AuthenticationManager() {
+									
+			@Override
+			public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+					return authentication;
+			}
+		};
+							    
+		SecurityContext sc = SecurityContextHolder.getContext();
+		sc.setAuthentication(auth.authenticate(authReq));
+		
+		// Delete User Account
+		userService.deleteUserAccount("Champ");
+	}
+	
 
 }

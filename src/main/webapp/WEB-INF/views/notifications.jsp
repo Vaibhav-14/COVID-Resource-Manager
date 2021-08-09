@@ -5,7 +5,7 @@
 
 <c:choose>
 	<c:when test="${empty notifications}">
-		<h3>No posts available</h3>
+		<h3>No notifications available</h3>
 	</c:when>
 <c:otherwise>
 <c:forEach items="${notifications }" var="notification" varStatus="tagStatus">

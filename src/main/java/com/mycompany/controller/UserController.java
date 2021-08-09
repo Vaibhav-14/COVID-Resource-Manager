@@ -1,13 +1,13 @@
 package com.mycompany.controller;
 
-
-
 import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mycompany.entity.Comment;
 import com.mycompany.entity.Post;
@@ -64,7 +65,7 @@ public class UserController {
 		if(results.hasErrors())
 			return "signup";
 		
-		user.setAccountStatus("ACTIVE");
+		user.setWarnings(0);
 		user.setEnabled(1);
 		
 		//Needs to be printed in the logs 
@@ -110,6 +111,40 @@ public class UserController {
 		return "redirect:/user/profile?username="+username;
 	}
 	
+
+	@PostMapping("/delete")
+	public String deleteUserAccount(@RequestParam(name="username") String username)
+	{
+		userService.deleteUserAccount(username);	
+		return "redirect:/user/logout";
+	}
 	
+	
+
+	@GetMapping("/search")
+	@ResponseBody
+	public List<String> getUsersByKeyword(@RequestParam String term) {
+		return userService.searchUsersByKeyWord(term);
+	}
+	
+	@GetMapping("/update")
+	public String updateProfile(@RequestParam(required = false) String username, Model model) throws Exception {
+		User user = userService.getUser(username);
+		model.addAttribute("user", user);
+		return "update-profile";
+	}
+	
+
+	@PostMapping("/update") 
+	public String updateProfile(@ModelAttribute("user") User user, Model model, BindingResult results) {
+		System.out.println(user);
+		if(!user.getPassword().equals(user.getRetypepassword()))
+			  results.rejectValue("retypepassword", "error.user","Confirmed Password is not the same");
+		if(results.hasErrors())
+			return "update-profile";
+		userService.updateUserProfile(user);
+		return "redirect:/home";
+	}
+
 	
 }

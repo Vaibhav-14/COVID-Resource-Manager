@@ -34,7 +34,7 @@ public class Post {
 	private String type;
 	
 	@Column(name="date_time")
-	@DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss[.fffffffff]")
+	@DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
 	private Timestamp dateTime;
 	
 	@Column 
@@ -143,20 +143,16 @@ public class Post {
 
 	@Override
 	public int hashCode() {
-		// TODO Auto-generated method stub
 		return this.id;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
 		Post currPost = (Post)obj;
 		if(this.id == currPost.id)
 			return true;
 		
 		return false;
 	}
-	
-	
 		
 }

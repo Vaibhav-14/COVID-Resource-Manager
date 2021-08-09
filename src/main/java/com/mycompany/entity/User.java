@@ -15,13 +15,13 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.springframework.data.annotation.Transient;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
@@ -55,7 +55,7 @@ public class User {
 	@Pattern(regexp = "[0-9]{10,10}", message="Please enter a valid phone number")
 	private String mobile;
 	
-	private String accountStatus;
+	private int warnings;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateOfBirth;
@@ -113,11 +113,11 @@ public class User {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	public String getAccountStatus() {
-		return accountStatus;
+	public int getWarnings() {
+		return warnings;
 	}
-	public void setAccountStatus(String accountStatus) {
-		this.accountStatus = accountStatus;
+	public void setWarnings(int warnings) {
+		this.warnings = warnings;
 	}
 	public Date getDateOfBirth() {
 		return dateOfBirth;
@@ -199,7 +199,7 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.mobile = mobile;
-		this.accountStatus = accountStatus;
+		this.warnings = warnings;
 		this.dateOfBirth = dateOfBirth;
 		this.gender = gender;
 		this.enabled = enabled;
@@ -233,7 +233,7 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", username=" + username
 				+ ", email=" + email + ", password=" + password + ", retypepassword=" + retypepassword + ", mobile="
-				+ mobile + ", accountStatus=" + accountStatus + ", dateOfBirth=" + dateOfBirth + ", gender=" + gender
+				+ mobile + ", warnings=" + warnings + ", dateOfBirth=" + dateOfBirth + ", gender=" + gender
 				+ ", enabled=" + enabled + ", roles=" + roles + "]";
 	}
 	

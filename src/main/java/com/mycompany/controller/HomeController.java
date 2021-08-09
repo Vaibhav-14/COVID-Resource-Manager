@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mycompany.entity.Comment;
 import com.mycompany.entity.User;
@@ -33,6 +34,16 @@ public class HomeController {
 		model.addAttribute("posts", postService.getAllPost());
 		model.addAttribute("comment", new Comment());
 		return "home";
+	}
+	
+	@GetMapping("/autocomplete")
+	public String getUsersByKeyword(@RequestParam String term) throws Exception {
+		if (term.startsWith("@"))
+			return "redirect:/user/search?term=" + term.substring(1);
+		else if (term.startsWith("#"))
+			return "redirect:/tag/search?term=" + term;
+		else
+			throw new Exception();
 	}
 	
 }

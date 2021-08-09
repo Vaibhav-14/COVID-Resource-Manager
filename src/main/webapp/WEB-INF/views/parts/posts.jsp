@@ -50,9 +50,8 @@
 				<!-- Button trigger modal -->
 				<button type="button" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#deletePostModal">
 					Delete Post
-				</button>					
-
-			    </li>
+				</button>
+				</li>
 
 			  </ul>
 	</div>	 
@@ -60,25 +59,30 @@
 	</c:if>   
 	
 			 <c:if test="${pageContext.request.userPrincipal.name != post.user.username }">
-				<sec:authorize access="hasAuthority('ADMIN')">
+				
 
 		<div class="col"> 
 			<div class="dropdown">
 			  <button class="btn btn-secondary btn-sm dropdown-toggle float-end bg-primary bg-gradient" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 			  </button>
 			  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-			  
+			  <sec:authorize access="hasAuthority('ADMIN')">
 			    <li>
 				<!-- Button trigger modal -->
-				<button type="button" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+				<button type="button" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#deletePostModal">
 					Delete Post
 				</button>		 
 			    </li>
-
+				</sec:authorize>
+				<li>
+				<button type="button" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#reportPostModal">
+					Report Post
+				</button>
+				</li>
 			  </ul>
 			</div>	
 			</div>
-				</sec:authorize>
+				
 			</c:if>  
   </div>
 </div>
@@ -93,7 +97,7 @@
 				<form id="form-id" method = "POST" action = "/post/searchresult">
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					<input type="hidden" name="searchentry" value="${tag.name }">
-				  	<a href="#" onclick="document.getElementById('form-id').submit();"> ${tag.name } </a>
+				  	<a href="#" onclick="document.getElementById('form-id').submit();"> #${tag.name } </a>
 				</form>
 				</c:forEach>	    		
 	    	</small>
@@ -102,7 +106,6 @@
 	    
 	    <p class="text-center fw-bold">Comments</p>
 	    
-
 			<c:forEach items="${post.comments }" var="comment" varStatus="tagStatus">
 			<br>
 			<c:if test="${comment.user.enabled == true}">
@@ -129,7 +132,7 @@
 						  <div class="col-9">
 							<a href="/user/profile"><b>@${comment.user.username }</b> </a> :${comment.content }<br>
 						  </div>
-						  <sec:authorize access="hasAuthority('USER')">
+						  
 						  <div class="col-1"> 
 
 							<!-- Button trigger modal -->
@@ -138,16 +141,7 @@
 							</button>	
 
 						  </div>
-						  </sec:authorize>
-						  <sec:authorize access="hasAuthority('ADMIN')">
-							<div class="col-1"> 
-
-							<!-- Button trigger modal -->
-							<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteCommentModal">
-								<i class="material-icons align-middle">delete</i>
-							</button>	
-							</div>
-							</sec:authorize>
+						  
 
 						</div>
 					</div>
@@ -190,7 +184,7 @@
 		            <div class="col-9">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<sf:input type="hidden" path="post" value="${ post.id}" />
-						<sf:input path="content" class="form-control" />
+						<sf:input path="content" class="form-control autocomplete" />
 		    		</div>
 		    		<div class="col-1">
 		      		<sf:button type="submit" class="btn btn-primary">Comment</sf:button>
@@ -232,6 +226,29 @@
 	  </div>
 	</div>
   </div>
+  
+  <!-- Report Modal -->
+    <div class="modal fade" id="reportPostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Report Post</h5>
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-body">
+		  Do you really want to report this post?
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<form method="post" action = "/post/report">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<input type="hidden" name="id" value="${post.id }"/>
+					<button name="submit" type="submit" class ="btn btn-primary btn-danger">Report Post</button>
+				</form>			    		     
+		</div>
+	  </div>
+	</div>
+  </div>
 
 	</c:forEach>
 
@@ -240,3 +257,4 @@
 	
   </div>
 </div>
+

@@ -1,18 +1,30 @@
 <%@ include file="parts/meta.jsp" %> 
-<title>User registration</title>
+
+	<title>Add Post</title>
+	<script src="${pageContext.request.contextPath }/js/jquery-3.6.0.min.js"></script>
+	<script src="${pageContext.request.contextPath }/js/jquery-ui.min.js"></script>
+<%@ include file="parts/header.jsp" %> 
+	<%@ include file="parts/auto.jsp" %>
+
+<%@ include file="parts/meta.jsp" %> 
+<title>Profile Updation</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 </head>
 <body>
-	
   <div class="formcontainer w-100 h-100 p-5 d-flex justify-content-center">	
-	<sf:form modelAttribute="user" method="POST">
+	<sf:form id="form1" modelAttribute="user" method="POST" action="/user/update">
 		<div class="container bg-white rounded shadow-lg ">
 		  <div class="row p-2">
 		      <div class="col text-center">
-				<h1>User SignUp</h1>
+				<h1>Profile Update</h1>
         	  </div>		  
 		  </div>
+		  
+		  <sf:hidden path="id"/>
+		  <sf:hidden path="username"/>
+		  <sf:hidden path="accountStatus"/>
+		  
 		  
 		  <div class="row p-2" >
 		    <div class="col">
@@ -29,14 +41,6 @@
 				    	  <sf:errors path="lastname"/>
         	 	      </div>       
 		    </div>		    
-		  </div>
-		  <div class="row p-2">
-		      <div class="col">
-		      <sf:input path="username" class="w-100 p-2" placeholder="Username"/>
-		              <div class="small text-danger">
-				    	  <sf:errors path="username"/>
-        	 	      </div>
-        	  </div>		  
 		  </div>
 		  <div class="row p-2">
 		      <div class="col">
@@ -78,6 +82,7 @@
         	 	      </div>
         	  </div>		  
 		  </div>
+		  
 		  <div class="row p-2">
 		      <div class="col">
 					
@@ -99,15 +104,10 @@
         	 	      </div>
         	  </div>		  
 		  </div>
-		<sf:button name="Submit" class="btn btn-primary w-100 text-center p-2" value="Submit">Register</sf:button>
-		
-		<div class= "text-center p-2">
-		<p>
-		Already have an account? Log In
-		<a href="${pageContext.request.contextPath}/user/login" style="text-decoration:none;"> here </a><br>
-		<a href="${pageContext.request.contextPath}/home" style="text-decoration:none;" > Homepage </a>
-		</p>
-		</div>
+
+		<sf:button name="Submit" class="btn btn-primary w-100 text-center p-2" value="Submit">Update</sf:button>
+		<br>
+		<br>
 		</div>
 	</sf:form>
 	
