@@ -1,6 +1,8 @@
 package com.mycompany.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -85,7 +87,19 @@ public class UserService {
 	}
 	
 	public List<String> searchUsersByKeyWord(String keyword) {
-		return userDao.searchUserByKeyWord(keyword);
+		return userDao.searchUserByKeyWord(keyword);	
+	}
+	public Set<User> getUsersFromString(String message) {
+		Set<User> mentionedUsers = new HashSet<>();
+		String[] strs = message.split(" ");
+		for (String string : strs) {
+			if (string.startsWith("@")) {
+				User user = getUser(string.substring(1));
+				if (user != null)
+					mentionedUsers.add(user);
+			}
+		}
+		return mentionedUsers;
 	}
 
 }

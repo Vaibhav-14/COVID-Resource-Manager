@@ -38,6 +38,7 @@ public class PostServiceTest{
 	@Autowired
 	private IPostFunctionDAO postDao;
 	
+	
 	@Test
 	@Order(1)
 	public void contextLoads() {
@@ -48,11 +49,13 @@ public class PostServiceTest{
 	
 	@Test
 	@Order(2)
+
 	public void addPost() {
 		// Creating Post
 		Post post = new Post() ; 
 		post.setId(1);
-		post.setType("Urgent") ; 
+		post.setType("Required") ; 
+
 		try {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		    Date parsedDate = dateFormat.parse("2000-01-01 00:00:01");
@@ -110,10 +113,12 @@ public class PostServiceTest{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 	
 //	@Test
 //	@Order(3)
+
 //	public void updatePost() {
 //		Post post = new Post();
 //		try {
@@ -157,24 +162,44 @@ public class PostServiceTest{
 		
 		// Negative Test Cases 
 		// By username
-		assertTrue(postService.findPostByUsername("cham").size() == 0  , "Result should be zero" ) ; 
+		assertTrue(postService.findPostByUsername("noUser").size() == 0  , "Result should be zero" ) ; 
 
 	}
+	@Order(7)
+	@Test
+	public void testPostUpdate() throws Exception {
+       String type = "Required";
+       Post post = new Post("Urgent", new Timestamp(System.currentTimeMillis()) , "urgent oxygen cyclinders requirement at ...");
+       User user= new User("a","b","abc","abc@test.com","12345abcd","7410084485","ACTIVE",new SimpleDateFormat("dd/MM/yyyy").parse("12/04/2010"),"male",0);
+       post.setUser(user);
+       post.setId(1);
+       assertNotNull(post);
+       //Updating Type.....
+       post.setType(type);
+       Post savedPost = postDao.save(post);
+       assertThat(savedPost.getType()).isEqualTo(type);
+       
+       //updating Message.....
+       String message = "All Fine" ; 
+       post.setMessage(message);
+       savedPost = postDao.save(post);
+       assertThat(savedPost.getMessage()).isEqualTo(message);
+
+  
+   }
 	
-//	@Test
-//	@Order(7)
-//	public void testPostUpdateByType() throws Exception {
-//       String type = "Required";
-//       Post post = new Post("Required", new Timestamp(System.currentTimeMillis()) , "urgent oxygen cyclinders requirement at ...");
-//       User user= new User("a","b","abc","abc@test.com","12345abcd","7410084485","ACTIVE",new SimpleDateFormat("dd/MM/yyyy").parse("12/04/2010"),"male",0);
-//       post.setUser(user);
-//       post.setId(1);
-//       Post savedPost = postDao.save(post);
-//       assertNotNull(post);
-//       Post updatePost = (Post) postDao.findPostByUser(user);
-//       assertThat(savedPost.getType()).isEqualTo(type);
-//       assertThat(updatePost.getType()).isEqualTo(type);
-//  
-//   }
+	@Test
+	public void testSetDao() {
+		PostService postService = new PostService();
+		postService.setDao(postDao);
+		assertTrue(postService.getDao() == this.postDao);
+	}
+	
+	@Test
+	public void testGetDao() {
+		PostService postService = new PostService();
+		postService.setDao(postDao);
+		assertTrue(postService.getDao() == this.postDao);
+	}
 	
 }
