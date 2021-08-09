@@ -24,6 +24,13 @@
 	<a href="/user/update/${post.id }">
 		<button>Edit Profile</button>
 	</a>
+	
+	<form method="post" action = "/user/delete">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+		<input type="hidden" name="username" value="${user.username }"/>
+		<button name="submit" type="submit" class ="btn btn-primary btn-danger">Delete Account</button>
+	</form>	
+	
 	<br>
 	<br> First Name: ${user.firstname }
 	<br> Last Name: ${user.lastname }
@@ -73,6 +80,8 @@
 	<% } %>
 <a href="/home">
 			<button>Back</button>
+
+
 </body>
 <%@ include file="parts/footer.jsp"%>
 </html>

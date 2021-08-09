@@ -4,7 +4,6 @@
 
 </head>
 <body>
-	<a href="${pageContext.request.contextPath}/home" > Home </a>
 	
   <div class="formcontainer w-100 h-100 p-5 d-flex justify-content-center">	
 	<sf:form modelAttribute="user" method="POST">
@@ -105,7 +104,8 @@
 		<div class= "text-center p-2">
 		<p>
 		Already have an account? Log In
-		<a href="${pageContext.request.contextPath}/user/login" > here </a>
+		<a href="${pageContext.request.contextPath}/user/login" style="text-decoration:none;"> here </a><br>
+		<a href="${pageContext.request.contextPath}/home" style="text-decoration:none;" > Homepage </a>
 		</p>
 		</div>
 		</div>

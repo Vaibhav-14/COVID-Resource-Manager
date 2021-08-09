@@ -73,10 +73,10 @@ public class PostService {
 	private void addTagsToPost(Post post) {
 		Set<Tag> tags = new HashSet<Tag>();
 		Iterable<Tag> db_tags = tagService.getAllTags();
-		for (String s : post.getTagStr().split(", ")) {
+		for (String tagString : post.getTagStr().replaceAll("#", "").split(" ")) {
 			int flag = 0;
 			for (Tag tag : db_tags) {
-				if(tag.getName().equals(s)) {
+				if(tag.getName().equals(tagString)) {
 					flag = 1;
 					tags.add(tag);
 					break;
@@ -84,7 +84,7 @@ public class PostService {
 			}
 			if(flag == 0) {
 				Tag tag = new Tag();
-				tag.setName(s);
+				tag.setName(tagString);
 				Set<Post> tag_post = new HashSet<Post>();
 				tag_post.add(post);
 				tags.add(tag);
@@ -93,7 +93,7 @@ public class PostService {
 		post.setTags(tags);
 	}
 
-	public Post getPostById(int id) throws IncorrectUserException {
+	public Post getPostById(int id) {
 		Post post = postDao.findById(id).get();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.getUserFromUsername(auth.getName());
@@ -102,16 +102,24 @@ public class PostService {
 			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
 		StringBuffer str = new StringBuffer();
 		for (Tag tag : post.getTags()) {
-			str.append(tag.getName() + ", ");
+			str.append("#" + tag.getName() + " ");
 		}
 		post.setTagStr(str.toString()); 
 		return post;
 	}
 
-	public void updatePost(Post post) {
-
+	public void updatePost(Post post) throws IncorrectUserException {
+		Post oldPost = getPostById(post.getId());
+		post.setDateTime(oldPost.getDateTime());
 		addTagsToPost(post);
-		postDao.save(post);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		User loggedInUser = userService.getUserFromUsername(auth.getName());
+		if(post.getUser().getId() == loggedInUser.getId())
+			postDao.save(post);
+		else
+			throw new IncorrectUserException("We are sorry but you do not have that permission.");
+
 	}
 	
 	public void deletePost(int id) throws IncorrectUserException {
@@ -138,7 +146,7 @@ public class PostService {
 			}
 		}
 		else
-			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
+			throw new IncorrectUserException("We are sorry but you do not have that permission.");
 	}
 	
 	public List<Post> getAllPost(){
