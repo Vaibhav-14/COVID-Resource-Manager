@@ -65,7 +65,7 @@ public class UserController {
 		if(results.hasErrors())
 			return "signup";
 		
-		user.setAccountStatus("ACTIVE");
+		user.setWarnings(0);
 		user.setEnabled(1);
 		
 		//Needs to be printed in the logs 

@@ -10,6 +10,8 @@ import static org.mockito.Mockito.when;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,14 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import com.mycompany.entity.Post;
 import org.springframework.context.ApplicationContext;
 
 import com.mycompany.dao.IUserFunctionDAO;
@@ -52,7 +62,7 @@ public class UserServiceTest {
 		user.setLastname("OK");
 		user.setPassword("Thor");
 		user.setMobile("1123456789") ; 
-		user.setAccountStatus("active");
+		user.setWarnings(0);
 		try {
 		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		    Date parsedDate = dateFormat.parse(String.valueOf("2000-01-01"));
@@ -81,6 +91,54 @@ public class UserServiceTest {
 	}
 	
 	@Test
+	@Order(5)
+	public void displayProfileTest() {
+		List<Post> posts = userService.displayProfile("Champ") ; 
+		assertTrue(posts.size() >= 0 );
+		posts = userService.displayProfile(null) ; 
+		assertTrue(posts.size() >= 0 );
+	}
+	
+	@Test
+	@Order(6)
+	public void getUsersFromStringTest() {
+		Set<User> users = userService.getUsersFromString("@Champ") ; 
+		assertTrue(users.size() >= 1 );
+	}
+	
+	@Test
+	@Order(7)
+	public void getListOfAllUsernamesTest() {
+		assertTrue(userService.getListOfAllUsernames().size() >= 1 ) ; 
+	}
+	
+	@Test
+	@Order(8)
+	public void updatUserTest() {
+		// User Authentication
+		UsernamePasswordAuthenticationToken authReq
+					      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
+		AuthenticationManager auth = new AuthenticationManager() {
+							
+			@Override
+			public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+					return authentication;
+			}
+		};
+					    
+		SecurityContext sc = SecurityContextHolder.getContext();
+		sc.setAuthentication(auth.authenticate(authReq));
+		User user = userService.getUser("Champ") ; 
+		assertDoesNotThrow(() -> userService.updateUser(user));
+	}
+	
+	@Test
+	@Order(9)
+	public void testGetterSetter() {
+		assertDoesNotThrow(() -> userService.setUserDao(userService.getUserDao()));
+	}
+	
+	@Test
 	public void testSetDao() {
 		UserService userService = new UserService();
 		userService.setUserDao(userDao);
@@ -92,6 +150,37 @@ public class UserServiceTest {
 		UserService userService = new UserService();
 		userService.setUserDao(userDao);
 		assertTrue(userService.getUserDao() == this.userDao);
+	}
+	
+	@Test
+	public void updateUserProfile() {
+		User user = userService.getUser("Champ") ; 
+		assertDoesNotThrow(() -> userService.updateUserProfile(user));
+	}
+	
+	@Test
+	public void searchUsersByKeyWordTest() {
+		assertTrue(userService.searchUsersByKeyWord("Champ").size() >= 1 ) ; 
+	}
+	
+	@Test
+	public void deleteUserAccount() {
+		// User Authentication
+		UsernamePasswordAuthenticationToken authReq
+							      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
+		AuthenticationManager auth = new AuthenticationManager() {
+									
+			@Override
+			public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+					return authentication;
+			}
+		};
+							    
+		SecurityContext sc = SecurityContextHolder.getContext();
+		sc.setAuthentication(auth.authenticate(authReq));
+		
+		// Delete User Account
+		userService.deleteUserAccount("Champ");
 	}
 	
 

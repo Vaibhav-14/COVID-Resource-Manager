@@ -16,7 +16,12 @@ public interface IUserFunctionDAO extends CrudRepository<User, Integer>{
 	@Query(value = " select username from users;  ", nativeQuery = true)
 	List<String> getListOfAllUsernames();
 	
+
+	@Query(value = "select * from users where id in (select user_id from users_roles where role_id=2)", nativeQuery = true)
+	List<User> getAllAdmin();
+
 	@Query("SELECT username FROM User WHERE username LIKE %:keyword%")
 	public List<String> searchUserByKeyWord(@Param("keyword") String keyword);
+
 
 }
