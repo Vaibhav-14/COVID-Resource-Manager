@@ -2,6 +2,7 @@ package com.mycompany.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import javax.transaction.Transactional;
@@ -11,36 +12,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.ui.Model;
-
-import com.mycompany.entity.User;
+import org.springframework.test.web.servlet.RequestBuilder;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class HomeControllerTest {
+public class CommentControllerTest {
 	
 	@Autowired
-	private HomeController homeController ; 
+	private CommentController commentController ; 
 	@Autowired
 	private MockMvc mockMvc;
 	
 	@Test
 	public void contextLoads() throws Exception{
-		assertThat(homeController).isNotNull();
+		assertThat(commentController).isNotNull();
 	}
 	
 	@Test
 	@Transactional
 	public void validHTTPResponse() throws Exception{
-		this.mockMvc.perform(get("/home")).andExpect(status().isOk());
-	}
-	
-	@Test
-	public void testshowHomePage(Model model) throws Exception {
-		this.mockMvc.perform(get("/")).andExpect(status().isOk());
+		this.mockMvc.perform(post("/create")).andExpect(status().isOk());
 	}
 
-	
 	
 
 }
