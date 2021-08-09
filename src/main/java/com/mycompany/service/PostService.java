@@ -89,13 +89,9 @@ public class PostService {
 		post.setTags(tags);
 	}
 
-	public Post getPostById(int id) throws IncorrectUserException {
+	public Post getPostById(int id) {
 		Post post = postDao.findById(id).get();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.getUserFromUsername(auth.getName());
 
-		if(post.getUser().getId() != user.getId())
-			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
 		StringBuffer str = new StringBuffer();
 		for (Tag tag : post.getTags()) {
 			str.append("#" + tag.getName() + " ");
@@ -104,11 +100,18 @@ public class PostService {
 		return post;
 	}
 
-	public void updatePost(Post post) {
+	public void updatePost(Post post) throws IncorrectUserException {
 		Post oldPost = getPostById(post.getId());
 		post.setDateTime(oldPost.getDateTime());
 		addTagsToPost(post);
-		postDao.save(post);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		User loggedInUser = userService.getUserFromUsername(auth.getName());
+		if(post.getUser().getId() == loggedInUser.getId())
+			postDao.save(post);
+		else
+			throw new IncorrectUserException("We are sorry but you do not have that permission.");
+
 	}
 	
 	public void deletePost(int id) throws IncorrectUserException {
@@ -128,7 +131,7 @@ public class PostService {
 			}
 		}
 		else
-			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
+			throw new IncorrectUserException("We are sorry but you do not have that permission.");
 	}
 	
 	public List<Post> getAllPost(){
