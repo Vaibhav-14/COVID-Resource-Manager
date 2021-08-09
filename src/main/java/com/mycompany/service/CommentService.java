@@ -1,6 +1,7 @@
 package com.mycompany.service;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,11 @@ public class CommentService {
 		else {
 			throw new IncorrectUserException("This comment doesn't belong to User " + user.getUsername());
 		}
+	}
+	
+	List<Comment> findAllCommentsByUserID(int userID)
+	{
+		return commentDao.findAllByUserId(userID);
 	}
 
 }
