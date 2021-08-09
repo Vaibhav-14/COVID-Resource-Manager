@@ -21,7 +21,7 @@
 	<% } %>
 	<c:if test="${user.enabled == true}">
 	<c:if test="${pageContext.request.userPrincipal.name == username}">
-	<a href="/user/update/${post.id }">
+	<a href="/user/update">
 		<button>Edit Profile</button>
 	</a>
 	
