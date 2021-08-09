@@ -23,7 +23,7 @@
 		  
 		  <sf:hidden path="id"/>
 		  <sf:hidden path="username"/>
-		  <sf:hidden path="accountStatus"/>
+		  <sf:hidden path="warnings"/>
 		  
 		  
 		  <div class="row p-2" >
