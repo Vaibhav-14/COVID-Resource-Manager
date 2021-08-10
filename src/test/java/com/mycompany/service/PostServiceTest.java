@@ -33,6 +33,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.mycompany.dao.IPostFunctionDAO;
+import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.Post;
 import com.mycompany.entity.Tag;
 import com.mycompany.entity.User;
@@ -44,6 +45,9 @@ public class PostServiceTest{
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private IUserFunctionDAO userDao;
 	
 	@Autowired
 	private PostService postService; 
@@ -288,8 +292,15 @@ public class PostServiceTest{
 		sc.setAuthentication(auth.authenticate(authReq));
 		
 		List<Post> posts = postService.findPostByUsername("Champ") ; 
-		Post post = posts.get(0) ; 
-		postService.deletePost(post.getId());
+		for(Post post : posts) {
+			postService.deletePost(post.getId());
+		}
+		
+		userService.deleteUserAccount("Champ");
+		User user = userService.getUser("Champ") ; 
+		if (user != null) {
+			userDao.delete(user);
+		}
 	}
 	
 }

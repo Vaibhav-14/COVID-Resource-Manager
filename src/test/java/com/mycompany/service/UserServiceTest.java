@@ -196,6 +196,11 @@ public class UserServiceTest {
 		
 		// Delete User Account
 		userService.deleteUserAccount("Champ");
+		User user = userService.getUser("Champ") ; 
+		if (user != null) {
+			userDao.delete(user);
+		}
+		
 	}
 	
 
