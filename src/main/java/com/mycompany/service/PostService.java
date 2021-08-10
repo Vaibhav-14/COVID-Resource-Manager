@@ -107,6 +107,7 @@ public class PostService {
 		post.setTagStr(str.toString()); 
 		return post;
 	}
+	
 
 	public void updatePost(Post post) throws IncorrectUserException {
 		Post oldPost = getPostById(post.getId());
