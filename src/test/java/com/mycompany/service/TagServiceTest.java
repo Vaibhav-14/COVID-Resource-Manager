@@ -1,4 +1,4 @@
-package com.mycompany.service;
+	package com.mycompany.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -62,4 +62,35 @@ public class TagServiceTest {
 		assertNotNull(expectedList);
 		assertNotEquals(expectedList , tagsList);
 	}
+	
+	@Test
+	public void getAllTagsTest() throws ParseException{
+		Iterable<Tag> tagsIterable = tagDao.findAll();
+		List<Tag> tagsList = new ArrayList<Tag>();
+	    for (Tag tag : tagsIterable) {
+	        tagsList.add(tag);
+	    }
+		//System.out.println("Tags retrieved are :" +tagsList);
+		Post post = new Post("Urgent", new Timestamp(System.currentTimeMillis()) , "urgent oxygen cyclinders requirement at ...");
+	    User user= new User("a","b","abc","abc@test.com","12345abcd","7410084485","ACTIVE",new SimpleDateFormat("dd/MM/yyyy").parse("12/04/2010"),"male",0);
+	    post.setUser(user);
+	    post.setId(1);
+	    Set<Post> setOfPost = new HashSet<>();
+	    setOfPost.add(post);
+		List<Tag> expectedList = new ArrayList<Tag>();
+		Tag tag1 = new Tag("#Available",setOfPost);
+		Tag tag2 = new Tag("#hydroxychloroquine",setOfPost);
+		Tag tag3 = new Tag("#Required",setOfPost);
+		Tag tag4 = new Tag("#Urgent",setOfPost);
+		expectedList.add(tag1);
+		expectedList.add(tag2);
+		expectedList.add(tag3);
+		expectedList.add(tag4);
+
+		assertNotNull(expectedList);
+		assertNotEquals(expectedList , tagsList);
+		
+		
+	}
+	
 }
