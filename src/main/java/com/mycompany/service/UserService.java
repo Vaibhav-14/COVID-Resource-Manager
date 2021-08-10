@@ -47,7 +47,7 @@ public class UserService {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
 		int roleId = 1; // role id for role 'USER'
-		Role role = roleDao.findById(roleId).get();
+		Role role = roleDao.findById(roleId);
 		user.getRoles().add(role);
 		user.setPassword(encoder.encode(user.getPassword()));
 		userDao.save(user);

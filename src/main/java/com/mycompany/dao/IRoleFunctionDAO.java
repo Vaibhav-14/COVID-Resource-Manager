@@ -8,4 +8,6 @@ public interface IRoleFunctionDAO extends CrudRepository<Role, Integer> {
 	
 	Role findByName(String name);
 	
+	Role findById(int id );
+	
 }
