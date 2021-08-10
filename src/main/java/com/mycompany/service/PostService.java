@@ -49,9 +49,9 @@ public class PostService {
 	public void addPost(Post post) {
 		Set<User> mentionedUsers = userService.getUsersFromString(post.getMessage());
 		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-		User loggedInUser = userService.getUserFromUsername(auth.getName());
+		User loggedInUser = userService.getLoggedInUser();
+		
+		mentionedUsers.remove(loggedInUser);
 		post.setUser(loggedInUser);
 		post.setDateTime(new Timestamp(System.currentTimeMillis()));
 		addTagsToPost(post);
@@ -88,8 +88,8 @@ public class PostService {
 
 	public Post getPostById(int id) {
 		Post post = postDao.findById(id).get();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.getUserFromUsername(auth.getName());
+		User user = userService.getLoggedInUser();
+
 		Role role = roleDao.findByName("ADMIN");
 		if(post.getUser().getId() != user.getId() && !user.getRoles().contains(role))
 			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
@@ -106,9 +106,8 @@ public class PostService {
 		Post oldPost = getPostById(post.getId());
 		post.setDateTime(oldPost.getDateTime());
 		addTagsToPost(post);
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User loggedInUser = userService.getLoggedInUser();
 
-		User loggedInUser = userService.getUserFromUsername(auth.getName());
 		if(post.getUser().getId() == loggedInUser.getId())
 			postDao.save(post);
 		else
@@ -117,8 +116,7 @@ public class PostService {
 	}
 	
 	public void deletePost(int id) throws IncorrectUserException {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.getUserFromUsername(auth.getName());
+		User user = userService.getLoggedInUser();
 		Role role = roleDao.findByName("ADMIN");
 		boolean isAdmin = false;
 		Post post = postDao.findPostById(id);
@@ -168,8 +166,8 @@ public class PostService {
 	}
 	
 	public void reportPost(int id) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User senderUser = userService.getUserFromUsername(auth.getName());
+		User senderUser = userService.getLoggedInUser();
+
 		Post post = postDao.findPostById(id);
 		String activityType = "This post doesn't concern Covid";
 		List<User> admins = userService.getAllAdmin();

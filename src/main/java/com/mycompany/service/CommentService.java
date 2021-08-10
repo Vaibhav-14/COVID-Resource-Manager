@@ -36,9 +36,7 @@ public class CommentService {
 	private UserService userService;
 	
 	public void addComment(Comment comment) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		
-		User loggedInUser = userService.getUserFromUsername(auth.getName());
+		User loggedInUser = userService.getLoggedInUser();
 
 		comment.setUser(loggedInUser);
 		comment.setDateTime(new Timestamp(System.currentTimeMillis()));
@@ -51,6 +49,7 @@ public class CommentService {
 				"post", "post/" + comment.getPost().getId(), comment.getPost().getUser());
 		
 		Set<User> mentionedUsers = userService.getUsersFromString(comment.getContent());
+		mentionedUsers.remove(loggedInUser);
 		activityType = "@" + loggedInUser.getUsername() + " mentioned you in a comment" ;
 		notificationService.saveNotification(loggedInUser, activityType,
 				"comment", "post/" + comment.getPost().getId(), mentionedUsers);
@@ -58,8 +57,8 @@ public class CommentService {
 	}
 	
 	public void deleteComment(int id) throws IncorrectUserException{
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userDao.findByUsername(auth.getName());
+		User user = userService.getLoggedInUser();
+
 		Role role = roleDao.findByName("ADMIN");
 		boolean isAdmin = false;
 		Comment comment = commentDao.findById(id).get();

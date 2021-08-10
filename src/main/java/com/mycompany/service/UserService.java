@@ -19,6 +19,7 @@ import com.mycompany.entity.Comment;
 import com.mycompany.entity.Post;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.User;
+import com.mycompany.exception.IncorrectUserException;
 
 @Transactional
 @Service("userService")
@@ -63,8 +64,7 @@ public class UserService {
 	
 	public List<Post> displayProfile(String username){
 		if(username == null) {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			return postDao.findAllByUserIdOrderByDateTimeDesc(getUserFromUsername(auth.getName()).getId());
+			return postDao.findAllByUserIdOrderByDateTimeDesc(getLoggedInUser().getId());
 		}
 		else {
 			return postDao.findAllByUserIdOrderByDateTimeDesc(getUserFromUsername(username).getId());
@@ -73,8 +73,7 @@ public class UserService {
 	
 	public User getUser(String username) {
 		if(username == null) {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			return userDao.findByUsername(auth.getName());
+			return getLoggedInUser();
 		}
 		else {
 			return userDao.findByUsername(username);
@@ -82,9 +81,8 @@ public class UserService {
 	}
 	
 	public void updateUser(User user) {
-		System.out.println(user);
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User admin_user = userDao.findByUsername(auth.getName());
+		User admin_user = getLoggedInUser();
+
 		Role role = roleDao.findByName("ADMIN"); // for admin use only
 		if(admin_user.getRoles().contains(role)) {
 			userDao.save(user);
@@ -114,34 +112,24 @@ public class UserService {
 		return mentionedUsers;
 	}
 	
-	public void deleteUserAccount(String username)
-	{
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = getUserFromUsername(auth.getName());
+	public void deleteUserAccount(String username) throws IncorrectUserException {
+		User user = getLoggedInUser();
 
 		if(user.getId() != getUserFromUsername(username).getId())
-			return;
+			throw new IncorrectUserException("Forbidden");
 		
-		//deleting comments by the user
-		List<Comment> commentsToDelete = commentDao.findAllByUserId(user.getId());
-		for(Comment currentComment: commentsToDelete)
-			commentDao.deleteById(currentComment.getId());
-		
-		//deleting posts by the user
-		List<Post> postsToDelete = postDao.findPostByUser(user);
-		for(Post currentPost: postsToDelete)
-			postDao.deleteById(currentPost.getId());
-		
-		/*
-		 * Any more entities added in the db need to be listed and deleted here
-		 * */
-		
-		//finally the user is deleted
 		userDao.deleteById(user.getId());
 	
 	}
+	
 	public List<User> getAllAdmin() {
 		return userDao.getAllAdmin();
+	}
+	
+	public User getLoggedInUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = getUserFromUsername(auth.getName());
+		return user;
 	}
 
 }
