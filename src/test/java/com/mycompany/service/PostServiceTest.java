@@ -53,6 +53,7 @@ public class PostServiceTest{
 	
 	
 	@Test
+	@Order(1)
 	public void contextLoads() {
 		assertThat(userService).isNotNull() ; 
 		assertThat(postService).isNotNull() ; 
@@ -139,6 +140,7 @@ public class PostServiceTest{
 	}
 	
 	@Test
+	@Order(3)
 	@Transactional
 	public void updatePost() {
 		// User Authentication
@@ -163,12 +165,14 @@ public class PostServiceTest{
 		
 	}
 
-	@Test 
+	@Test
+	@Order(4)
 	public void getAllPost() {
 		assertTrue(postService.getAllPost().size() > 0 ) ; 
 	}
 	
 	@Test
+	@Order(5)
 	public void findPostByUsername() {
 		String username = "Champ" ; 
 		List<Post> posts = postService.findPostByUsername(username) ; 
@@ -178,6 +182,7 @@ public class PostServiceTest{
 	} 
 	
 	@Test
+	@Order(6)
 	public void searchPost(){
 		// Positive Test Cases 
 		// By username
@@ -212,6 +217,7 @@ public class PostServiceTest{
 //   }
 	
 	@Test
+	@Order(7)
 	public void testSetDao() {
 		PostService postService = new PostService();
 		postService.setDao(postDao);
@@ -219,6 +225,7 @@ public class PostServiceTest{
 	}
 	
 	@Test
+	@Order(8)
 	public void testGetDao() {
 		PostService postService = new PostService();
 		postService.setDao(postDao);
@@ -226,14 +233,14 @@ public class PostServiceTest{
 	}
 	
 	@Test
-	@Order(8)
+	@Order(9)
 	public void getPostOnSearchTest() {
 		Set<Post> posts = postService.getPostOnSearch("Urgent") ; 
 		assertTrue(posts.size() >= 0 ) ; 
 	}
 	
 	@Test
-	@Order(9)
+	@Order(12)
 	public void deletePostTest() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq

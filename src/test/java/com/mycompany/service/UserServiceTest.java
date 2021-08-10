@@ -87,7 +87,7 @@ public class UserServiceTest {
 	@Test
 	@Order(4)
 	public void getUser() {
-		assertEquals(userService.getUser("Champ").getId() , 6);
+		assertEquals(userService.getUser("Champ").getId() , 1);
 	}
 	
 	@Test
@@ -139,6 +139,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
+	@Order(10)
 	public void testSetDao() {
 		UserService userService = new UserService();
 		userService.setUserDao(userDao);
@@ -146,6 +147,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
+	@Order(11)
 	public void testGetDao() {
 		UserService userService = new UserService();
 		userService.setUserDao(userDao);
@@ -153,17 +155,20 @@ public class UserServiceTest {
 	}
 	
 	@Test
+	@Order(12)
 	public void updateUserProfile() {
 		User user = userService.getUser("Champ") ; 
 		assertDoesNotThrow(() -> userService.updateUserProfile(user));
 	}
 	
 	@Test
+	@Order(13)
 	public void searchUsersByKeyWordTest() {
 		assertTrue(userService.searchUsersByKeyWord("Champ").size() >= 1 ) ; 
 	}
 	
 	@Test
+	@Order(14)
 	public void deleteUserAccount() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
