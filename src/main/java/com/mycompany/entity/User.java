@@ -190,9 +190,8 @@ public class User {
 		
 	}
 	
-	
 	public User(String firstname, String lastname, String username, String email, String password,
-			String mobile, String accountStatus, Date dateOfBirth, String gender, int enabled) {
+			String mobile, int warnings, Date dateOfBirth, String gender, int enabled) {
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.username = username;
@@ -203,25 +202,6 @@ public class User {
 		this.dateOfBirth = dateOfBirth;
 		this.gender = gender;
 		this.enabled = enabled;
-	}
-	public void addPost(Post tempPost) {
-		
-		if(posts == null)
-			posts = new HashSet<>();
-		else
-			posts.add(tempPost);
-		
-		tempPost.setUser(this);  // bidirectional linkage
-	}
-	
-	public void addNotification(Notification theNotification) {
-		
-		if(notifications == null)
-			notifications = new HashSet<>();
-		else
-			notifications.add(theNotification);
-		
-		theNotification.setReceiver(this);  // bidirectional linkage
 	}
 	
 	public boolean isEnabled() {

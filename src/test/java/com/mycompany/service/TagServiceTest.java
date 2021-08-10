@@ -1,4 +1,4 @@
-package com.mycompany.service;
+	package com.mycompany.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -44,6 +44,7 @@ public class TagServiceTest {
 		Tag tag = new Tag("OK" , null) ; 
 		assertDoesNotThrow(() -> tagService.addTags(tag));
 		assertDoesNotThrow(() -> tagService.addTags(tag));
+
 	}
 	
 	@Test
