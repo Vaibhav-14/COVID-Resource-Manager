@@ -85,7 +85,7 @@ public class PostServiceTest{
 		user.setEmail("Champ@gmail.com");
 		user.setFirstname("Champ");
 		user.setLastname("OK");
-		user.setPassword("abcdefgh");
+		user.setPassword("Thor");
 		user.setMobile("1123456789") ; 
 		try {
 		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -140,8 +140,8 @@ public class PostServiceTest{
 	}
 	
 	@Test
-	@Order(3)
 	@Transactional
+	@Order(3)
 	public void updatePost() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
@@ -165,8 +165,7 @@ public class PostServiceTest{
 		
 	}
 
-
-	@Test
+	@Test 
 	@Order(4)
 	public void getAllPost() {
 		assertTrue(postService.getAllPost().size() > 0 ) ; 
@@ -187,11 +186,11 @@ public class PostServiceTest{
 	public void searchPost(){
 		// Positive Test Cases 
 		// By username
-		assertTrue(postService.findPostByUsername("Champ").size() > 0 , "Result should be greater than zero" ) ; 
+		assertTrue(postService.findPostByUsername("champ").size() > 0 , "Result should be greater than zero" ) ; 
 		
 		// Negative Test Cases 
 		// By username
-		assertTrue(postService.findPostByUsername("fasdf").size() == 0  , "Result should be zero" ) ; 
+		assertTrue(postService.findPostByUsername("noUser").size() == 0  , "Result should be zero" ) ; 
 
 	}
 	
@@ -240,6 +239,8 @@ public class PostServiceTest{
 		assertTrue(posts.size() >= 0 ) ; 
 	}
 	
+	
+	
 	@Test
 	@Order(11)
 	public void testGetterSetter() {
@@ -264,8 +265,8 @@ public class PostServiceTest{
 		sc.setAuthentication(auth.authenticate(authReq));
 				
 		List<Post> posts = postService.findPostByUsername("Champ") ; 
-//		Post post = posts.get(0) ; 
-//		assertDoesNotThrow(() -> postService.reportPost(post.getId()));
+		Post post = posts.get(0) ; 
+		assertDoesNotThrow(() -> postService.reportPost(post.getId()));
 	}
 	
 	@Test
