@@ -133,7 +133,7 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `mobile` varchar(255) NOT NULL,
-  `account_status` varchar(255) NOT NULL,
+  `warnings` int(11) NOT NULL,
   `date_of_birth` date NOT NULL,
   `gender` varchar(255) NOT NULL,
   `enabled` int(11) NOT NULL,

@@ -1,12 +1,20 @@
 package com.mycompany.config;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.dao.*;
 import org.springframework.security.config.annotation.authentication.builders.*;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.*;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  
 @Configuration
@@ -28,7 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
-         
+        authProvider.setHideUserNotFoundExceptions(false) ;
+
         return authProvider;
     }
  
@@ -50,12 +59,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/home").permitAll()
             .antMatchers("/post/create").hasAuthority("USER")
             .antMatchers("/user/profile").permitAll()
+            .antMatchers("/user/login").permitAll()
             .anyRequest().authenticated()
             .and()
             .formLogin()
             	.defaultSuccessUrl("/")
             	.loginPage("/user/login")
             	.loginProcessingUrl("/authenticateTheUser")
+            	.failureHandler(new SimpleUrlAuthenticationFailureHandler() {
+            		 
+                    @Override
+                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                            AuthenticationException exception) throws IOException, ServletException {
+                        String error = exception.getMessage();
+                        String redirectURL = request.getContextPath() + "/user/login?error";
+                        
+                        if (error.contains("disabled"))
+                        	redirectURL = request.getContextPath() + "/user/login?disabled";
+                        
+                        super.setDefaultFailureUrl(redirectURL);
+                        super.onAuthenticationFailure(request, response, exception);
+     
+                    }
+                })
             	.permitAll()
             .and()
             .logout()

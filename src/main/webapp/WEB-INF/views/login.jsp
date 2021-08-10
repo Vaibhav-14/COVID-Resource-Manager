@@ -21,6 +21,10 @@
 			<c:if test="${param.error != null}">
 				<b>invalid username or password</b>
 			</c:if>
+			
+			<c:if test="${param.disabled != null}">
+				<b>Your account has been suspended</b>
+			</c:if>
 
 			<c:if test="${param.logout != null}">
 				<b>you have been logged out</b>

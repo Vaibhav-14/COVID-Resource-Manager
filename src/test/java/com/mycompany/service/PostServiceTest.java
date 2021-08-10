@@ -33,6 +33,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.mycompany.dao.IPostFunctionDAO;
+import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.Post;
 import com.mycompany.entity.Tag;
 import com.mycompany.entity.User;
@@ -44,6 +45,9 @@ public class PostServiceTest{
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private IUserFunctionDAO userDao;
 	
 	@Autowired
 	private PostService postService; 
@@ -193,28 +197,29 @@ public class PostServiceTest{
 		assertTrue(postService.findPostByUsername("noUser").size() == 0  , "Result should be zero" ) ; 
 
 	}
-	
-//	@Order(7)
-//	@Test
-//	public void testPostUpdate() throws Exception {
-//       String type = "Required";
-//       Post post = new Post("Urgent", new Timestamp(System.currentTimeMillis()) , "urgent oxygen cyclinders requirement at ...");
-//       User user= new User("a","b","abc","abc@test.com","12345abcd","7410084485","ACTIVE",new SimpleDateFormat("dd/MM/yyyy").parse("12/04/2010"),"male",0);
-//       post.setUser(user);
-//       post.setId(1);
-//       assertNotNull(post);
-//       //Updating Type.....
-//       post.setType(type);
-//       Post savedPost = postDao.save(post);
-//       assertThat(savedPost.getType()).isEqualTo(type);
-//       
-//       //updating Message.....
-//       String message = "All Fine" ; 
-//       post.setMessage(message);
-//       savedPost = postDao.save(post);
-//       assertThat(savedPost.getMessage()).isEqualTo(message);
-//
-//   }
+
+	@Order(7)
+	@Test
+	public void testPostUpdate() throws Exception {
+       String type = "Required";
+       Post post = new Post("Urgent", new Timestamp(System.currentTimeMillis()) , "urgent oxygen cyclinders requirement at ...");
+       User user= new User("a","b","abc","abc@test.com","12345abcd","7410084485", 0,new SimpleDateFormat("dd/MM/yyyy").parse("12/04/2010"),"male",0);
+       post.setUser(user);
+       post.setId(1);
+       assertNotNull(post);
+       //Updating Type.....
+       post.setType(type);
+       Post savedPost = postDao.save(post);
+       assertThat(savedPost.getType()).isEqualTo(type);
+       
+       //updating Message.....
+       String message = "All Fine" ; 
+       post.setMessage(message);
+       savedPost = postDao.save(post);
+       assertThat(savedPost.getMessage()).isEqualTo(message);
+
+  
+   }
 	
 	@Test
 	@Order(7)
@@ -287,8 +292,15 @@ public class PostServiceTest{
 		sc.setAuthentication(auth.authenticate(authReq));
 		
 		List<Post> posts = postService.findPostByUsername("Champ") ; 
-		Post post = posts.get(0) ; 
-		postService.deletePost(post.getId());
+		for(Post post : posts) {
+			postService.deletePost(post.getId());
+		}
+		
+		userService.deleteUserAccount("Champ");
+		User user = userService.getUser("Champ") ; 
+		if (user != null) {
+			userDao.delete(user);
+		}
 	}
 	
 }
