@@ -41,7 +41,7 @@ public class HomeController {
 		if (term.startsWith("@"))
 			return "redirect:/user/search?term=" + term.substring(1);
 		else if (term.startsWith("#"))
-			return "redirect:/tag/search?term=" + term;
+			return "redirect:/tag/search?term=" + term.substring(1);
 		else
 			throw new Exception();
 	}

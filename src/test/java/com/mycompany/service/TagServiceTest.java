@@ -50,7 +50,7 @@ public class TagServiceTest {
 		System.out.println("Tags retrieved are :" +tagsList);
 		
 		Post post = new Post("Urgent", new Timestamp(System.currentTimeMillis()) , "urgent oxygen cyclinders requirement at ...");
-	    User user= new User("a","b","abc","abc@test.com","12345abcd","7410084485","ACTIVE",new SimpleDateFormat("dd/MM/yyyy").parse("12/04/2010"),"male",0);
+	    User user= new User("a","b","abc","abc@test.com","12345abcd","7410084485", 0,new SimpleDateFormat("dd/MM/yyyy").parse("12/04/2010"),"male",0);
 	    post.setUser(user);
 	    post.setId(1);
 	    Set<Post> setOfPost = new HashSet<>();
