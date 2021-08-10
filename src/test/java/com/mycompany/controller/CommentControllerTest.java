@@ -31,7 +31,7 @@ public class CommentControllerTest {
 	@Test
 	@Transactional
 	public void validHTTPResponse() throws Exception{
-		this.mockMvc.perform(post("/create")).andExpect(status().isOk());
+		this.mockMvc.perform(post("/create")).andExpect(status().is(302));
 	}
 
 	
