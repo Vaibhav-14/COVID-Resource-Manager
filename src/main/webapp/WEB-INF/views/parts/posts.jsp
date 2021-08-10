@@ -164,20 +164,12 @@
 											<div class="col">
 												<p class="card-text">
 													<small class="text-muted">
-														<c:forEach items="${post.tags }" var="tag"
-															varStatus="tagStatus">
-															<span>
-															<form id="form-id" method="POST"
-																action="/post/searchresult">
-																<input type="hidden" name="${_csrf.parameterName}"
-																	value="${_csrf.token}" />
-																<input type="hidden" name="searchentry"
-																	value="#${tag.name }">
-																<a href="#"
-																	onclick="document.getElementById('form-id').submit();">
-																	#${tag.name } </a>
-															</form>
-															</span>
+														<c:forEach items="${post.tags }" var="tag" varStatus="tagStatus">
+															<span style="padding:3px">
+															  <a href="<c:url value="/post/searchresult" ><c:param name="searchentry" value="#${tag.name }" /></c:url>">
+															  	#${tag.name }
+															  </a>
+														  </span>
 														</c:forEach>
 													</small>
 												</p>
