@@ -42,9 +42,7 @@ public class UserServiceTest {
 	@Autowired
 	private IUserFunctionDAO userDao;
 	
-	
-	static ApplicationContext applicationContext = null;
-    
+	    
 	@Test
 	@Order(1)
 	public void contextLoads() {
@@ -87,7 +85,7 @@ public class UserServiceTest {
 	@Test
 	@Order(4)
 	public void getUser() {
-		assertEquals(userService.getUser("Champ").getId() , 1);
+		assertEquals(userService.getUser("Champ").getUsername() , "Champ");
 	}
 	
 	@Test
@@ -95,8 +93,22 @@ public class UserServiceTest {
 	public void displayProfileTest() {
 		List<Post> posts = userService.displayProfile("Champ") ; 
 		assertTrue(posts.size() >= 0 );
-//		posts = userService.displayProfile(null) ; 
-//		assertTrue(posts.size() >= 0 );
+		
+		// User Authentication
+		UsernamePasswordAuthenticationToken authReq
+					      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
+		AuthenticationManager auth = new AuthenticationManager() {
+									
+				@Override
+				public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+						return authentication;
+				}
+		};
+							    
+		SecurityContext sc = SecurityContextHolder.getContext();
+		sc.setAuthentication(auth.authenticate(authReq));
+		posts = userService.displayProfile(null) ; 
+		assertTrue(posts.size() >= 0 );
 	}
 	
 	@Test
