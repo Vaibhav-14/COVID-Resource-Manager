@@ -25,5 +25,11 @@ public class TagControllerTest {
 	public void contextLoads() throws Exception{
 		assertThat(tagController).isNotNull();
 	}
+	
+	@Test
+	@Transactional
+	public void validHTTPResponse() throws Exception{
+		this.mockMvc.perform(get("/tags")).andExpect(status().isOk());
+	}
 
 }

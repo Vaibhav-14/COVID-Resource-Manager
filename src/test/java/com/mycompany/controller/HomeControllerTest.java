@@ -35,5 +35,12 @@ public class HomeControllerTest {
 		this.mockMvc.perform(get("/home")).andExpect(status().isOk());
 	}
 	
+	@Test
+	public void testshowHomePage(Model model) throws Exception {
+		this.mockMvc.perform(get("/")).andExpect(status().isOk());
+	}
+
+	
+	
 
 }
