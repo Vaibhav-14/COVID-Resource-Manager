@@ -76,6 +76,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         
                         if (error.contains("disabled"))
                         	redirectURL = request.getContextPath() + "/user/login?disabled";
+                        else if(error.contains("Could not"))
+                        	redirectURL = request.getContextPath() + "/user/login?notfound";
                         
                         super.setDefaultFailureUrl(redirectURL);
                         super.onAuthenticationFailure(request, response, exception);
