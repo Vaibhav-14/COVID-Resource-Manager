@@ -4,9 +4,6 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.servlet.ServletContext;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,11 +34,7 @@ public class PostService {
 	
 	@Autowired
 	private TagService tagService;
-	
-	@Autowired
-	private IUserFunctionDAO userDao;
-	
-	
+		
 	@Autowired
 	private NotificationService notificationService;
 
@@ -179,7 +172,7 @@ public class PostService {
 		User senderUser = userService.getUserFromUsername(auth.getName());
 		Post post = postDao.findPostById(id);
 		String activityType = "This post doesn't concern Covid";
-		List<User> admins = userDao.getAllAdmin();
+		List<User> admins = userService.getAllAdmin();
 		for (User user : admins) {
 			notificationService.saveNotification(senderUser, activityType, "post", "post/" + id, user);
 		}

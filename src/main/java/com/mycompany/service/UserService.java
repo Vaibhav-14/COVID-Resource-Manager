@@ -140,5 +140,8 @@ public class UserService {
 		userDao.deleteById(user.getId());
 	
 	}
+	public List<User> getAllAdmin() {
+		return userDao.getAllAdmin();
+	}
 
 }
