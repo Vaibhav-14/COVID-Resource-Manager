@@ -31,10 +31,11 @@ public class UserControllerTest {
 	@Test
 	@Transactional
 	public void validHTTPResponse() throws Exception{
-		this.mockMvc.perform(get("/user/register")).andExpect(status().is3xxRedirection());
+		this.mockMvc.perform(get("/usfdfer/register")).andExpect(status().is3xxRedirection());
 		this.mockMvc.perform(post("/user/register")).andExpect(status().isOk());
 		this.mockMvc.perform(get("/user/login")).andExpect(status().isOk());
-		this.mockMvc.perform(get("/user/profile")).andExpect(status().isOk());
+		this.mockMvc.perform(get("/user/update/prasad")).andExpect(status().isOk());
+		this.mockMvc.perform(get("/user/register")).andExpect(status().is3xxRedirection());
 	}
 	
 	@Test
