@@ -59,29 +59,33 @@
 	<%
 		if (tag != null) {
 	%>
-	<br><br>
-	<b>Posts:</b><br>  	
-	<%@ include file="parts/posts.jsp"%>
+		<br><br>
+		<b>Posts:</b><br>  	
+		<%@ include file="parts/posts.jsp"%>
 	
 	<%
-		} else {
+		} else if (user == null) {
 	%>
+		<br><br>
+		<b>No such user Exists</b>
+		<br>
+	<% } else { %>
+	
 		<c:if test="${user.enabled != true}">
-	<sec:authorize access="hasAuthority('ADMIN')">
-		<a href="/user/unblock/${user.username }">
-			<button>Unblock User</button>
-		</a>
-	</sec:authorize>
-	<br>
-	This Account is Suspended
-	<br>
-	<br>
-	</c:if>
+			<br>
+			<b>This account is suspended</b>
+			<br>
+			<sec:authorize access="hasAuthority('ADMIN')">
+				<a href="/user/unblock/${user.username }">
+					<button>Unblock User</button>
+				</a>
+			</sec:authorize>
+		</c:if>
 	<% } %>
+
 <a href="/home">
 			<button>Back</button>
+</a>
 
 
-</body>
 <%@ include file="parts/footer.jsp"%>
-</html>

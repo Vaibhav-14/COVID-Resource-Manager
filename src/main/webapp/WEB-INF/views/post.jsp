@@ -6,7 +6,11 @@
 	  <div class="card-body">
 	    <div class= "bg-light p-2">
 
-	    	    
+<c:choose>
+	<c:when test="${post == null}">
+		<h3>Post is no longer available</h3>
+	</c:when>
+	<c:otherwise>
 <div class="container">
   <div class="row">
     <div class="col">
@@ -243,6 +247,9 @@
 	  </div>
 	</div>
   </div>
+  
+</c:otherwise>
+</c:choose> 
 <a href="/home">
 			<button>Back</button>
 </body>
