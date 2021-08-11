@@ -16,6 +16,7 @@ public class PostEntityTest {
 		assertDoesNotThrow(() -> post.setId(post.getId()));
 		assertDoesNotThrow(() -> post.setComments(post.getComments()));
 		
+		post.equals(post) ; 
 	}
 
 }
