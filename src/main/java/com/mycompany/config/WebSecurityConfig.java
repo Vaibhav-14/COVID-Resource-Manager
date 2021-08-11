@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.dao.*;
 import org.springframework.security.config.annotation.authentication.builders.*;
@@ -48,6 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+    	http.csrf().disable();
         http.authorizeRequests()
         	.regexMatchers("\\/tags\\?term=([^\\s]+)").permitAll()
         	.antMatchers("/js/**","/css/**").permitAll()
@@ -58,8 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         	.antMatchers("/user/register").permitAll()
             .antMatchers("/home").permitAll()
             .antMatchers("/post/create").hasAuthority("USER")
-            .antMatchers("/user/profile").permitAll()
             .antMatchers("/user/login").permitAll()
+            .antMatchers("/user/profile").permitAll()
             .anyRequest().authenticated()
             .and()
             .formLogin()
@@ -76,6 +78,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         
                         if (error.contains("disabled"))
                         	redirectURL = request.getContextPath() + "/user/login?disabled";
+                        else if(error.contains("Could not"))
+                        	redirectURL = request.getContextPath() + "/user/login?notfound";
                         
                         super.setDefaultFailureUrl(redirectURL);
                         super.onAuthenticationFailure(request, response, exception);

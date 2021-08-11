@@ -190,7 +190,7 @@ DROP TABLE IF EXISTS `comments`;
  
 CREATE TABLE `comments` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `content` varchar(45) NOT NULL,
+  `content` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL,
   `post_id` int NOT NULL,
   `user_id` int NOT NULL,
@@ -221,7 +221,7 @@ CREATE TABLE `notifications` (
   KEY `receiver_id_fk_idx` (`receiver_id`),
   KEY `sender_id_fk_idx` (`sender_id`),
   CONSTRAINT `receiver_id_fk` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `sender_id_fk` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`)
+  CONSTRAINT `sender_id_fk` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 

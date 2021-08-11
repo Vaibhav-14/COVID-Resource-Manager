@@ -1,9 +1,11 @@
 package com.mycompany.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -28,9 +30,32 @@ public class TagServiceTest {
 	@Autowired
 	private ITagFunctionDAO tagDao;
 	
+	@Autowired
+	private TagService tagService ; 
+	
 	@Test
 	public void contextLoads() {
 		assertThat(tagDao).isNotNull() ; 
+		assertThat(tagService).isNotNull() ; 
+	}
+	
+	@Test
+	public void addTagTest() {
+		Tag tag = new Tag("OK" , null) ; 
+		assertDoesNotThrow(() -> tagService.addTags(tag));
+		assertDoesNotThrow(() -> tagService.addTags(tag));
+
+	}
+	
+	@Test
+	public void searchTagsByKeywordTest() {
+		List<String> tags = tagService.searchTagsByKeyWord("O") ; 
+		assertTrue(tags.size() > 0 ) ; 
+	}
+	
+	@Test
+	public void getAllTagsTest() {
+		tagService.getAllTags() ; 
 	}
 	
 	@Test
