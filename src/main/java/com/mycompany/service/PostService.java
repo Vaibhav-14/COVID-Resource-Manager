@@ -13,6 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.dao.IRoleFunctionDAO;
+
+import com.mycompany.dao.IUserFunctionDAO;
+import com.mycompany.entity.Comment;
+
 import com.mycompany.entity.Post;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.Tag;
@@ -85,18 +89,24 @@ public class PostService {
 				tags.add(tag);
 			}
 		}
-		post.setTags(tags);
+		post.setTags(tags); 
 	}
 
 	public Post getPostById(int id) {
 		Post post = postDao.findById(id).get();
 		User user = userService.getLoggedInUser();
 
-		Role role = roleDao.findByName("ADMIN");
-		if(post.getUser().getId() != user.getId() && !user.getRoles().contains(role)) {
-			logger.error("Post with id = " + id + " doesn't belong to User " + user.getUsername());
-			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
-		}
+
+//		since any user should be allowed to share and view any post, the commented code below is not optimal and needs to be discussed upon
+		
+
+// 		Role role = roleDao.findByName("ADMIN");
+// 		if(post.getUser().getId() != user.getId() && !user.getRoles().contains(role)) {
+// 			logger.error("Post with id = " + id + " doesn't belong to User " + user.getUsername());
+// 			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
+// 		}
+    
+    
 		StringBuffer str = new StringBuffer();
 		for (Tag tag : post.getTags()) {
 			str.append("#" + tag.getName() + " ");
@@ -190,6 +200,44 @@ public class PostService {
 			notificationService.saveNotification(senderUser, activityType, "post", "post/" + id, user);
 		}
 		
+	}
+	
+	public void sharePost(int postID, String username)
+	{
+		
+		User user = userService.getLoggedInUser();
+		
+		if(username.equals(user.getUsername()))
+		{
+			//post to be shared
+			Post shareThisPost = getPostById(postID);
+			
+			//new post instance to be added on current user's wall
+			Post newPost = new Post();
+			
+			//copying values
+			
+			String referURL =   "<a href= '/post/"+postID+"'>Go to Source Post</a>" ;
+			
+			newPost.setMessage(referURL);
+			newPost.setTags(new HashSet<Tag>(shareThisPost.getTags()));
+			newPost.setTagStr(shareThisPost.getTagStr());
+			newPost.setType(shareThisPost.getType());
+			newPost.setUser(user);
+			newPost.setDateTime(new Timestamp(System.currentTimeMillis()));
+			
+			//saving the shared post as a new post in the db
+			postDao.save(newPost);
+			
+			
+			//setting up a notification for sharing the post
+			Set<User> receiver = new HashSet<User>();
+			receiver.add(userService.getUserFromUsername(shareThisPost.getUser().getUsername()));
+			String activityType = "@" + user.getUsername() + " shared your post";
+
+			notificationService.saveNotification(user, activityType, "post", "post/" + postID, receiver);
+			
+		}
 	}
 	
 	
