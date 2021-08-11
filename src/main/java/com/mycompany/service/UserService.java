@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,11 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mycompany.dao.ICommentFunctionDAO;
 import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.dao.IRoleFunctionDAO;
 import com.mycompany.dao.IUserFunctionDAO;
-import com.mycompany.entity.Comment;
 import com.mycompany.entity.Post;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.User;
@@ -33,9 +33,8 @@ public class UserService {
 	
 	@Autowired
 	private IPostFunctionDAO postDao;
-
-	@Autowired
-	private ICommentFunctionDAO commentDao;
+	
+	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 	
 	public IUserFunctionDAO getUserDao() {
 		return userDao;
@@ -52,6 +51,8 @@ public class UserService {
 		user.getRoles().add(role);
 		user.setPassword(encoder.encode(user.getPassword()));
 		userDao.save(user);
+		logger.info("User : " + user.getUsername() + " has registered successfully.");
+		
 	}
 	public User getUserFromUsername(String username) {
 		return userDao.findByUsername(username);
@@ -94,6 +95,7 @@ public class UserService {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		user.setPassword(encoder.encode(user.getPassword()));
 		userDao.save(user);
+		logger.info("User : " + user.getUsername() + " has updated the profile information.");
 	}
 	
 	public List<String> searchUsersByKeyWord(String keyword) {
@@ -115,10 +117,13 @@ public class UserService {
 	public void deleteUserAccount(String username) throws IncorrectUserException {
 		User user = getLoggedInUser();
 
-		if(user.getId() != getUserFromUsername(username).getId())
+		if(user.getId() != getUserFromUsername(username).getId()) {
+			logger.error("User : " + user.getUsername() + " doesn't have the permission to delete account with username = " + username);
 			throw new IncorrectUserException("Forbidden");
+		}
 		
 		userDao.deleteById(user.getId());
+		logger.info("User : " + username + " has deleted the acoount");
 	
 	}
 	
