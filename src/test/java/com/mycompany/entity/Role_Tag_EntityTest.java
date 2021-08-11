@@ -17,6 +17,10 @@ public class Role_Tag_EntityTest {
 		Tag tag = new Tag();
 		assertDoesNotThrow(() -> tag.setPosts(tag.getPosts()));
 		assertDoesNotThrow(() -> tag.setName(tag.getName()));
+		
+		Role role1 = new Role("Hello") ; 
 	}
+	
+	
 	
 }
