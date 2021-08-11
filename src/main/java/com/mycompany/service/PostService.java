@@ -4,15 +4,19 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.dao.IRoleFunctionDAO;
+
 import com.mycompany.dao.IUserFunctionDAO;
+import com.mycompany.entity.Comment;
+
 import com.mycompany.entity.Post;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.Tag;
@@ -37,6 +41,8 @@ public class PostService {
 		
 	@Autowired
 	private NotificationService notificationService;
+	
+	private static final Logger logger = LoggerFactory.getLogger(PostService.class);
 
 	public IPostFunctionDAO getDao() {
 		return postDao;
@@ -56,7 +62,7 @@ public class PostService {
 		post.setDateTime(new Timestamp(System.currentTimeMillis()));
 		addTagsToPost(post);
 		postDao.save(post);
-		
+		logger.info("User : " + loggedInUser.getUsername() + " created a post");
 		String activityType = "@" + loggedInUser.getUsername() + " mentioned you in a post";
 
 		notificationService.saveNotification(loggedInUser, activityType, "post", "post/" + post.getId(), mentionedUsers);
@@ -83,7 +89,7 @@ public class PostService {
 				tags.add(tag);
 			}
 		}
-		post.setTags(tags);
+		post.setTags(tags); 
 	}
 
 	public Post getPostById(int id) {
@@ -94,8 +100,8 @@ public class PostService {
 			post = postDao.findById(id).get();
 			for (Tag tag : post.getTags()) {
 				str.append("#" + tag.getName() + " ");
-			}
-			post.setTagStr(str.toString()); 
+      post.setTagStr(str.toString()); 
+      }
 		} catch (Exception e) {
 			post = null;
 		}		
@@ -109,10 +115,14 @@ public class PostService {
 		addTagsToPost(post);
 		User loggedInUser = userService.getLoggedInUser();
 
-		if(post.getUser().getId() == loggedInUser.getId())
+		if(post.getUser().getId() == loggedInUser.getId()) {
 			postDao.save(post);
-		else
+			logger.info("User : " + loggedInUser.getUsername() + " has updated post with id = " + post.getId());
+		}
+		else {
+			logger.error("Use : " + loggedInUser.getUsername() + " doesn't have permission to update post with id = " + post.getId());
 			throw new IncorrectUserException("We are sorry but you do not have that permission.");
+		}
 
 	}
 	
@@ -125,6 +135,7 @@ public class PostService {
 		if(postUser.getId() == user.getId() || (isAdmin = user.getRoles().contains(role))) {
 			postDao.deleteById(id);
 			if (isAdmin) {
+				logger.warn("Admin has deleted post of user : " + postUser.getUsername());
 				String activityType = "Your post violets the Covid Resource Manager Policies. "
 						+ "So It has been removed. "+"You got "+postUser.getWarnings() +
 						" out of 5. After 5 warnings your account will get suspended.";
@@ -133,13 +144,19 @@ public class PostService {
 									"post/" + id, postUser);
 				postUser.setWarnings(postUser.getWarnings()+1);
 				if(postUser.getWarnings()>5) {
+					logger.warn("The account of user : " + postUser.getUsername() + " is suspended autometically due to 5 warnings");
 					postUser.setEnabled(0);
 					userService.updateUser(postUser);
 				}
 			}
+			else {
+				logger.info("User : " + postUser.getUsername() + " has deleted post with id = " + id);
+			}
 		}
-		else
+		else {
+			logger.error("User : " + user.getUsername() + " doesn't have permission to delete post with id = " + id);
 			throw new IncorrectUserException("We are sorry but you do not have that permission.");
+		}
 	}
 	
 	public List<Post> getAllPost(){
@@ -169,13 +186,51 @@ public class PostService {
 	public void reportPost(int id) {
 		User senderUser = userService.getLoggedInUser();
 
-		Post post = postDao.findPostById(id);
 		String activityType = "This post doesn't concern Covid";
 		List<User> admins = userService.getAllAdmin();
+		logger.info("User : " + senderUser.getUsername() + " has reported post with id = " + id);
 		for (User user : admins) {
 			notificationService.saveNotification(senderUser, activityType, "post", "post/" + id, user);
 		}
 		
+	}
+	
+	public void sharePost(int postID, String username)
+	{
+		
+		User user = userService.getLoggedInUser();
+		
+		if(username.equals(user.getUsername()))
+		{
+			//post to be shared
+			Post shareThisPost = getPostById(postID);
+			
+			//new post instance to be added on current user's wall
+			Post newPost = new Post();
+			
+			//copying values
+			
+			String referURL =   "<a href= '/post/"+postID+"'>Go to Source Post</a>" ;
+			
+			newPost.setMessage(referURL);
+			newPost.setTags(new HashSet<Tag>(shareThisPost.getTags()));
+			newPost.setTagStr(shareThisPost.getTagStr());
+			newPost.setType(shareThisPost.getType());
+			newPost.setUser(user);
+			newPost.setDateTime(new Timestamp(System.currentTimeMillis()));
+			
+			//saving the shared post as a new post in the db
+			postDao.save(newPost);
+			
+			
+			//setting up a notification for sharing the post
+			Set<User> receiver = new HashSet<User>();
+			receiver.add(userService.getUserFromUsername(shareThisPost.getUser().getUsername()));
+			String activityType = "@" + user.getUsername() + " shared your post";
+
+			notificationService.saveNotification(user, activityType, "post", "post/" + postID, receiver);
+			
+		}
 	}
 	
 	

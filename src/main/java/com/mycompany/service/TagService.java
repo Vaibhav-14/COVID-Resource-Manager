@@ -2,6 +2,8 @@ package com.mycompany.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,8 @@ public class TagService {
 	
 	@Autowired
 	private ITagFunctionDAO tagDao;
+	
+	private static Logger logger = LoggerFactory.getLogger(TagService.class);
 	
 	public Iterable<Tag> getAllTags(){
 		return tagDao.findAll();
@@ -38,6 +42,7 @@ public class TagService {
 			}
 		}
 		if(flag==0) {
+			logger.info("Tag : #" + tag.getName() + " has saved in database.");
 			tagDao.save(tag);
 		}
 	}

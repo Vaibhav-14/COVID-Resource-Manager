@@ -5,9 +5,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,6 +32,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	//URL:  http://localhost:8080/user/register
 	
@@ -99,6 +100,7 @@ public class UserController {
 		User user = userService.getUser(username);
 		user.setEnabled(0);
 		userService.updateUser(user);
+		logger.info("Admin has suspended the account of " + username);
 		return "redirect:/user/profile?username="+username;
 		
 	}
@@ -108,6 +110,7 @@ public class UserController {
 		User user = userService.getUser(username);
 		user.setEnabled(1);
 		userService.updateUser(user);
+		logger.info("Admin has removed suspension on account of " + username);
 		return "redirect:/user/profile?username="+username;
 	}
 	
