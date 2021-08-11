@@ -6,21 +6,29 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.dao.*;
 import org.springframework.security.config.annotation.authentication.builders.*;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	private static final Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
 	
     @Bean
     public UserDetailsService userDetailsService() {
@@ -76,10 +84,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         String error = exception.getMessage();
                         String redirectURL = request.getContextPath() + "/user/login?error";
                         
-                        if (error.contains("disabled"))
+                        if (error.contains("disabled")) {
+                        	logger.error(error);
                         	redirectURL = request.getContextPath() + "/user/login?disabled";
-                        else if(error.contains("Could not"))
+                        }
+                        else if(error.contains("Could not")) {
+                        	logger.error(error);
                         	redirectURL = request.getContextPath() + "/user/login?notfound";
+                        }
                         
                         super.setDefaultFailureUrl(redirectURL);
                         super.onAuthenticationFailure(request, response, exception);
@@ -87,9 +99,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     }
                 })
             	.permitAll()
+            	.successHandler(new SavedRequestAwareAuthenticationSuccessHandler() {
+            		@Override
+            		public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, 
+            				Authentication authentication) throws IOException, ServletException {
+            			
+            			logger.info("User : " + authentication.getName() + " logged in successfully.");
+            			super.setDefaultTargetUrl("/");
+            			super.onAuthenticationSuccess(request, response, authentication);
+            		}
+            	})
             .and()
             .logout()
             	.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+            	.addLogoutHandler(new LogoutHandler() {
+					
+					@Override
+					public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+						logger.info("User : " + authentication.getName() + " logged out successfully.");
+						
+					}
+				})
             	.permitAll();
     }
 }
