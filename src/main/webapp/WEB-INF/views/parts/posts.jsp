@@ -1,6 +1,5 @@
 <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
 	<div class="p-2 w-50 bd-highlight" style="min-width: 500px;">
-
 		<c:choose>
 			<c:when test="${empty posts}">
 				<h3>No posts available</h3>
@@ -196,8 +195,7 @@
 														<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 														<input type="hidden" name="username" value="${pageContext.request.userPrincipal.name}"/>
 														<input type="hidden" name="postID" value="${post.id}"/>
-														<button name="submit" type="submit" class ="btn btn-light "> <i class="p-1 material-icons align-middle">share</i> Share</button>
-
+														<button name="submit" type="submit" class ="btn btn-light"> <i class="p-1 material-icons align-middle">share</i> Share</button>
 													</form>		
 
 												</c:if>
