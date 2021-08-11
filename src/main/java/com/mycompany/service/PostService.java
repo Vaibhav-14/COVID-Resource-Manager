@@ -195,17 +195,17 @@ public class PostService {
 			//new post instance to be added on current user's wall
 			Post newPost = new Post();
 			
-
+			//copying values
 			newPost.setMessage("/post/"+postID);
 			newPost.setTags(new HashSet<Tag>(shareThisPost.getTags()));
 			newPost.setTagStr(shareThisPost.getTagStr());
 			newPost.setType(shareThisPost.getType());
 			newPost.setUser(user);
 			newPost.setDateTime(new Timestamp(System.currentTimeMillis()));
+			
+			//saving the shared post as a new post in the db
 			postDao.save(newPost);
 			
-			
-			addPost(newPost);
 		}
 	}
 	
