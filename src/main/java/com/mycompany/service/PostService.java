@@ -87,17 +87,18 @@ public class PostService {
 	}
 
 	public Post getPostById(int id) {
-		Post post = postDao.findById(id).get();
-		User user = userService.getLoggedInUser();
-
-		Role role = roleDao.findByName("ADMIN");
-		if(post.getUser().getId() != user.getId() && !user.getRoles().contains(role))
-			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
+		Post post;
 		StringBuffer str = new StringBuffer();
-		for (Tag tag : post.getTags()) {
-			str.append("#" + tag.getName() + " ");
-		}
-		post.setTagStr(str.toString()); 
+
+		try {
+			post = postDao.findById(id).get();
+			for (Tag tag : post.getTags()) {
+				str.append("#" + tag.getName() + " ");
+			}
+			post.setTagStr(str.toString()); 
+		} catch (Exception e) {
+			post = null;
+		}		
 		return post;
 	}
 	
