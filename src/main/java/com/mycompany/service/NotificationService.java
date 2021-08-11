@@ -54,15 +54,15 @@ public class NotificationService {
 	}
 	
 	public List<Notification> getNotifications() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.getUserFromUsername(auth.getName());
+		User user = userService.getLoggedInUser();
+
 		List<Notification> notifications = notificationDao.getAllNotificationsByReceiver(user);
 		return notifications;
 	}
 
 	public void deleteNotification(int id) throws IncorrectUserException {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.getUserFromUsername(auth.getName());
+		User user = userService.getLoggedInUser();
+
 		Notification notification = notificationDao.findById(id).get();
 		if (notification.getReceiver().getId() != user.getId())
 			throw new IncorrectUserException("This notification doesn't  belong to " + user.getUsername());

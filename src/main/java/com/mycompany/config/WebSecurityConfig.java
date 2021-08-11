@@ -60,8 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         	.antMatchers("/user/register").permitAll()
             .antMatchers("/home").permitAll()
             .antMatchers("/post/create").hasAuthority("USER")
-            .antMatchers("/user/profile").permitAll()
             .antMatchers("/user/login").permitAll()
+            .antMatchers("/user/profile").permitAll()
             .anyRequest().authenticated()
             .and()
             .formLogin()
@@ -78,6 +78,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         
                         if (error.contains("disabled"))
                         	redirectURL = request.getContextPath() + "/user/login?disabled";
+                        else if(error.contains("Could not"))
+                        	redirectURL = request.getContextPath() + "/user/login?notfound";
                         
                         super.setDefaultFailureUrl(redirectURL);
                         super.onAuthenticationFailure(request, response, exception);

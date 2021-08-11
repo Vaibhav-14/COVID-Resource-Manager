@@ -25,6 +25,10 @@
 			<c:if test="${param.disabled != null}">
 				<b>Your account has been suspended</b>
 			</c:if>
+			
+			<c:if test="${param.notfound != null}">
+				<b>No Such User exists</b>
+			</c:if>
 
 			<c:if test="${param.logout != null}">
 				<b>you have been logged out</b>
