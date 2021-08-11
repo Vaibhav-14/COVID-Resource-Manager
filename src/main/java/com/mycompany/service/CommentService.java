@@ -4,14 +4,13 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.mycompany.dao.ICommentFunctionDAO;
 import com.mycompany.dao.IRoleFunctionDAO;
-import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.Comment;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.User;
@@ -24,9 +23,6 @@ public class CommentService {
 	private ICommentFunctionDAO commentDao;
 	
 	@Autowired
-	private IUserFunctionDAO userDao;
-	
-	@Autowired
 	private IRoleFunctionDAO roleDao;
 	
 	@Autowired
@@ -35,12 +31,15 @@ public class CommentService {
 	@Autowired
 	private UserService userService;
 	
+	private static final Logger logger = LoggerFactory.getLogger(CommentService.class);
+	
 	public void addComment(Comment comment) {
 		User loggedInUser = userService.getLoggedInUser();
 
 		comment.setUser(loggedInUser);
 		comment.setDateTime(new Timestamp(System.currentTimeMillis()));
 		commentDao.save(comment);
+		logger.info("User : " + loggedInUser.getUsername() + " created a comment");
 		
 		String activityType = "@" + loggedInUser.getUsername() + " commented on your post: " + 
 									comment.getContent();
@@ -66,6 +65,7 @@ public class CommentService {
 		if(commentUser.getId() == user.getId() || (isAdmin = user.getRoles().contains(role))) {
 			commentDao.deleteById(id);
 			if (isAdmin) {
+				logger.warn("Admin has deleted comment of user : " + commentUser.getUsername());
 				commentUser.setWarnings(commentUser.getWarnings()+1);
 				String activityType = "Your comment violets the Covid Resource Manager Policies. "
 						+ "So It has been removed. "+"You got "+commentUser.getWarnings() +
@@ -74,12 +74,17 @@ public class CommentService {
 				notificationService.saveNotification(null, activityType, "post", 
 									"post/" + id, commentUser);
 				if(commentUser.getWarnings()>5) {
+					logger.warn("The account of user : " + commentUser.getUsername() + " is suspended autometically due to 5 warnings");
 					commentUser.setEnabled(0);
 					userService.updateUser(commentUser);
 				}
 			}
+			else {
+				logger.info("User : " + commentUser.getUsername() + " has deleted post with id = " + id);
+			}
 		}
 		else {
+			logger.error("User : " + user.getUsername() + " doesn't have permission to delete post with id = " + id);
 			throw new IncorrectUserException("This comment doesn't belong to User " + user.getUsername());
 		}
 	}
