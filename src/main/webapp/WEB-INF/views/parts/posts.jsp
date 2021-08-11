@@ -184,9 +184,27 @@
 								<div class="container p-2">
 									<div class="row">
 										<div class="col">
-											<p class="text-center p-2 fw-bold"><i
+										</div>										
+										<div class="col">
+											<p class="text-center p-2"><i
 													class="p-1 material-icons align-middle">comment</i>Comments</p>
 										</div>
+										<div class="col text-center">
+											<c:if test="${pageContext.request.userPrincipal.name != null}">	
+												<c:if test="${pageContext.request.userPrincipal.name != post.user.username }">	
+													<form method="post" action = "/post/share">
+														<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+														<input type="hidden" name="username" value="${pageContext.request.userPrincipal.name}"/>
+														<input type="hidden" name="postID" value="${post.id}"/>
+														<button name="submit" type="submit" class ="btn btn-light "> <i class="p-1 material-icons align-middle">share</i> Share</button>
+
+													</form>		
+
+												</c:if>
+											</c:if>	
+										</div>
+										
+										
 									</div>
 									<c:forEach items="${post.comments }" var="comment" varStatus="tagStatus">
 										<c:if test="${comment.user.enabled == true}">
@@ -304,7 +322,7 @@
 						</div>
 
 
-						<!-- Post Modal -->
+						<!-- Post Delete Modal -->
 						<div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="exampleModalLabel"
 							aria-hidden="true">
 							<div class="modal-dialog">

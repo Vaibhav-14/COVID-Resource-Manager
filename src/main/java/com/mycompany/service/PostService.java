@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.dao.IRoleFunctionDAO;
 import com.mycompany.dao.IUserFunctionDAO;
+import com.mycompany.entity.Comment;
 import com.mycompany.entity.Post;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.Tag;
@@ -90,9 +91,13 @@ public class PostService {
 		Post post = postDao.findById(id).get();
 		User user = userService.getLoggedInUser();
 
-		Role role = roleDao.findByName("ADMIN");
-		if(post.getUser().getId() != user.getId() && !user.getRoles().contains(role))
-			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
+
+//		since any user should be allowed to share and view any post, the commented code below is not optimal and needs to be discussed upon
+		
+//		Role role = roleDao.findByName("ADMIN");
+//		if(post.getUser().getId() != user.getId() && !user.getRoles().contains(role))
+//			throw new IncorrectUserException("This post doesn't belong to User " + user.getUsername());
+		
 		StringBuffer str = new StringBuffer();
 		for (Tag tag : post.getTags()) {
 			str.append("#" + tag.getName() + " ");
@@ -175,6 +180,33 @@ public class PostService {
 			notificationService.saveNotification(senderUser, activityType, "post", "post/" + id, user);
 		}
 		
+	}
+	
+	public void sharePost(int postID, String username)
+	{
+		
+		User user = userService.getLoggedInUser();
+		
+		if(username.equals(user.getUsername()))
+		{
+			//post to be shared
+			Post shareThisPost = getPostById(postID);
+			
+			//new post instance to be added on current user's wall
+			Post newPost = new Post();
+			
+
+			newPost.setMessage("/post/"+postID);
+			newPost.setTags(new HashSet<Tag>(shareThisPost.getTags()));
+			newPost.setTagStr(shareThisPost.getTagStr());
+			newPost.setType(shareThisPost.getType());
+			newPost.setUser(user);
+			newPost.setDateTime(new Timestamp(System.currentTimeMillis()));
+			postDao.save(newPost);
+			
+			
+			addPost(newPost);
+		}
 	}
 	
 	
