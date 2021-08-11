@@ -84,7 +84,7 @@ public class PostService {
 				tags.add(tag);
 			}
 		}
-		post.setTags(tags);
+		post.setTags(tags); 
 	}
 
 	public Post getPostById(int id) {
@@ -208,6 +208,14 @@ public class PostService {
 			
 			//saving the shared post as a new post in the db
 			postDao.save(newPost);
+			
+			
+			//setting up a notification for sharing the post
+			Set<User> receiver = new HashSet<User>();
+			receiver.add(userService.getUserFromUsername(shareThisPost.getUser().getUsername()));
+			String activityType = "@" + user.getUsername() + " shared your post";
+
+			notificationService.saveNotification(user, activityType, "post", "post/" + postID, receiver);
 			
 		}
 	}
