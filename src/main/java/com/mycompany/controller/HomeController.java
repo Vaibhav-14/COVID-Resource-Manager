@@ -22,7 +22,7 @@ public class HomeController {
 	
 	@GetMapping({"/", "/home"})
 	public String showHomePage(Model model, @RequestParam(defaultValue = "0") Integer pageNumber) {
-		User user = userService.getUser(null);
+		User user = userService.getLoggedInUser();
 
 		String username;
 		if(user == null) {
