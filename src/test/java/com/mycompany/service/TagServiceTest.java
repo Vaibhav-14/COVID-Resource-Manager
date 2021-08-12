@@ -60,7 +60,7 @@ public class TagServiceTest {
 	
 	@Test
 	public void serachTagsByKeywordTest() {
-		String keyword = "Available";
+		String keyword = "#Available";
 		List<String> tagsList = tagDao.searchTagsByKeyWord(keyword);
 		List<String> expectedList = new ArrayList<String>();
 		expectedList.add("#Available");

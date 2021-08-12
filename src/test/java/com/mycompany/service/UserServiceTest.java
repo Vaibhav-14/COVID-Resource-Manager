@@ -52,7 +52,7 @@ public class UserServiceTest {
 	public void addUser() {
 		User user = new User() ; 
 		user.setId(1);
-		user.setUsername("Champ");
+		user.setUsername("Champ1");
 		user.setEmail("Champ@gmail.com");
 		user.setFirstname("Champ");
 		user.setLastname("OK");
@@ -77,24 +77,24 @@ public class UserServiceTest {
 	@Test
 	@Order(3)
 	public void displayProfile() {
-		assertTrue(userService.displayProfile("Champ").size() >= 0 );
+		assertTrue(userService.displayProfile("Champ1").size() >= 0 );
 	}
 	
 	@Test
 	@Order(4)
 	public void getUser() {
-		assertEquals(userService.getUser("Champ").getUsername() , "Champ");
+		assertEquals(userService.getUser("Champ1").getUsername() , "Champ1");
 	}
 	
 	@Test
 	@Order(5)
 	public void displayProfileTest() {
-		List<Post> posts = userService.displayProfile("Champ") ; 
+		List<Post> posts = userService.displayProfile("Champ1") ; 
 		assertTrue(posts.size() >= 0 );
 		
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
-					      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
+					      = new UsernamePasswordAuthenticationToken("Champ1", "Thor");
 		AuthenticationManager auth = new AuthenticationManager() {
 									
 				@Override
@@ -112,7 +112,7 @@ public class UserServiceTest {
 	@Test
 	@Order(6)
 	public void getUsersFromStringTest() {
-		Set<User> users = userService.getUsersFromString("@Champ") ; 
+		Set<User> users = userService.getUsersFromString("@Champ1") ; 
 		assertTrue(users.size() >= 1 );
 	}
 	
@@ -127,7 +127,7 @@ public class UserServiceTest {
 	public void updatUserTest() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
-					      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
+					      = new UsernamePasswordAuthenticationToken("Champ1", "Thor");
 		AuthenticationManager auth = new AuthenticationManager() {
 							
 			@Override
@@ -138,7 +138,7 @@ public class UserServiceTest {
 					    
 		SecurityContext sc = SecurityContextHolder.getContext();
 		sc.setAuthentication(auth.authenticate(authReq));
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUser("Champ1") ; 
 		assertDoesNotThrow(() -> userService.updateUser(user));
 	}
 	
@@ -167,14 +167,14 @@ public class UserServiceTest {
 	@Test
 	@Order(12)
 	public void updateUserProfile() {
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUser("Champ1") ; 
 		assertDoesNotThrow(() -> userService.updateUserProfile(user));
 	}
 	
 	@Test
 	@Order(13)
 	public void searchUsersByKeyWordTest() {
-		assertTrue(userService.searchUsersByKeyWord("Champ").size() >= 1 ) ; 
+		assertTrue(userService.searchUsersByKeyWord("Champ1").size() >= 1 ) ; 
 	}
 	
 	@Test
@@ -182,7 +182,7 @@ public class UserServiceTest {
 	public void deleteUserAccount() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
-							      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
+							      = new UsernamePasswordAuthenticationToken("Champ1", "Thor");
 		AuthenticationManager auth = new AuthenticationManager() {
 									
 			@Override
@@ -195,8 +195,8 @@ public class UserServiceTest {
 		sc.setAuthentication(auth.authenticate(authReq));
 		
 		// Delete User Account
-		userService.deleteUserAccount("Champ");
-		User user = userService.getUser("Champ") ; 
+		userService.deleteUserAccount("Champ1");
+		User user = userService.getUser("Champ1") ; 
 		if (user != null) {
 			userDao.delete(user);
 		}

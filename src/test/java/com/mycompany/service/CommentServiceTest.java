@@ -77,7 +77,7 @@ public class CommentServiceTest {
 				
 				// Creating User for Post
 				User user = new User() ; 
-				user.setUsername("Champ");
+				user.setUsername("Champ3");
 				user.setEmail("Champ@gmail.com");
 				user.setFirstname("Champ");
 				user.setLastname("OK");
@@ -99,7 +99,7 @@ public class CommentServiceTest {
 				
 				// User Authentication
 				UsernamePasswordAuthenticationToken authReq
-					    = new UsernamePasswordAuthenticationToken("Champ", "Thor");
+					    = new UsernamePasswordAuthenticationToken("Champ3", "Thor");
 				AuthenticationManager auth = new AuthenticationManager() {
 							
 					@Override
@@ -124,7 +124,7 @@ public class CommentServiceTest {
 				post.setTagStr(post.getDateTime().toString()+", Urgent, ");
 				// Saving Post to Database 
 				postService.addPost(post);
-				List<Post> posts = postService.findPostByUsername("Champ") ; 
+				List<Post> posts = postService.findPostByUsername("Champ3") ; 
 				Post p = posts.get(0) ; 
 		
 		Comment comment = new Comment() ; 
@@ -150,7 +150,7 @@ public class CommentServiceTest {
 	@Test
 	@Order(3)
 	public void findAllCommentsByUserID() {
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUser("Champ3") ; 
 		List<Comment> comments = commentService.findAllCommentsByUserID(user.getId()) ; 
 		assertTrue(comments.size() > 0 ) ;
 	}
@@ -160,7 +160,7 @@ public class CommentServiceTest {
 	public void deleteCommentTest() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
-			    = new UsernamePasswordAuthenticationToken("Champ", "Thor");
+			    = new UsernamePasswordAuthenticationToken("Champ3", "Thor");
 		AuthenticationManager auth = new AuthenticationManager() {
 					
 			@Override
@@ -172,13 +172,13 @@ public class CommentServiceTest {
 		SecurityContext sc = SecurityContextHolder.getContext();
 		sc.setAuthentication(auth.authenticate(authReq));
 		
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUser("Champ3") ; 
 		commentService.deleteComment(user.getId());
 		List<Comment> comments = commentService.findAllCommentsByUserID(user.getId()) ; 
 		assertTrue(comments.size() == 0 ) ;
 		
-		userService.deleteUserAccount("Champ");
-		User user1 = userService.getUser("Champ") ; 
+		userService.deleteUserAccount("Champ3");
+		User user1 = userService.getUser("Champ3") ; 
 		if (user1 != null) {
 			userDao.delete(user1);
 		}
