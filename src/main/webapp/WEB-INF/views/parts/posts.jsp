@@ -22,6 +22,7 @@
 
 
 												<c:if test="${username != post.user.username }">
+													
 													<a class="card-link"
 														href="/user/profile?username=${post.user.username }"
 														style="text-decoration: none;">
@@ -30,6 +31,7 @@
 																style="font-size: 36px; ">account_circle</i>${post.user.username
 															}</h3>
 													</a>
+													
 												</c:if>
 												<c:if test="${username == post.user.username }">
 													<a class="card-link" href="/user/profile?"
@@ -48,11 +50,11 @@
 												test="${pageContext.request.userPrincipal.name == post.user.username }">
 												<div class="col">
 													<div class="dropdown">
-														<button
-															class="btn btn-secondary btn-sm dropdown-toggle float-end bg-primary bg-gradient"
-															style="border-radius: 35px;" type="button"
-															data-bs-toggle="dropdown" aria-expanded="false">
-														</button>
+														<div class="float-end" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+															<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+  																<path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+															</svg>
+														</div>
 														<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 
 															<li>
@@ -156,12 +158,13 @@
 										
 										<div class="row">
 											<div class="col">
-												<p class="card-subtitle mb-2 text-muted fw-lighter">Posted At: <fmt:formatDate type = "time" value = "${post.dateTime}" /> On <fmt:formatDate value="${post.dateTime}" pattern="dd-MM-yyyy" /></p>
-											</div>
-
 											
+												<p class="card-subtitle mb-2 text-muted fw-lighter text-lowercase" style="padding-left:43px; font-size:15px;">Posted At:<cite title="Source Title"> <fmt:formatDate type = "time" value = "${post.dateTime}" /> On <fmt:formatDate value="${post.dateTime}" pattern="dd-MM-yyyy" /></cite></p>
+											
+											</div>	
 										</div>
-
+										
+										
 
 										<div class="row">
 											<div class="col">
@@ -175,7 +178,7 @@
 										</div>
 										<div class="row">
 											<div class="col">
-												<p class="card-text">${post.message }</p>
+												<p class="card-text" style="padding-left:43px">${post.message }</p>
 											</div>
 										</div>
 
@@ -183,13 +186,16 @@
 											<div class="col">
 												<p class="card-text">
 													<small class="text-muted">
+													<div class="conatiner" style="padding-left:40px">
 														<c:forEach items="${post.tags }" var="tag" varStatus="tagStatus">
+															
 															<span style="padding:3px">
 															  <a href="<c:url value="/post/searchresult" ><c:param name="searchentry" value="#${tag.name }" /></c:url>">
 															  	#${tag.name }
 															  </a>
 														  </span>
 														</c:forEach>
+														</div>
 													</small>
 												</p>
 											</div>
