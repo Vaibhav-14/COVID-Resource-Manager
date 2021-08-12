@@ -220,16 +220,20 @@
 														<a href="/user/profile?username=${comment.user.username }"
 															style="text-decoration: none;"><b>${comment.user.username
 																}</b></a> :&nbsp;${comment.content }
-														<sec:authorize access="hasAuthority('ADMIN')">
-															<!-- Button trigger modal -->
-															<button type="button" class="btn btn-primary btn-sm"
-																data-bs-toggle="modal"
-																data-bs-target="#deleteCommentModal">
-																<i class="material-icons align-middle"
-																	style="font-size: 16px; ">delete</i>
-															</button>
-														</sec:authorize>
 													</div>
+												
+												<sec:authorize access="hasAuthority('ADMIN')">
+													<div class="col-1">
+														<!-- Button trigger modal -->
+														<button type="button" class="btn btn-sm btn-outline-danger"
+															data-bs-toggle="modal"
+															data-bs-target="#deleteCommentModal">
+															<i class="material-icons align-middle "
+																style="font-size: 16px; ">delete</i>
+														</button>
+													</div>
+												</sec:authorize>
+
 												</div>
 
 
@@ -249,18 +253,6 @@
 																data-bs-toggle="modal"
 																data-bs-target="#deleteCommentModal">
 																<i class="material-icons align-middle "
-																	style="font-size: 16px; ">delete</i>
-															</button>
-
-														</div>
-													</sec:authorize>
-													<sec:authorize access="hasAuthority('ADMIN')">
-														<div class="col-1">
-															<!-- Button trigger modal -->
-															<button type="button" class="btn btn-primary btn-sm"
-																data-bs-toggle="modal"
-																data-bs-target="#deleteCommentModal">
-																<i class="material-icons align-middle"
 																	style="font-size: 16px; ">delete</i>
 															</button>
 														</div>
