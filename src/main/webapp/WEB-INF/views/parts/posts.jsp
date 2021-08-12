@@ -4,7 +4,7 @@
 	<div class="p-2 w-50 bd-highlight" style="min-width: 500px;">
 		<c:choose>
 			<c:when test="${empty posts}">
-				<h3>No posts available</h3>
+				<h3 style=" text-align: center;" >No more posts available for now</h3>
 			</c:when>
 			<c:otherwise>
 				<c:forEach items="${posts }" var="post" varStatus="tagStatus">
@@ -58,7 +58,7 @@
 														<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 
 															<li>
-																<form method="post" action="/post/updatepost">
+																<form method="GET" action="/post/update">
 																	<input type="hidden" name="${_csrf.parameterName}"
 																		value="${_csrf.token}" />
 																	<input type="hidden" name="id"

@@ -9,10 +9,10 @@ import org.springframework.data.repository.query.Param;
 import com.mycompany.entity.Tag;
 
 public interface ITagFunctionDAO extends CrudRepository<Tag, String>{
-
-	List<Tag> getAllTagsByName(String passedTag);
 	
 	@Query("SELECT name FROM Tag WHERE name LIKE %:keyword%")
 	public List<String> searchTagsByKeyWord(@Param("keyword") String keyword);
+
+	Tag getTagByName(String string);
 	
 }

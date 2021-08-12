@@ -28,22 +28,19 @@ public class TagService {
 		return tagDao.searchTagsByKeyWord(keyword);
 	}
 	
-	public List<Tag> getAllTagsByName(String passedtag) {
-		return tagDao.getAllTagsByName(passedtag);
+	public Tag getAllTagsByName(String passedtag) {
+		return tagDao.getTagByName(passedtag);
 	}
 	
 	public void addTags(Tag tag) {
-		Iterable<Tag> db_tags = tagDao.findAll();
-		int flag = 0;
-		for (Tag db_tag : db_tags) {
-			if(db_tag.getName().equals(tag.getName())) {
-				flag = 1;
-				break;
-			}
+		String[] tagStr = tag.getName().replace("#", "").split(" ");
+		for (String tag_: tagStr) {
+			logger.info("Tag : #" + tag_ + " has saved in database.");
+			tagDao.save(new Tag(tag_));
 		}
-		if(flag==0) {
-			logger.info("Tag : #" + tag.getName() + " has saved in database.");
-			tagDao.save(tag);
-		}
+	}
+
+	public Tag getTagByName(String string) {
+		return tagDao.getTagByName(string);
 	}
 }

@@ -48,8 +48,8 @@ public class TagServiceTest {
 	}
 	
 	@Test
-	public void getAllTagsByNameTest1() {
-		List<Tag> tags = tagService.getAllTagsByName("OK") ; 
+	public void getTagByNameTest1() {
+		Tag tags = tagService.getTagByName("OK") ; 
 		
 	}
 	

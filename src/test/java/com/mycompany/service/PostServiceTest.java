@@ -297,7 +297,7 @@ public class PostServiceTest{
 		}
 		
 		userService.deleteUserAccount("Champ");
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUserFromUsername("Champ") ; 
 		if (user != null) {
 			userDao.delete(user);
 		}
