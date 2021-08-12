@@ -111,25 +111,8 @@
 
 																</li>
 
-															</ul>
-														</div>
-													</div>
 
-
-
-												</sec:authorize>
-
-												<sec:authorize access="hasAuthority('ADMIN')">
-													<div class="col">
-														<div class="dropdown">
-															<button
-																class="btn btn-secondary btn-sm dropdown-toggle float-end bg-primary bg-gradient"
-																style="border-radius: 35px;" type="button"
-																data-bs-toggle="dropdown" aria-expanded="false">
-															</button>
-															<ul class="dropdown-menu"
-																aria-labelledby="dropdownMenuButton1">
-
+																<sec:authorize access="hasAuthority('ADMIN')">
 																<li>
 
 																	<!-- Button trigger modal -->
@@ -139,13 +122,19 @@
 																		data-bs-target="#deletePostModal">
 																		Delete Post
 																	</button>
-
 																</li>
+																</sec:authorize>
+
 
 															</ul>
 														</div>
 													</div>
+
+
+
 												</sec:authorize>
+
+												
 											</c:if>
 										</div>
 										<div class="row">
