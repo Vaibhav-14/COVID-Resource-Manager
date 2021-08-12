@@ -156,7 +156,7 @@
 										
 										<div class="row">
 											<div class="col">
-												<p class="card-subtitle mb-2 text-muted fw-lighter">Posted At: <fmt:formatDate type = "time" value = "${post.dateTime}" /> On <fmt:formatDate value="${post.dateTime}" pattern="yyyy-MM-dd" /></p>
+												<p class="card-subtitle mb-2 text-muted fw-lighter">Posted At: <fmt:formatDate type = "time" value = "${post.dateTime}" /> On <fmt:formatDate value="${post.dateTime}" pattern="dd-MM-yyyy" /></p>
 											</div>
 
 											
