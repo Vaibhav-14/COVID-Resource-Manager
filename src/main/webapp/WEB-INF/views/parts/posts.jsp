@@ -165,7 +165,12 @@
 
 										<div class="row">
 											<div class="col">
-												<h6 class="card-subtitle mb-2 text-muted">${post.type }</h6>
+												<c:if test = "${post.type == 'Required'}">
+													<h6 class="card-subtitle mb-2 text-danger">${post.type }</h6>
+												</c:if>
+												<c:if test = "${post.type == 'Available'}">
+													<h6 class="card-subtitle mb-2 text-success">${post.type }</h6>
+												</c:if>
 											</div>
 										</div>
 										<div class="row">
