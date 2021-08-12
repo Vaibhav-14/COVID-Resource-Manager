@@ -83,8 +83,6 @@ public class UserService {
 	
 	public void updateUserProfile(User user) {
 		user.setEnabled(1);
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		user.setPassword(encoder.encode(user.getPassword()));
 		userDao.save(user);
 		logger.info("User : " + user.getUsername() + " has updated the profile information.");
 	}

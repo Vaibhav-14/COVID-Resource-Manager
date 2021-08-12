@@ -73,13 +73,13 @@ public class User {
 	)
 	private Set<Role> roles = new HashSet<>();
 	
-	@OneToMany(mappedBy = "receiver", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(mappedBy = "receiver", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
 	private Set<Notification> notifications = new HashSet<>();
 	
-	@OneToMany(mappedBy = "user", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private Set<Post> posts = new HashSet<>();
 	
-	@OneToMany(mappedBy = "user", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(mappedBy = "user", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	private Set<Comment> comments = new HashSet<>();
 	
 	public int getId() {

@@ -58,7 +58,7 @@ public class PostController {
 	
 	@PostMapping("/update") 
 	public String updatePost(@ModelAttribute("post") Post post, Model model) {
-		
+		System.out.println(post.getComments().size());
 		postService.updatePost(post);
 		return "redirect:/home";
 	}

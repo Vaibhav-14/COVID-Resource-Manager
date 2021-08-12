@@ -144,8 +144,6 @@ public class UserController {
 
 	@PostMapping("/update") 
 	public String updateProfile(@ModelAttribute("user") User user, Model model, BindingResult results) {
-		if(!user.getPassword().equals(user.getRetypepassword()))
-			  results.rejectValue("retypepassword", "error.user","Confirmed Password is not the same");
 		if(results.hasErrors())
 			return "update-profile";
 		userService.updateUserProfile(user);
