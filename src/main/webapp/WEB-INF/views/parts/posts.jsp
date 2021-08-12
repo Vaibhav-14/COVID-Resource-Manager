@@ -1,3 +1,5 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
 	<div class="p-2 w-50 bd-highlight" style="min-width: 500px;">
 		<c:choose>
@@ -150,6 +152,17 @@
 												
 											</c:if>
 										</div>
+
+										
+										<div class="row">
+											<div class="col">
+												<p class="card-subtitle mb-2 text-muted fw-lighter">Posted At: <fmt:formatDate type = "time" value = "${post.dateTime}" /> On <fmt:formatDate value="${post.dateTime}" pattern="yyyy-MM-dd" /></p>
+											</div>
+
+											
+										</div>
+
+
 										<div class="row">
 											<div class="col">
 												<h6 class="card-subtitle mb-2 text-muted">${post.type }</h6>
