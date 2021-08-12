@@ -210,7 +210,7 @@ public class PostService {
 			
 			//copying values
 			
-			String referURL =   "<a href= '/post/"+postID+"'>Go to Source Post</a>" ;
+			String referURL =   shareThisPost.getMessage()+"<br><a href= '/post/"+postID+"'>Go to Source Post</a>" ;
 			
 			newPost.setMessage(referURL);
 			newPost.setTags(new HashSet<Tag>(shareThisPost.getTags()));
