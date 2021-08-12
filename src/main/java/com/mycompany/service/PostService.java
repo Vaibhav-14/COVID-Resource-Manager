@@ -1,6 +1,7 @@
 package com.mycompany.service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,6 +9,9 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -161,6 +165,18 @@ public class PostService {
 	
 	public List<Post> getAllPost(){
 		return postDao.findAllByOrderByDateTimeDesc();
+	}
+	
+	public List<Post> getAllPostsFromPageable(int pageNumber,int pageSize,String sortBy)
+	{
+		Pageable paging = PageRequest.of(pageNumber, pageSize, org.springframework.data.domain.Sort.by(sortBy));
+		 
+        Page<Post> pagedResult = postDao.findAll(paging);
+         
+        if(pagedResult.hasContent()) 
+            return pagedResult.getContent();
+        
+        return new ArrayList<Post>();
 	}
 	
 	public List<Post> findPostByUsername(String username) {
