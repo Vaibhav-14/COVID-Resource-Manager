@@ -33,17 +33,10 @@ public class TagService {
 	}
 	
 	public void addTags(Tag tag) {
-		Iterable<Tag> db_tags = tagDao.findAll();
-		int flag = 0;
-		for (Tag db_tag : db_tags) {
-			if(db_tag.getName().equals(tag.getName())) {
-				flag = 1;
-				break;
-			}
-		}
-		if(flag==0) {
-			logger.info("Tag : #" + tag.getName() + " has saved in database.");
-			tagDao.save(tag);
+		String[] tagStr = tag.getName().replace("#", "").split(" ");
+		for (String tag_: tagStr) {
+			logger.info("Tag : #" + tag_ + " has saved in database.");
+			tagDao.save(new Tag(tag_));
 		}
 	}
 }
