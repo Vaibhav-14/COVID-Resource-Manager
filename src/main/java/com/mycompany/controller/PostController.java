@@ -122,6 +122,15 @@ public class PostController {
 		postService.reportPost(id);
 		return "redirect:/";
 	}
+	
+	@PostMapping("/share")
+	public String sharePost(@RequestParam(name="username") String username,@RequestParam(name="postID") int postID)
+	{
+
+		postService.sharePost(postID, username);
+		return "redirect:/";
+		
+	}
 
 
 }
