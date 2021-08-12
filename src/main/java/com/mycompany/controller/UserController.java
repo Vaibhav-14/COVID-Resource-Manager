@@ -90,9 +90,13 @@ public class UserController {
 	}
 	
 	@GetMapping(value = "/profile")
-	public String displayProfile(@RequestParam(required = false) String username, Model model) {
+	public String displayProfile(@RequestParam(required=false) String username, Model model) {
 		List<Post> posts = userService.displayProfile(username);
-		User user = userService.getUser(username);
+		User user;
+		if (username != null)
+			user = userService.getUserFromUsername(username);
+		else
+			user = userService.getLoggedInUser();
 		model.addAttribute("IsUsername", username);
 		model.addAttribute("username", user.getUsername());
 		model.addAttribute("tag", null);
@@ -104,7 +108,7 @@ public class UserController {
 	
 	@GetMapping(value = "/block/{username}")
 	public String blockUser(@PathVariable String username) {
-		User user = userService.getUser(username);
+		User user = userService.getUserFromUsername(username);
 		user.setEnabled(0);
 		userService.updateUser(user);
 		logger.info("Admin has suspended the account of " + username);
@@ -114,7 +118,7 @@ public class UserController {
 	
 	@GetMapping(value = "/unblock/{username}")
 	public String unblockUser(@PathVariable String username) {
-		User user = userService.getUser(username);
+		User user = userService.getUserFromUsername(username);
 		user.setEnabled(1);
 		userService.updateUser(user);
 		logger.info("Admin has removed suspension on account of " + username);
@@ -139,8 +143,8 @@ public class UserController {
 	}
 	
 	@GetMapping("/update")
-	public String updateProfile(@RequestParam(required = false) String username, Model model) throws Exception {
-		User user = userService.getUser(username);
+	public String updateProfile(Model model) throws Exception {
+		User user = userService.getLoggedInUser();
 		model.addAttribute("user", user);
 		return "update-profile";
 	}
@@ -148,9 +152,6 @@ public class UserController {
 
 	@PostMapping("/update") 
 	public String updateProfile(@ModelAttribute("user") User user, Model model, BindingResult results) {
-		System.out.println(user);
-		if(!user.getPassword().equals(user.getRetypepassword()))
-			  results.rejectValue("retypepassword", "error.user","Confirmed Password is not the same");
 		if(results.hasErrors())
 			return "update-profile";
 		userService.updateUserProfile(user);

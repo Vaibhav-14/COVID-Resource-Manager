@@ -69,7 +69,7 @@ public class NotificationServiceTest {
 		notification.setObjectURL("objectURL");
 		User user = new User() ; 
 		user.setId(1);
-		user.setUsername("Champ4");
+		user.setUsername("Champ");
 		user.setEmail("Champ@gmail.com");
 		user.setFirstname("Champ");
 		user.setLastname("OK");
@@ -103,7 +103,7 @@ public class NotificationServiceTest {
 	public void getNotificationsTest() throws ParseException{
 		// User Authentication
 				UsernamePasswordAuthenticationToken authReq
-							      = new UsernamePasswordAuthenticationToken("Champ4", "Thor");
+							      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
 				AuthenticationManager auth = new AuthenticationManager() {
 									
 				@Override
@@ -115,7 +115,7 @@ public class NotificationServiceTest {
 				SecurityContext sc = SecurityContextHolder.getContext();
 				sc.setAuthentication(auth.authenticate(authReq));
 				
-		User user= userService.getUser("Champ4");
+		User user= userService.getUserFromUsername("Champ");
 		List<Notification> notifications = notificationService.getNotifications() ; 
 		
 		
@@ -125,7 +125,7 @@ public class NotificationServiceTest {
 	public void deleteNotificationTest() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
-					      = new UsernamePasswordAuthenticationToken("Champ4", "Thor");
+					      = new UsernamePasswordAuthenticationToken("Thor", "Thor");
 		AuthenticationManager auth = new AuthenticationManager() {
 							
 		@Override
@@ -143,8 +143,8 @@ public class NotificationServiceTest {
 		}
 		
 		// Delete User Account
-		userService.deleteUserAccount("Champ4");
-		User user = userService.getUser("Champ4") ; 
+		userService.deleteUserAccount("Thor");
+		User user = userService.getUserFromUsername("Thor") ; 
 		if (user != null) {
 			userDao.delete(user);
 		}
@@ -155,7 +155,7 @@ public class NotificationServiceTest {
 	public void removeUser() {
 		// User Authentication
 				UsernamePasswordAuthenticationToken authReq
-									      = new UsernamePasswordAuthenticationToken("Champ4", "Thor");
+									      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
 				AuthenticationManager auth = new AuthenticationManager() {
 											
 					@Override
@@ -168,8 +168,8 @@ public class NotificationServiceTest {
 				sc.setAuthentication(auth.authenticate(authReq));
 				
 				// Delete User Account
-				userService.deleteUserAccount("Champ4");
-				User user = userService.getUser("Champ4") ; 
+				userService.deleteUserAccount("Champ");
+				User user = userService.getUserFromUsername("Champ") ; 
 				if (user != null) {
 					userDao.delete(user);
 				}

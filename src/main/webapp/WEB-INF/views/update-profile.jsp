@@ -25,6 +25,7 @@
 		  <sf:hidden path="username"/>
 		  <sf:hidden path="warnings"/>
 		  
+		  <sf:hidden path="password"/>
 		  
 		  <div class="row p-2" >
 		    <div class="col">
@@ -41,22 +42,6 @@
 				    	  <sf:errors path="lastname"/>
         	 	      </div>       
 		    </div>		    
-		  </div>
-		  <div class="row p-2">
-		      <div class="col">
-		      <sf:input path="password" type="password" class="w-100 p-2" placeholder="Password"/>
-		              <div class="small text-danger">
-				    	  <sf:errors path="password"/>
-        	 	      </div>
-        	  </div>		  
-		  </div>	
-		  <div class="row p-2">
-		      <div class="col">
-		      <sf:input path="retypepassword" type="password" class="w-100 p-2" placeholder="Confirm Password"/>
-		              <div class="small text-danger">
-				    	  <sf:errors path="retypepassword"/>
-        	 	      </div>
-        	  </div>		  
 		  </div>	  
 		  <div class="row p-2">
 		      <div class="col">

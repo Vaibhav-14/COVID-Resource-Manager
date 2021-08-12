@@ -1,10 +1,7 @@
 package com.mycompany.controller;
 
 import java.security.ProviderException;
-import java.util.LinkedList;
 import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,7 +48,7 @@ public class PostController {
 		return "redirect:/home";
 	}
 	
-	@PostMapping("/updatepost")
+	@GetMapping("/update")
 	public String updatePost(@RequestParam(name = "id") int id, Model model) throws ProviderException {
 		
 		Post post = postService.getPostById(id);
@@ -61,7 +58,7 @@ public class PostController {
 	
 	@PostMapping("/update") 
 	public String updatePost(@ModelAttribute("post") Post post, Model model) {
-		
+		System.out.println(post.getComments().size());
 		postService.updatePost(post);
 		return "redirect:/home";
 	}
@@ -75,10 +72,10 @@ public class PostController {
 			model.addAttribute("tag", searchBy[0]);
 		}
 		else {
-			user = userService.getUser(searchBy[0].substring(1));
+			user = userService.getUserFromUsername(searchBy[0].substring(1));
 			model.addAttribute("tag", null);
 		}
-		if( userService.getUser(null) == null) {
+		if( userService.getLoggedInUser() == null) {
 			model.addAttribute("isLoggedIn", false);
 		}
 		else {
@@ -103,7 +100,7 @@ public class PostController {
 	
 	@GetMapping("/{id}")
 	public String showPost(@PathVariable int id, Model model) {
-		User user = userService.getUser(null);
+		User user = userService.getLoggedInUser();
 		String username;
 		if(user == null) {
 			username = null;
@@ -124,8 +121,7 @@ public class PostController {
 	}
 	
 	@PostMapping("/share")
-	public String sharePost(@RequestParam(name="username") String username,@RequestParam(name="postID") int postID)
-	{
+	public String sharePost(@RequestParam(name="username") String username,@RequestParam(name="postID") int postID) {
 
 		postService.sharePost(postID, username);
 		return "redirect:/";

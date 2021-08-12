@@ -54,12 +54,12 @@ public class UserService {
 		logger.info("User : " + user.getUsername() + " has registered successfully.");
 		
 	}
+	
 	public User getUserFromUsername(String username) {
 		return userDao.findByUsername(username);
 	}
 	
-	public List<String> getListOfAllUsernames()
-	{
+	public List<String> getListOfAllUsernames() {
 		return userDao.getListOfAllUsernames();
 	}
 	
@@ -71,16 +71,7 @@ public class UserService {
 			return postDao.findAllByUserIdOrderByDateTimeDesc(getUserFromUsername(username).getId());
 		}
 	}
-	
-	public User getUser(String username) {
-		if(username == null) {
-			return getLoggedInUser();
-		}
-		else {
-			return userDao.findByUsername(username);
-		}
-	}
-	
+		
 	public void updateUser(User user) {
 		User admin_user = getLoggedInUser();
 
@@ -92,8 +83,6 @@ public class UserService {
 	
 	public void updateUserProfile(User user) {
 		user.setEnabled(1);
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		user.setPassword(encoder.encode(user.getPassword()));
 		userDao.save(user);
 		logger.info("User : " + user.getUsername() + " has updated the profile information.");
 	}
@@ -106,7 +95,7 @@ public class UserService {
 		String[] strs = message.split(" ");
 		for (String string : strs) {
 			if (string.startsWith("@")) {
-				User user = getUser(string.substring(1));
+				User user = getUserFromUsername(string.substring(1));
 				if (user != null)
 					mentionedUsers.add(user);
 			}
