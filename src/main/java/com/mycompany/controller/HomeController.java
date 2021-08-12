@@ -23,6 +23,7 @@ public class HomeController {
 	@GetMapping({"/", "/home"})
 	public String showHomePage(Model model, @RequestParam(defaultValue = "0") Integer pageNumber) {
 		User user = userService.getUser(null);
+
 		String username;
 		if(user == null) {
 			username = null;

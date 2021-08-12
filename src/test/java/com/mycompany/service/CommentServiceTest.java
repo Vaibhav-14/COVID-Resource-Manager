@@ -150,7 +150,7 @@ public class CommentServiceTest {
 	@Test
 	@Order(3)
 	public void findAllCommentsByUserID() {
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUserFromUsername("Champ") ; 
 		List<Comment> comments = commentService.findAllCommentsByUserID(user.getId()) ; 
 		assertTrue(comments.size() > 0 ) ;
 	}
@@ -172,13 +172,13 @@ public class CommentServiceTest {
 		SecurityContext sc = SecurityContextHolder.getContext();
 		sc.setAuthentication(auth.authenticate(authReq));
 		
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUserFromUsername("Champ") ; 
 		commentService.deleteComment(user.getId());
 		List<Comment> comments = commentService.findAllCommentsByUserID(user.getId()) ; 
 		assertTrue(comments.size() == 0 ) ;
 		
 		userService.deleteUserAccount("Champ");
-		User user1 = userService.getUser("Champ") ; 
+		User user1 = userService.getUserFromUsername("Champ") ; 
 		if (user1 != null) {
 			userDao.delete(user1);
 		}

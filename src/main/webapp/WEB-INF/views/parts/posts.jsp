@@ -56,7 +56,7 @@
 														<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 
 															<li>
-																<form method="post" action="/post/updatepost">
+																<form method="GET" action="/post/update">
 																	<input type="hidden" name="${_csrf.parameterName}"
 																		value="${_csrf.token}" />
 																	<input type="hidden" name="id"

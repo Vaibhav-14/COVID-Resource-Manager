@@ -1,11 +1,10 @@
 <%@ include file="parts/meta.jsp" %> 
 
-	<title>Add Post</title>
-	<script src="${pageContext.request.contextPath }/js/jquery-3.6.0.min.js"></script>
-	<script src="${pageContext.request.contextPath }/js/jquery-ui.min.js"></script>
+	<title>Add Tag</title>
 <%@ include file="parts/header.jsp" %> 
+	<h6>Create New Tag</h6>
 	<sf:form id="form1" modelAttribute="tag" method= "POST" >
-		Tag: <sf:textarea id="tags" path="name"/>
+		Tag: <sf:textarea class="autocomplete" path="name"/>
 		<sf:button value="Submit">Add Tags</sf:button>
 	</sf:form>
 	
