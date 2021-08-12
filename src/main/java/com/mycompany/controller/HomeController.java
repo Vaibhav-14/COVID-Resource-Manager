@@ -22,7 +22,7 @@ public class HomeController {
 	
 	@GetMapping({"/", "/home"})
 	public String showHomePage(Model model) {
-		User user = userService.getUser(null);
+		User user = userService.getLoggedInUser();
 		String username;
 		if(user == null) {
 			username = null;

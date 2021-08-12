@@ -82,12 +82,6 @@ public class UserServiceTest {
 	
 	@Test
 	@Order(4)
-	public void getUser() {
-		assertEquals(userService.getUser("Champ").getUsername() , "Champ");
-	}
-	
-	@Test
-	@Order(5)
 	public void displayProfileTest() {
 		List<Post> posts = userService.displayProfile("Champ") ; 
 		assertTrue(posts.size() >= 0 );
@@ -110,20 +104,20 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	@Order(6)
+	@Order(5)
 	public void getUsersFromStringTest() {
 		Set<User> users = userService.getUsersFromString("@Champ") ; 
 		assertTrue(users.size() >= 1 );
 	}
 	
 	@Test
-	@Order(7)
+	@Order(6)
 	public void getListOfAllUsernamesTest() {
 		assertTrue(userService.getListOfAllUsernames().size() >= 1 ) ; 
 	}
 	
 	@Test
-	@Order(8)
+	@Order(7)
 	public void updatUserTest() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
@@ -138,18 +132,18 @@ public class UserServiceTest {
 					    
 		SecurityContext sc = SecurityContextHolder.getContext();
 		sc.setAuthentication(auth.authenticate(authReq));
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUserFromUsername("Champ") ; 
 		assertDoesNotThrow(() -> userService.updateUser(user));
 	}
 	
 	@Test
-	@Order(9)
+	@Order(8)
 	public void testGetterSetter() {
 		assertDoesNotThrow(() -> userService.setUserDao(userService.getUserDao()));
 	}
 	
 	@Test
-	@Order(10)
+	@Order(9)
 	public void testSetDao() {
 		UserService userService = new UserService();
 		userService.setUserDao(userDao);
@@ -157,7 +151,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	@Order(11)
+	@Order(10)
 	public void testGetDao() {
 		UserService userService = new UserService();
 		userService.setUserDao(userDao);
@@ -165,20 +159,20 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	@Order(12)
+	@Order(11)
 	public void updateUserProfile() {
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUserFromUsername("Champ") ; 
 		assertDoesNotThrow(() -> userService.updateUserProfile(user));
 	}
 	
 	@Test
-	@Order(13)
+	@Order(12)
 	public void searchUsersByKeyWordTest() {
 		assertTrue(userService.searchUsersByKeyWord("Champ").size() >= 1 ) ; 
 	}
 	
 	@Test
-	@Order(14)
+	@Order(13)
 	public void deleteUserAccount() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
@@ -196,7 +190,7 @@ public class UserServiceTest {
 		
 		// Delete User Account
 		userService.deleteUserAccount("Champ");
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUserFromUsername("Champ") ; 
 		if (user != null) {
 			userDao.delete(user);
 		}

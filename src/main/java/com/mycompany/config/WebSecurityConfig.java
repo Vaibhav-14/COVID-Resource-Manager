@@ -70,6 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/post/create").hasAuthority("USER")
             .antMatchers("/user/login").permitAll()
             .antMatchers("/user/profile").permitAll()
+            .antMatchers("/tag/create").hasAuthority("ADMIN")
             .anyRequest().authenticated()
             .and()
             .formLogin()

@@ -13,10 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.dao.IRoleFunctionDAO;
-
-import com.mycompany.dao.IUserFunctionDAO;
-import com.mycompany.entity.Comment;
-
 import com.mycompany.entity.Post;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.Tag;
@@ -89,6 +85,11 @@ public class PostService {
 				tags.add(tag);
 			}
 		}
+		if (post.getType().equals("Available"))
+			tags.add(tagService.getTagByName("Available"));
+		else if (post.getType().equals("Required"))
+			tags.add(tagService.getTagByName("Required"));
+		
 		post.setTags(tags); 
 	}
 
@@ -100,7 +101,7 @@ public class PostService {
 			post = postDao.findById(id).get();
 			for (Tag tag : post.getTags()) {
 				str.append("#" + tag.getName() + " ");
-      post.setTagStr(str.toString()); 
+				post.setTagStr(str.toString()); 
       }
 		} catch (Exception e) {
 			post = null;
@@ -173,13 +174,14 @@ public class PostService {
 		//finding posts by username
 		searchList.addAll(findPostByUsername(searchEntry));
 				
-		List<Tag> associatedTags = tagService.getAllTagsByName(searchEntry);
-		
-		for(Tag currentTag: associatedTags) {
-			Set<Post> postsWithcurrentTag = currentTag.getPosts();
-			searchList.addAll(postsWithcurrentTag);		
+		try {
+			Tag associatedTag = tagService.getTagByName(searchEntry);
+			
+			Set<Post> postsWithcurrentTag = associatedTag.getPosts();
+			searchList.addAll(postsWithcurrentTag);
+		} catch (Exception e) {
+			logger.info(e.getMessage());
 		}
-
 	    return searchList;
 	}
 	
