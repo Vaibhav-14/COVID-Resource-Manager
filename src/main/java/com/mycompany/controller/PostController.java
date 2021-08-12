@@ -51,7 +51,7 @@ public class PostController {
 		return "redirect:/home";
 	}
 	
-	@PostMapping("/updatepost")
+	@GetMapping("/update")
 	public String updatePost(@RequestParam(name = "id") int id, Model model) throws ProviderException {
 		
 		Post post = postService.getPostById(id);
