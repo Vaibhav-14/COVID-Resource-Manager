@@ -28,8 +28,8 @@ public class TagService {
 		return tagDao.searchTagsByKeyWord(keyword);
 	}
 	
-	public List<Tag> getAllTagsByName(String passedtag) {
-		return tagDao.getAllTagsByName(passedtag);
+	public Tag getAllTagsByName(String passedtag) {
+		return tagDao.getTagByName(passedtag);
 	}
 	
 	public void addTags(Tag tag) {
@@ -38,5 +38,9 @@ public class TagService {
 			logger.info("Tag : #" + tag_ + " has saved in database.");
 			tagDao.save(new Tag(tag_));
 		}
+	}
+
+	public Tag getTagByName(String string) {
+		return tagDao.getTagByName(string);
 	}
 }
