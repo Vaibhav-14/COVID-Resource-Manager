@@ -22,7 +22,7 @@
         </sec:authorize>
         <sec:authorize access="hasAuthority('ADMIN')">
         <li class="nav-item"> 
-          <a class="nav-link active" href="/createTag">Add Tag</a>
+          <a class="nav-link active" href="/tag/create">Add Tag</a>
         </li>
         </sec:authorize>
         </ul>
