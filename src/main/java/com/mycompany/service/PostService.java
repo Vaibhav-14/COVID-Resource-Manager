@@ -13,18 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.dao.IRoleFunctionDAO;
-
-import com.mycompany.dao.IUserFunctionDAO;
-import com.mycompany.entity.Comment;
-
 import com.mycompany.entity.Post;
-import com.mycompany.entity.PostType;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.Tag;
 import com.mycompany.entity.User;
 import com.mycompany.exception.IncorrectUserException;
-
-import javassist.NotFoundException;
 
 @Transactional
 @Service("postService")
