@@ -1,5 +1,4 @@
 <%@ include file="parts/meta.jsp" %> 
-
 	<title>Add Tag</title>
 <%@ include file="parts/header.jsp" %> 
 	<h6>Create New Tag</h6>

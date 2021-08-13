@@ -1,5 +1,7 @@
 package com.mycompany.exception.handler;
 
+import javax.el.PropertyNotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,19 +13,8 @@ import com.mycompany.exception.IncorrectUserException;
 @ControllerAdvice
 public class CovidResourceManagerExceptionHandler {
 	
-	@ExceptionHandler
-	public String handleException(IncorrectUserException exc, Model model) {
-		CustomErrorResponse error = new CustomErrorResponse(
-									HttpStatus.INTERNAL_SERVER_ERROR.value(), exc.getMessage(), 
-									System.currentTimeMillis());
-		
-		model.addAttribute("error", error);
-		
-		return "error";
-	}
-	
-	@ExceptionHandler
-	public String handleException(NullPointerException exc, Model model) {
+	@ExceptionHandler(value = {IncorrectUserException.class, NullPointerException.class})
+	public String handleException(Exception exc, Model model) {
 		CustomErrorResponse error = new CustomErrorResponse(
 									HttpStatus.INTERNAL_SERVER_ERROR.value(), exc.getMessage(), 
 									System.currentTimeMillis());

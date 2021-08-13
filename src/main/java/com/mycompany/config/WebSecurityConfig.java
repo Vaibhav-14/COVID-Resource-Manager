@@ -122,6 +122,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						
 					}
 				})
-            	.permitAll();
+            	.permitAll()
+            .and()
+            .exceptionHandling().accessDeniedPage("/403");
     }
 }
