@@ -239,7 +239,7 @@
 															style="text-decoration: none;"><b>${comment.user.username
 																}</b></a> :&nbsp;${comment.content }
 													</div>
-												
+								
 													<sec:authorize access="hasAuthority('ADMIN')">
 														<div class="col">
 
@@ -250,7 +250,7 @@
 																	<button type="button"
 																		class="btn btn-sm btn-outline-danger"
 																		data-bs-toggle="modal"
-																		data-bs-target="#deleteCommentModal${comment.id}">
+																		data-bs-target="#deleteCommentModal${comment.id }">
 																		<i class="material-icons align-middle "
 																			style="font-size: 16px; ">delete</i>
 																	</button>
@@ -262,7 +262,9 @@
 
 														</div>
 													</sec:authorize>
-
+													<div class="col-10">
+													<p class="card-subtitle mb-2 text-muted fw-lighter" style="text-align: right; font-size: 10px;"><cite title="Source Title"> <fmt:formatDate type = "time" value = "${comment.dateTime}" /> On <fmt:formatDate value="${comment.dateTime}" pattern="dd-MM-yyyy" /></cite></p>
+													</div>
 												</div>
 
 
@@ -275,6 +277,7 @@
 															style="text-decoration: none;"><b>${comment.user.username
 																}</b> </a> :&nbsp; ${comment.content }
 													</div>
+													
 													<sec:authorize access="hasAuthority('USER')">
 														<div class="col">
 
@@ -296,6 +299,9 @@
 
 														</div>
 													</sec:authorize>
+													<div class="col-10">
+													<p class="card-subtitle mb-2 text-muted fw-lighter" style="text-align: right; font-size: 10px;"><cite title="Source Title"> <fmt:formatDate type = "time" value = "${comment.dateTime}" /> On <fmt:formatDate value="${comment.dateTime}" pattern="dd-MM-yyyy" /></cite></p>
+													</div>
 												</div>
 											</c:if>
 										</c:if>
