@@ -13,8 +13,14 @@
 
 						<div class="card p-2 shadow-sm p-3 mb-5 bg-body rounded">
 							<div class="card-body">
-								<div class="bg-light p-2">
-
+				
+								<c:if test = "${post.type == 'Required'}">
+									<div class="bg-light-red p-2">
+								</c:if>
+								<c:if test = "${post.type == 'Available'}">
+									<div class="bg-light p-2">
+								</c:if>
+												
 
 									<div class="container">
 										<div class="row">
@@ -41,11 +47,10 @@
 																style="font-size: 36px; ">account_circle</i>${post.user.username
 															}</h3>
 													</a>
-
 												</c:if>
-
-
+												
 											</div>
+											
 											<c:if
 												test="${pageContext.request.userPrincipal.name == post.user.username }">
 												<div class="col">
@@ -155,6 +160,16 @@
 											</c:if>
 										</div>
 
+										<div class="row">
+											<div class="col">
+												<c:if test = "${post.type == 'Required'}">
+													<small class="card-subtitle mb-2 text-danger">${post.type }</small>
+												</c:if>
+												<c:if test = "${post.type == 'Available'}">
+													<small class="card-subtitle mb-2 text-success">${post.type }</small>
+												</c:if>
+											</div>
+										</div>
 										
 										<div class="row">
 											<div class="col">
@@ -164,18 +179,6 @@
 											</div>	
 										</div>
 										
-										
-
-										<div class="row">
-											<div class="col">
-												<c:if test = "${post.type == 'Required'}">
-													<h6 class="card-subtitle mb-2 text-danger">${post.type }</h6>
-												</c:if>
-												<c:if test = "${post.type == 'Available'}">
-													<h6 class="card-subtitle mb-2 text-success">${post.type }</h6>
-												</c:if>
-											</div>
-										</div>
 										<div class="row">
 											<div class="col">
 												<p class="card-text" style="padding-left:43px">${post.message }</p>
