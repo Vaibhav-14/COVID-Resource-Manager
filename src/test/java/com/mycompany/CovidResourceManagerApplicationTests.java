@@ -8,9 +8,8 @@ public class CovidResourceManagerApplicationTests {
 	
 	@Test
 	public void contextLoads() {
+		
 
+	
 	}
-	
-
-	
 }

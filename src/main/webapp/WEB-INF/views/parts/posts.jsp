@@ -13,14 +13,16 @@
 
 						<div class="card p-2 shadow-sm p-3 mb-5 bg-body rounded">
 							<div class="card-body">
-				
+								<!-- here -->
+
 								<c:if test = "${post.type == 'Required'}">
-									<div class="bg-light-red p-2">
+									<div class="p-2" style="background-color: #FFEBEE;">
 								</c:if>
 								<c:if test = "${post.type == 'Available'}">
-									<div class="bg-light p-2">
+									<div class="p-2" style="background-color: #E0F2F1;">
 								</c:if>
-												
+								
+
 
 									<div class="container">
 										<div class="row">
@@ -47,10 +49,11 @@
 																style="font-size: 36px; ">account_circle</i>${post.user.username
 															}</h3>
 													</a>
+
 												</c:if>
-												
+
+
 											</div>
-											
 											<c:if
 												test="${pageContext.request.userPrincipal.name == post.user.username }">
 												<div class="col">
@@ -160,28 +163,33 @@
 											</c:if>
 										</div>
 
+										
+										<div class="row">
+											<div class="col">
+											
+												<p class="card-subtitle mb-2 text-muted fw-lighter" style="text-align: right;">Posted At:<cite title="Source Title"> <fmt:formatDate type = "time" value = "${post.dateTime}" /> On <fmt:formatDate value="${post.dateTime}" pattern="dd-MM-yyyy" /></cite></p>
+											
+											</div>	
+										</div>
+										<br>
+
+										
+
 										<div class="row">
 											<div class="col">
 												<c:if test = "${post.type == 'Required'}">
-													<small class="card-subtitle mb-2 text-danger">${post.type }</small>
+													<h6 class="card-subtitle mb-2 text-danger">${post.type }</h6>
 												</c:if>
 												<c:if test = "${post.type == 'Available'}">
-													<small class="card-subtitle mb-2 text-success">${post.type }</small>
+													<h6 class="card-subtitle mb-2 text-success">${post.type }</h6>
 												</c:if>
 											</div>
 										</div>
 										
+
 										<div class="row">
 											<div class="col">
-											
-												<p class="card-subtitle mb-2 text-muted fw-lighter text-lowercase" style="padding-left:43px; font-size:15px;">Posted At:<cite title="Source Title"> <fmt:formatDate type = "time" value = "${post.dateTime}" /> On <fmt:formatDate value="${post.dateTime}" pattern="dd-MM-yyyy" /></cite></p>
-											
-											</div>	
-										</div>
-										
-										<div class="row">
-											<div class="col">
-												<p class="card-text" style="padding-left:43px">${post.message }</p>
+												<p class="card-text">${post.message }</p>
 											</div>
 										</div>
 
@@ -189,7 +197,7 @@
 											<div class="col">
 												<p class="card-text">
 													<small class="text-muted">
-													<div class="conatiner" style="padding-left:40px">
+													<div class="conatiner">
 														<c:forEach items="${post.tags }" var="tag" varStatus="tagStatus">
 															
 															<span style="padding:3px">
