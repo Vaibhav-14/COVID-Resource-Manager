@@ -11,7 +11,7 @@ import com.mycompany.exception.IncorrectUserException;
 import com.mycompany.service.NotificationService;
 
 @Controller
-@RequestMapping("/notifications")
+@RequestMapping("notifications")
 public class NotificationController {
 	
 	@Autowired

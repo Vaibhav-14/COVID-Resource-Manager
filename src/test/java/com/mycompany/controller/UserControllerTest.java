@@ -73,43 +73,5 @@ public class UserControllerTest {
 		
 		mockMvc.perform(get("/user/login")).andExpect(status().isOk()).andExpect(view().name("login"));
 	}
-
-//	@SuppressWarnings("deprecation")
-//	@Test
-//	public void user1ControllerTest() throws Exception {
-//		User user = new User() ; 
-//		user.setId(1);
-//		user.setUsername("username");
-//		user.setEmail("Champ@gmail.com");
-//		user.setFirstname("Champ");
-//		user.setLastname("OK");
-//		user.setPassword("Thor");
-//		user.setMobile("1123456789") ; 
-//		user.setWarnings(0);
-//		try {
-//		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//		    Date parsedDate = dateFormat.parse(String.valueOf("2000-01-01"));
-//		    user.setDateOfBirth(parsedDate);
-//		} catch(Exception e) { 
-//			System.out.println("Error : In Allocation of DOB to user");
-//			e.printStackTrace();
-//		}
-//		user.setGender("male");
-//		user.setEnabled(1);
-//		userService.addUser(user);
-////		
-//		// Saving User in Database 
-//	
-//		
-//		//when(userService.displayProfile("Champ")).thenReturn((List<Post>) user);
-//		
-//		//assertDoesNotThrow(() -> userController.deleteUserAccount(null));
-//		//mockMvc.perform(get("/user/update/{username}", "USERNAME")).andExpect(status().isOk()).andExpect(view().name("update-profile"));
-//		mockMvc.perform(post("/user/delete")
-//                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-//                .param("username", "username")).andExpect(view().name("redirect:/user/logout"));
-//		
-//		
-//		}
 	
 }
