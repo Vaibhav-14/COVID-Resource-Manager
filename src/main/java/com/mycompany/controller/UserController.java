@@ -36,6 +36,13 @@ public class UserController {
 	
 	//URL:  http://localhost:8080/user/register
 	
+	private String createRedirectViewPath(String requestMapping) {
+        StringBuilder redirectViewPath = new StringBuilder();
+        redirectViewPath.append("redirect:");
+        redirectViewPath.append(requestMapping);
+        return redirectViewPath.toString();
+    }
+	
 	@GetMapping(value = "/register")
 	public String register(Model model) {
 		
@@ -123,6 +130,7 @@ public class UserController {
 	public String deleteUserAccount(@RequestParam(name="username") String username)
 	{
 		userService.deleteUserAccount(username);	
+		//return "redirect:/user/logout";
 		return "redirect:/user/logout";
 	}
 	

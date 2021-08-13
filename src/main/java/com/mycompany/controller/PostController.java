@@ -65,31 +65,36 @@ public class PostController {
 	
 	
 	@RequestMapping(value="/searchresult", method = {RequestMethod.GET, RequestMethod.POST})
-	public String searchPostResult(Model model, @RequestParam(name = "searchentry") String searchEntry) {
-		User user = null;
-		String[] searchBy = searchEntry.split(" ");
-		if (searchEntry.startsWith("#")) {
-			model.addAttribute("tag", searchBy[0]);
-		}
-		else {
-			user = userService.getUserFromUsername(searchBy[0].substring(1));
-			model.addAttribute("tag", null);
-		}
-		if( userService.getLoggedInUser() == null) {
-			model.addAttribute("isLoggedIn", false);
-		}
-		else {
-			model.addAttribute("isLoggedIn", true);
-		}
-		model.addAttribute("comment", new Comment());
-		model.addAttribute("username", searchBy[0]);
-		model.addAttribute("IsUsername", null);
-		model.addAttribute("user", user);
-		
+	public String searchPostResult(Model model, @RequestParam(name = "searchentry", required=false) String searchEntry) {
+		try {
+			User user = null;
+			String[] searchBy = searchEntry.split(" ");
+			if (searchEntry.startsWith("#")) {
+				model.addAttribute("tag", searchBy[0]);
+			}
+			else {
+				user = userService.getUserFromUsername(searchBy[0].substring(1));
+				model.addAttribute("tag", null);
+			}
+			if( userService.getLoggedInUser() == null) {
+				model.addAttribute("isLoggedIn", false);
+			}
+			else {
+				model.addAttribute("isLoggedIn", true);
+			}
+			model.addAttribute("comment", new Comment());
+			model.addAttribute("username", searchBy[0]);
+			model.addAttribute("IsUsername", null);
+			model.addAttribute("user", user);
+			
 
-		Set<Post> searchList = postService.getPostOnSearch(searchBy[0].substring(1));
-		model.addAttribute("posts", searchList);
-		return "profile";	
+			Set<Post> searchList = postService.getPostOnSearch(searchBy[0].substring(1));
+			model.addAttribute("posts", searchList);
+			return "profile";
+		} catch (Exception e) {
+			return "redirect:/home";
+		}
+			
 	}
 	
 	@PostMapping("/delete")

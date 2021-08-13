@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Ugh!</title>
 </head>
 <body>
 	<%
@@ -12,5 +12,6 @@
 	%>
 <h1>Something went wrong</h1>
 <p>${error.message }</p>
+<a href="/home">HomePage</a>
 </body>
 </html>
