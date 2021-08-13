@@ -37,14 +37,7 @@
 		      </form>   
 	        </li> 
       	</ul>
-      	
-      	<sec:authorize access="isAuthenticated()">
-	      	<span class="material-icons">
-				<a href="${pageContext.request.contextPath}/notifications/" >notifications</a>	
-			</span>
-		</sec:authorize>  
-		
-      	
+
       	<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
       	<sec:authorize access="!isAuthenticated()">
         <li class="nav-item">
@@ -58,6 +51,9 @@
         
 
       	<sec:authorize access="isAuthenticated()">
+          <li class="nav-item">
+            <a class="nav-link active" href="${pageContext.request.contextPath}/notifications/"><i class="material-icons align-middle">notifications</i> </a>
+          </li>  
         <li class="nav-item">
           <a class="nav-link active" href="/user/profile"><i class="material-icons align-middle">account_circle</i> ${pageContext.request.userPrincipal.name}</a>
         </li>
