@@ -83,8 +83,18 @@ public class UserService {
 	
 	public void updateUserProfile(User user) {
 		user.setEnabled(1);
+		Role role = roleDao.findByName("USER");
+		user.getRoles().add(role);
 		userDao.save(user);
 		logger.info("User : " + user.getUsername() + " has updated the profile information.");
+	}
+	
+	public void changePassword(User user) {
+		user.setEnabled(1);
+		Role role = roleDao.findByName("USER");
+		user.getRoles().add(role);
+		userDao.save(user);
+		logger.info("User : " + user.getUsername() + " has changed the password.");
 	}
 	
 	public List<String> searchUsersByKeyWord(String keyword) {

@@ -230,7 +230,7 @@
 									<c:forEach items="${post.comments }" var="comment" varStatus="tagStatus">
 										<c:if test="${comment.user.enabled == true}">
 											<c:if
-												test="${pageContext.request.userPrincipal.name != comment.user.username }">
+												test="${pageContext.request.userPrincipal.name != comment.user.username && pageContext.request.userPrincipal.name != post.user.username}">
 
 
 												<div class="row p-2">
@@ -239,7 +239,7 @@
 															style="text-decoration: none;"><b>${comment.user.username
 																}</b></a> :&nbsp;${comment.content }
 													</div>
-												
+								
 													<sec:authorize access="hasAuthority('ADMIN')">
 														<div class="col">
 
@@ -250,7 +250,7 @@
 																	<button type="button"
 																		class="btn btn-sm btn-outline-danger"
 																		data-bs-toggle="modal"
-																		data-bs-target="#deleteCommentModal">
+																		data-bs-target="#deleteCommentModal${comment.id }">
 																		<i class="material-icons align-middle "
 																			style="font-size: 16px; ">delete</i>
 																	</button>
@@ -262,19 +262,22 @@
 
 														</div>
 													</sec:authorize>
-
+													<div class="col-10">
+													<p class="card-subtitle mb-2 text-muted fw-lighter" style="text-align: right; font-size: 10px;"><cite title="Source Title"> <fmt:formatDate type = "time" value = "${comment.dateTime}" /> On <fmt:formatDate value="${comment.dateTime}" pattern="dd-MM-yyyy" /></cite></p>
+													</div>
 												</div>
 
 
 											</c:if>
 											<c:if
-												test="${pageContext.request.userPrincipal.name == comment.user.username }">
+												test="${pageContext.request.userPrincipal.name == comment.user.username || pageContext.request.userPrincipal.name == post.user.username}">
 												<div class="row p-2">
 													<div class="col-10">
 														<a href="/user/profile"
 															style="text-decoration: none;"><b>${comment.user.username
 																}</b> </a> :&nbsp; ${comment.content }
 													</div>
+													
 													<sec:authorize access="hasAuthority('USER')">
 														<div class="col">
 
@@ -285,7 +288,7 @@
 																	<button type="button"
 																		class="btn btn-sm btn-outline-danger"
 																		data-bs-toggle="modal"
-																		data-bs-target="#deleteCommentModal">
+																		data-bs-target="#deleteCommentModal${comment.id}">
 																		<i class="material-icons align-middle "
 																			style="font-size: 16px; ">delete</i>
 																	</button>
@@ -294,15 +297,17 @@
 																</div>
 															</div>
 
-
 														</div>
 													</sec:authorize>
+													<div class="col-10">
+													<p class="card-subtitle mb-2 text-muted fw-lighter" style="text-align: right; font-size: 10px;"><cite title="Source Title"> <fmt:formatDate type = "time" value = "${comment.dateTime}" /> On <fmt:formatDate value="${comment.dateTime}" pattern="dd-MM-yyyy" /></cite></p>
+													</div>
 												</div>
 											</c:if>
 										</c:if>
 
 										<!-- Comment Modal -->
-										<div class="modal fade" id="deleteCommentModal" tabindex="-1"
+										<div class="modal fade" id="deleteCommentModal${comment.id}" tabindex="-1"
 											aria-labelledby="exampleModalLabel" aria-hidden="true">
 											<div class="modal-dialog">
 												<div class="modal-content">
