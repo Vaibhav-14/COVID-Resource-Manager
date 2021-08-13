@@ -3,6 +3,7 @@ package com.mycompany.entity;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -59,7 +60,7 @@ public class Post {
 	private Set<Tag> tags = new HashSet<>();
 	
 	@OneToMany(mappedBy = "post", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	private Set<Comment> comments = new HashSet<>();
+	private Set<Comment> comments = new TreeSet<>();
 	
 	
 	public Post() {

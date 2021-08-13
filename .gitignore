@@ -1,5 +1,6 @@
 *.log
-*.obj 
+*.obj
+*.tmp 
 HELP.md
 target/
 bin/
