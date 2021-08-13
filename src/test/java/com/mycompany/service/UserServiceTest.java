@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.SimpleDateFormat;
@@ -29,6 +30,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.User;
+import com.mycompany.exception.IncorrectUserException;
 
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation.class)
@@ -173,6 +175,54 @@ public class UserServiceTest {
 	
 	@Test
 	@Order(13)
+	public void deleteUserAccountNegative() {
+		User user = new User() ; 
+		user.setId(2);
+		user.setUsername("Thor");
+		user.setEmail("Champ@gmail.com");
+		user.setFirstname("Champ");
+		user.setLastname("OK");
+		user.setPassword("Thor");
+		user.setMobile("1123456789") ; 
+		user.setWarnings(0);
+		try {
+		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		    Date parsedDate = dateFormat.parse(String.valueOf("2000-01-01"));
+		    user.setDateOfBirth(parsedDate);
+		} catch(Exception e) { 
+			System.out.println("Error : In Allocation of DOB to user");
+			e.printStackTrace();
+		}
+		user.setGender("male");
+		user.setEnabled(1);
+		
+		// Saving User in Database 
+		assertDoesNotThrow(() -> userService.addUser(user));
+		
+		// User Authentication
+				UsernamePasswordAuthenticationToken authReq
+									      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
+				AuthenticationManager auth = new AuthenticationManager() {
+											
+					@Override
+					public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+							return authentication;
+					}
+				};
+									    
+				SecurityContext sc = SecurityContextHolder.getContext();
+				sc.setAuthentication(auth.authenticate(authReq));
+				
+				// Delete User Account
+				assertThrows(IncorrectUserException.class , () -> userService.deleteUserAccount("Thor")) ; 
+				User u = userService.getUserFromUsername("Thor") ; 
+				if (u != null) {
+					userDao.delete(u);
+				}
+	}
+	
+	@Test
+	@Order(14)
 	public void deleteUserAccount() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
