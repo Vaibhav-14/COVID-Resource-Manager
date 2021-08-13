@@ -71,11 +71,11 @@ public class CommentService {
 				logger.warn("Admin has deleted comment of user : " + commentUser.getUsername());
 				commentUser.setWarnings(commentUser.getWarnings()+1);
 				String activityType = "Your comment violets the Covid Resource Manager Policies. "
-						+ "So It has been removed. "+"You got "+commentUser.getWarnings() +
+						+ "So It has been removed. "+"You got "+(commentUser.getWarnings()+1) +
 						" out of 5. After 5 warnings your account will get suspended.";
 
 				notificationService.saveNotification(null, activityType, "post", 
-									"post/" + id, commentUser);
+									"/user/profile" + id, commentUser);
 				if(commentUser.getWarnings()>5) {
 					logger.warn("The account of user : " + commentUser.getUsername() + " is suspended autometically due to 5 warnings");
 					commentUser.setEnabled(0);
