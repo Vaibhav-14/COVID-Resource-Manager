@@ -13,14 +13,16 @@
 
 						<div class="card p-2 shadow-sm p-3 mb-5 bg-body rounded">
 							<div class="card-body">
-				
+								<!-- here -->
+
 								<c:if test = "${post.type == 'Required'}">
-									<div class="bg-light-red p-2">
+									<div class="p-2" style="background-color: #FFEBEE;">
 								</c:if>
 								<c:if test = "${post.type == 'Available'}">
-									<div class="bg-light p-2">
+									<div class="p-2" style="background-color: #E0F2F1;">
 								</c:if>
-												
+								
+
 
 									<div class="container">
 										<div class="row">
@@ -47,10 +49,11 @@
 																style="font-size: 36px; ">account_circle</i>${post.user.username
 															}</h3>
 													</a>
+
 												</c:if>
-												
+
+
 											</div>
-											
 											<c:if
 												test="${pageContext.request.userPrincipal.name == post.user.username }">
 												<div class="col">
@@ -160,28 +163,33 @@
 											</c:if>
 										</div>
 
+										
+										<div class="row">
+											<div class="col">
+											
+												<p class="card-subtitle mb-2 text-muted fw-lighter" style="text-align: right;">Posted At:<cite title="Source Title"> <fmt:formatDate type = "time" value = "${post.dateTime}" /> On <fmt:formatDate value="${post.dateTime}" pattern="dd-MM-yyyy" /></cite></p>
+											
+											</div>	
+										</div>
+										<br>
+
+										
+
 										<div class="row">
 											<div class="col">
 												<c:if test = "${post.type == 'Required'}">
-													<small class="card-subtitle mb-2 text-danger">${post.type }</small>
+													<h6 class="card-subtitle mb-2 text-danger">${post.type }</h6>
 												</c:if>
 												<c:if test = "${post.type == 'Available'}">
-													<small class="card-subtitle mb-2 text-success">${post.type }</small>
+													<h6 class="card-subtitle mb-2 text-success">${post.type }</h6>
 												</c:if>
 											</div>
 										</div>
 										
+
 										<div class="row">
 											<div class="col">
-											
-												<p class="card-subtitle mb-2 text-muted fw-lighter text-lowercase" style="padding-left:43px; font-size:15px;">Posted At:<cite title="Source Title"> <fmt:formatDate type = "time" value = "${post.dateTime}" /> On <fmt:formatDate value="${post.dateTime}" pattern="dd-MM-yyyy" /></cite></p>
-											
-											</div>	
-										</div>
-										
-										<div class="row">
-											<div class="col">
-												<p class="card-text" style="padding-left:43px">${post.message }</p>
+												<p class="card-text">${post.message }</p>
 											</div>
 										</div>
 
@@ -189,7 +197,7 @@
 											<div class="col">
 												<p class="card-text">
 													<small class="text-muted">
-													<div class="conatiner" style="padding-left:40px">
+													<div class="conatiner">
 														<c:forEach items="${post.tags }" var="tag" varStatus="tagStatus">
 															
 															<span style="padding:3px">
@@ -210,38 +218,50 @@
 
 
 								<div class="container p-2">
-									<div class="row">									
-										<div class="col">
-											<p class="text-center p-2"><i
-													class="p-1 material-icons align-middle">comment</i>Comments</p>
+									<div class="row justify-content-md-center">
+										<div class="col col-md-auto">
+													<button class="btn btn-light text-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseComments${vs.index }">
+														<i class="p-1 material-icons align-middle">comment</i>Comments 
+													</button>			
 										</div>
-										
-										
 									</div>
-									<c:forEach items="${post.comments }" var="comment" varStatus="vscomment">
+									<div class="row collapse" id="collapseComments${vs.index }">
+
+									<c:forEach items="${post.comments }" var="comment" varStatus="tagStatus">
 										<c:if test="${comment.user.enabled == true}">
 											<c:if
 												test="${pageContext.request.userPrincipal.name != comment.user.username && pageContext.request.userPrincipal.name != post.user.username}">
 
 
 												<div class="row p-2">
-													<div class="col-9">
+													<div class="col-10">
 														<a href="/user/profile?username=${comment.user.username }"
 															style="text-decoration: none;"><b>${comment.user.username
 																}</b></a> :&nbsp;${comment.content }
 													</div>
 												
-												<sec:authorize access="hasAuthority('ADMIN')">
-													<div class="col-1">
-														<!-- Button trigger modal -->
-														<button type="button" class="btn btn-sm btn-outline-danger"
-															data-bs-toggle="modal"
-															data-bs-target="#deleteCommentModal${comment.id}">
-															<i class="material-icons align-middle "
-																style="font-size: 16px; ">delete</i>
-														</button>
-													</div>
-												</sec:authorize>
+													<sec:authorize access="hasAuthority('ADMIN')">
+														<div class="col">
+
+															<div class="d-flex flex-row-reverse bd-highlight">
+																<div class="bd-highlight">
+
+																	<!-- Button trigger modal -->
+																	<button type="button"
+																		class="btn btn-sm btn-outline-danger"
+																		data-bs-toggle="modal"
+																		data-bs-target="#deleteCommentModal${comment.id}">
+																		<i class="material-icons align-middle "
+																			style="font-size: 16px; ">delete</i>
+																	</button>
+
+
+																</div>
+															</div>
+
+
+														</div>
+													</sec:authorize>
 
 												</div>
 
@@ -250,20 +270,30 @@
 											<c:if
 												test="${pageContext.request.userPrincipal.name == comment.user.username || pageContext.request.userPrincipal.name == post.user.username}">
 												<div class="row p-2">
-													<div class="col-9">
+													<div class="col-10">
 														<a href="/user/profile"
 															style="text-decoration: none;"><b>${comment.user.username
 																}</b> </a> :&nbsp; ${comment.content }
 													</div>
 													<sec:authorize access="hasAuthority('USER')">
-														<div class="col-1">
-															<!-- Button trigger modal -->
-															<button type="button" class="btn btn-sm btn-outline-danger"
-																data-bs-toggle="modal"
-																data-bs-target="#deleteCommentModal${comment.id}">
-																<i class="material-icons align-middle "
-																	style="font-size: 16px; ">delete</i>
-															</button>
+														<div class="col">
+
+															<div class="d-flex flex-row-reverse bd-highlight">
+																<div class="bd-highlight">
+
+																	<!-- Button trigger modal -->
+																	<button type="button"
+																		class="btn btn-sm btn-outline-danger"
+																		data-bs-toggle="modal"
+																		data-bs-target="#deleteCommentModal${comment.id}">
+																		<i class="material-icons align-middle "
+																			style="font-size: 16px; ">delete</i>
+																	</button>
+
+
+																</div>
+															</div>
+
 														</div>
 													</sec:authorize>
 												</div>
@@ -302,7 +332,10 @@
 											</div>
 										</div>
 									</c:forEach>
+									</div>
 
+									<br>
+									<br>
 									<c:if test="${pageContext.request.userPrincipal.name != null}">
 										<sf:form modelAttribute="comment" action="/comment/create" method="post">
 

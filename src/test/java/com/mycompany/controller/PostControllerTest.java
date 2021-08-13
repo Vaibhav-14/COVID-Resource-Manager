@@ -31,11 +31,12 @@ public class PostControllerTest {
 	@Transactional
 	public void validHTTPResponse() throws Exception{
 		this.mockMvc.perform(get("/post/create")).andExpect(status().is3xxRedirection());
-		this.mockMvc.perform(get("/post/update/1")).andExpect(status().is3xxRedirection());
+		this.mockMvc.perform(get("/post/update")).andExpect(status().is3xxRedirection());
+		this.mockMvc.perform(get("/post/report")).andExpect(status().is3xxRedirection());
 //		this.mockMvc.perform(get("/post/search")).andExpect(status().isOk());
 //		this.mockMvc.perform(get("/post/searchResult")).andExpect(status().isOk());
-		this.mockMvc.perform(post("/post/update/1")).andExpect(status().isOk());
-		this.mockMvc.perform(post("/post/create")).andExpect(status().isOk());
+//		this.mockMvc.perform(post("/post/update/1")).andExpect(status().isOk());
+//		this.mockMvc.perform(post("/post/create")).andExpect(status().isOk());
 	}
 
 }
