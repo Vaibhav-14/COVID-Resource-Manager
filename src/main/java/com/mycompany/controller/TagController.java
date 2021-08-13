@@ -22,6 +22,8 @@ public class TagController {
 	@Autowired
 	private TagService tagService;
 	
+	
+	
 	@GetMapping("/search")
 	@ResponseBody
 	public List<String> getTagsByKeyword(@RequestParam String term) {
