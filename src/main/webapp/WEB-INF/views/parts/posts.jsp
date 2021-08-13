@@ -7,7 +7,7 @@
 				<h3 style=" text-align: center;" >No more posts available for now</h3>
 			</c:when>
 			<c:otherwise>
-				<c:forEach items="${posts }" var="post" varStatus="tagStatus">
+				<c:forEach items="${posts }" var="post" varStatus="vs">
 					<br>
 					<c:if test="${post.user.enabled == true}">
 
@@ -84,7 +84,7 @@
 																<button type="button"
 																	class="btn btn-primary dropdown-item"
 																	data-bs-toggle="modal"
-																	data-bs-target="#deletePostModal">
+																	data-bs-target="#deletePostModal${vs.index }">
 																	Delete Post
 																</button>
 
@@ -130,7 +130,7 @@
 																	<button type="button"
 																		class="btn btn-primary dropdown-item"
 																		data-bs-toggle="modal"
-																		data-bs-target="#reportPostModal">
+																		data-bs-target="#reportPostModal${vs.index }">
 																		Report Post
 																	</button>
 
@@ -144,7 +144,7 @@
 																	<button type="button"
 																		class="btn btn-primary dropdown-item"
 																		data-bs-toggle="modal"
-																		data-bs-target="#deletePostModal">
+																		data-bs-target="#deletePostModal${vs.index }">
 																		Delete Post
 																	</button>
 																</li>
@@ -335,7 +335,7 @@
 
 
 						<!-- Post Delete Modal -->
-						<div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+						<div class="modal fade" id="deletePostModal${vs.index }" tabindex="-1" aria-labelledby="exampleModalLabel"
 							aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
@@ -362,7 +362,7 @@
 						</div>
 
 						<!-- Report Modal -->
-						<div class="modal fade" id="reportPostModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+						<div class="modal fade" id="reportPostModal${vs.index }" tabindex="-1" aria-labelledby="exampleModalLabel"
 							aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
