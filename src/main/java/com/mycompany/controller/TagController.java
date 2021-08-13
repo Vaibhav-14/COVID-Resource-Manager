@@ -31,13 +31,23 @@ public class TagController {
 	@GetMapping("/create")
 	public String addTags(Model model) {
 		model.addAttribute("tag", new Tag());
+		model.addAttribute("tags", tagService.getAllTags());
 		return "create-tag";
 	}
 	
 	@PostMapping("/create")
 	public String saveTags(@ModelAttribute("tag") Tag tag) {
 		tagService.addTags(tag);
-		return "redirect:/";
+		return "redirect:/tag/create";
+	}
+
+	
+	@PostMapping("/delete")
+	public String deleteTag(@ModelAttribute("tag") Tag tag,Model model) {
+		tagService.deleteTag(tag);
+		Iterable<Tag> tagList = tagService.getAllTags();
+		model.addAttribute("tag", tagList);
+		return "redirect:/tag/create";
 	}
 	
 }
