@@ -41,18 +41,21 @@ public class CommentService {
 		commentDao.save(comment);
 		logger.info("User : " + loggedInUser.getUsername() + " created a comment");
 		
-		String activityType = "@" + loggedInUser.getUsername() + " commented on your post: " + 
-									comment.getContent();
-		
-		notificationService.saveNotification(loggedInUser, activityType,
-				"post", "post/" + comment.getPost().getId(), comment.getPost().getUser());
-		
-		Set<User> mentionedUsers = userService.getUsersFromString(comment.getContent());
-		mentionedUsers.remove(loggedInUser);
-		activityType = "@" + loggedInUser.getUsername() + " mentioned you in a comment" ;
-		notificationService.saveNotification(loggedInUser, activityType,
-				"comment", "post/" + comment.getPost().getId(), mentionedUsers);
-		
+		User userOfThePost = comment.getPost().getUser();
+
+		if (userOfThePost.getId() != loggedInUser.getId()) {
+			String activityType = "@" + loggedInUser.getUsername() + " commented on your post: " + 
+					comment.getContent();
+
+			notificationService.saveNotification(loggedInUser, activityType,
+			"post", "post/" + comment.getPost().getId(), userOfThePost);
+			
+			Set<User> mentionedUsers = userService.getUsersFromString(comment.getContent());
+			activityType = "@" + loggedInUser.getUsername() + " mentioned you in a comment" ;
+			notificationService.saveNotification(loggedInUser, activityType,
+			"comment", "post/" + comment.getPost().getId(), mentionedUsers);
+		}
+				
 	}
 	
 	public void deleteComment(int id) throws IncorrectUserException{
