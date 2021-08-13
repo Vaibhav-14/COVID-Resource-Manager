@@ -50,13 +50,12 @@ public class TagControllerTest {
 	}
 	
 	@Test
-	public void userControllerTest1() throws Exception {
-		TagController controller = new TagController();
-		
-		assertEquals("create-tag", controller.addTags(model));
-		assertEquals("redirect:/", controller.saveTags(new Tag()));
-
-	 
+	public void TagCreateTest() throws Exception {
+		Tag tag = new Tag();
+		tag.setName("vaccine");
+		tag.setPosts(null);
+		assertEquals("create-tag", tagController.addTags(model));
+		assertEquals("redirect:/", tagController.saveTags(tag));
 	}
 
 }
