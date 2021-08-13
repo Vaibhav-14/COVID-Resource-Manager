@@ -13,7 +13,8 @@ import com.mycompany.exception.IncorrectUserException;
 @ControllerAdvice
 public class CovidResourceManagerExceptionHandler {
 	
-	@ExceptionHandler(value = {IncorrectUserException.class, NullPointerException.class})
+	@ExceptionHandler(value = {IncorrectUserException.class, NullPointerException.class,
+			PropertyNotFoundException.class})
 	public String handleException(Exception exc, Model model) {
 		CustomErrorResponse error = new CustomErrorResponse(
 									HttpStatus.INTERNAL_SERVER_ERROR.value(), exc.getMessage(), 
