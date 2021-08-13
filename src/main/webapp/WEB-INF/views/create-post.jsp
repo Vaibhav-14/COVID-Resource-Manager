@@ -35,6 +35,9 @@
 					</div>
 					<div class="col-6 p-1 m-1 fw-normal">
 						<sf:textarea path="message" class="form-control autocomplete" rows="5"/>
+						<div class="small text-danger">
+						<sf:errors path="message"></sf:errors>
+						</div>
 					</div>
 				</div>
 				

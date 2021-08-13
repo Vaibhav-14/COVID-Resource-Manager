@@ -218,10 +218,10 @@
 										
 										
 									</div>
-									<c:forEach items="${post.comments }" var="comment" varStatus="tagStatus">
+									<c:forEach items="${post.comments }" var="comment" varStatus="vscomment">
 										<c:if test="${comment.user.enabled == true}">
 											<c:if
-												test="${pageContext.request.userPrincipal.name != comment.user.username }">
+												test="${pageContext.request.userPrincipal.name != comment.user.username && pageContext.request.userPrincipal.name != post.user.username}">
 
 
 												<div class="row p-2">
@@ -236,7 +236,7 @@
 														<!-- Button trigger modal -->
 														<button type="button" class="btn btn-sm btn-outline-danger"
 															data-bs-toggle="modal"
-															data-bs-target="#deleteCommentModal">
+															data-bs-target="#deleteCommentModal${comment.id}">
 															<i class="material-icons align-middle "
 																style="font-size: 16px; ">delete</i>
 														</button>
@@ -248,7 +248,7 @@
 
 											</c:if>
 											<c:if
-												test="${pageContext.request.userPrincipal.name == comment.user.username }">
+												test="${pageContext.request.userPrincipal.name == comment.user.username || pageContext.request.userPrincipal.name == post.user.username}">
 												<div class="row p-2">
 													<div class="col-9">
 														<a href="/user/profile"
@@ -260,7 +260,7 @@
 															<!-- Button trigger modal -->
 															<button type="button" class="btn btn-sm btn-outline-danger"
 																data-bs-toggle="modal"
-																data-bs-target="#deleteCommentModal">
+																data-bs-target="#deleteCommentModal${comment.id}">
 																<i class="material-icons align-middle "
 																	style="font-size: 16px; ">delete</i>
 															</button>
@@ -271,7 +271,7 @@
 										</c:if>
 
 										<!-- Comment Modal -->
-										<div class="modal fade" id="deleteCommentModal" tabindex="-1"
+										<div class="modal fade" id="deleteCommentModal${comment.id}" tabindex="-1"
 											aria-labelledby="exampleModalLabel" aria-hidden="true">
 											<div class="modal-dialog">
 												<div class="modal-content">
