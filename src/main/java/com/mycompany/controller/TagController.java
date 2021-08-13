@@ -5,9 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,12 +47,20 @@ public class TagController {
 	}
 
 	
-	@PostMapping("/delete")
-	public String deleteTag(@ModelAttribute("tag") Tag tag,Model model) {
+//	@GetMapping("/delete")//@ModelAttribute("tag") Tag tag,Model model
+//	public String deleteTag(@RequestParam(name = "tags") Tag tags, Model model) {
+//		tagService.deleteTag(tags);
+//		Iterable<Tag> tagList = tagService.getAllTags();
+//		model.addAttribute("tags", tagList);
+//		return "redirect:/tag/create";
+//	}
+	@DeleteMapping("/delete/{name}")
+	public String deleteTag(@PathVariable String name) {
+		Tag tag = tagService.getTagByName(name);
 		tagService.deleteTag(tag);
-		Iterable<Tag> tagList = tagService.getAllTags();
-		model.addAttribute("tag", tagList);
+		
 		return "redirect:/tag/create";
+		
 	}
 	
 }

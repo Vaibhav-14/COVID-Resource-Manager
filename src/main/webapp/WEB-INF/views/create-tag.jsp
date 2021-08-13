@@ -24,15 +24,7 @@
 		<c:forEach var="tag" items="${tags}">
 		<tr>
 			<td>${tag.name}</td>
-			<td>
-			
-				<sf:form modelAttribute="tag" method= "POST" action="/tag/delete">
-				<input type="hidden" name="name" value="${ tag.name}"/>
-				<sf:button value="Submit">Delete Tag</sf:button>
-			</td>
-			</sf:form>
-			
-	
+			<td> <a href="/tag/delete">Delete Tag</a>
 		</tr>
 		</c:forEach>
 		</tbody>
