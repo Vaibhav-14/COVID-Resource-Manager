@@ -125,7 +125,7 @@ public class NotificationServiceTest {
 	public void deleteNotificationTest() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
-					      = new UsernamePasswordAuthenticationToken("Thor", "Thor");
+					      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
 		AuthenticationManager auth = new AuthenticationManager() {
 							
 		@Override
