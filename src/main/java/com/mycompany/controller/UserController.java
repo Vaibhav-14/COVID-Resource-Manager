@@ -152,10 +152,11 @@ public class UserController {
 
 	@PostMapping("/update") 
 	public String updateProfile(@ModelAttribute("user") User user, Model model, BindingResult results) {
+	
 		if(results.hasErrors())
 			return "update-profile";
 		userService.updateUserProfile(user);
-		return "redirect:/home";
+		return "redirect:/user/profile";
 	}
 
 	

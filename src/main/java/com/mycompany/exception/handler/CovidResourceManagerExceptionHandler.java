@@ -21,5 +21,16 @@ public class CovidResourceManagerExceptionHandler {
 		
 		return "error";
 	}
+	
+	@ExceptionHandler
+	public String handleException(NullPointerException exc, Model model) {
+		CustomErrorResponse error = new CustomErrorResponse(
+									HttpStatus.INTERNAL_SERVER_ERROR.value(), exc.getMessage(), 
+									System.currentTimeMillis());
+		
+		model.addAttribute("error", error);
+		
+		return "error";
+	}
 
 }
