@@ -32,7 +32,7 @@
 	        <li class="nav-item">
 		      <form class="d-flex"  method = "POST" action = "/post/searchresult">
 		        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-		        <input name="searchentry" class="form-control autocomplete" type="search" placeholder="Search">
+		        <input name="searchentry" class="form-control autocomplete" type="search" placeholder="Search" required>
 		        <button class="btn btn-outline-success" type="submit">Search</button>  
 		      </form>   
 	        </li> 
