@@ -24,7 +24,7 @@
 		<c:forEach var="tag" items="${tags}">
 		<tr>
 			<td>${tag.name}</td>
-			<td> <a href="/tag/delete">Delete Tag</a>
+			<td> <a href="/tag/delete/${tag.name}">Delete Tag</a>
 		</tr>
 		</c:forEach>
 		</tbody>
