@@ -44,7 +44,7 @@ import com.mycompany.exception.IncorrectUserException;
 public class CommentServiceTest {
 	
 	@Autowired
-	CommentService commentService ; 
+	private CommentService commentService ; 
 	
 	@Autowired
 	private UserService userService;
@@ -62,13 +62,7 @@ public class CommentServiceTest {
 	@Order(1)
 	public void contextLoads() {
 		assertThat(commentService).isNotNull() ; 
-		Role role = new Role() ; 
-		role.setId(1);
-		role.setRole("USER");
-		roleDao.save(role) ; 
-		role.setId(2);
-		role.setRole("ADMIN");
-		roleDao.save(role) ; 
+		
 	}
 	
 	@Test
