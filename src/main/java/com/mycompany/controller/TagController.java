@@ -3,6 +3,7 @@ package com.mycompany.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,14 +23,13 @@ public class TagController {
 	@Autowired
 	private TagService tagService;
 	
-	
-	
 	@GetMapping("/search")
 	@ResponseBody
 	public List<String> getTagsByKeyword(@RequestParam String term) {
 		return tagService.searchTagsByKeyWord(term);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/create")
 	public String addTags(Model model) {
 		model.addAttribute("tag", new Tag());
