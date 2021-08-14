@@ -14,7 +14,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="comments")
-public class Comment {
+public class Comment implements Comparable<Comment>{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -89,6 +89,16 @@ public class Comment {
 	public String toString() {
 		return "Comment [id=" + id + ", content=" + content + ", dateTime=" + dateTime + ", post=" + post + ", user="
 				+ user + "]";
+	}
+
+	@Override
+	public int compareTo(Comment o) {
+		if(this.getDateTime().after(o.getDateTime())) {
+			return 1;
+		}
+		else {
+			return -1;
+		}
 	}
 	
 		

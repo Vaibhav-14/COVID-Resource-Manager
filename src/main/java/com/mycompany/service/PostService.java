@@ -1,22 +1,24 @@
 package com.mycompany.service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.dao.IPostFunctionDAO;
 import com.mycompany.dao.IRoleFunctionDAO;
-
-import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.Comment;
-
 import com.mycompany.entity.Post;
 import com.mycompany.entity.Role;
 import com.mycompany.entity.Tag;
@@ -89,6 +91,11 @@ public class PostService {
 				tags.add(tag);
 			}
 		}
+		if (post.getType().equals("Available"))
+			tags.add(tagService.getTagByName("Available"));
+		else if (post.getType().equals("Required"))
+			tags.add(tagService.getTagByName("Required"));
+		
 		post.setTags(tags); 
 	}
 
@@ -100,12 +107,12 @@ public class PostService {
 			post = postDao.findById(id).get();
 			for (Tag tag : post.getTags()) {
 				str.append("#" + tag.getName() + " ");
-      post.setTagStr(str.toString()); 
+				post.setTagStr(str.toString()); 
       }
 		} catch (Exception e) {
 			post = null;
 		}		
-		return post;
+		return sortComments(post);
 	}
 	
 
@@ -137,11 +144,11 @@ public class PostService {
 			if (isAdmin) {
 				logger.warn("Admin has deleted post of user : " + postUser.getUsername());
 				String activityType = "Your post violets the Covid Resource Manager Policies. "
-						+ "So It has been removed. "+"You got "+postUser.getWarnings() +
+						+ "So It has been removed. "+"You got "+(postUser.getWarnings()+1) +
 						" out of 5. After 5 warnings your account will get suspended.";
 
 				notificationService.saveNotification(null, activityType, "post", 
-									"post/" + id, postUser);
+									"/user/profile", postUser);
 				postUser.setWarnings(postUser.getWarnings()+1);
 				if(postUser.getWarnings()>5) {
 					logger.warn("The account of user : " + postUser.getUsername() + " is suspended autometically due to 5 warnings");
@@ -163,8 +170,20 @@ public class PostService {
 		return postDao.findAllByOrderByDateTimeDesc();
 	}
 	
+	public List<Post> getAllPostsFromPageable(int pageNumber,int pageSize,String sortBy)
+	{
+		Pageable paging = PageRequest.of(pageNumber, pageSize, org.springframework.data.domain.Sort.by(sortBy));
+		 
+        Page<Post> pagedResult = postDao.findAll(paging);
+         
+        if(pagedResult.hasContent()) 
+            return sortComments(pagedResult.getContent());
+        
+        return new ArrayList<Post>();
+	}
+	
 	public List<Post> findPostByUsername(String username) {
-		return postDao.findPostByUser(userService.getUserFromUsername(username));
+		return sortComments(postDao.findPostByUser(userService.getUserFromUsername(username)));
 	}
 	
 	public Set<Post> getPostOnSearch(String searchEntry) {
@@ -173,13 +192,14 @@ public class PostService {
 		//finding posts by username
 		searchList.addAll(findPostByUsername(searchEntry));
 				
-		List<Tag> associatedTags = tagService.getAllTagsByName(searchEntry);
-		
-		for(Tag currentTag: associatedTags) {
-			Set<Post> postsWithcurrentTag = currentTag.getPosts();
-			searchList.addAll(postsWithcurrentTag);		
+		try {
+			Tag associatedTag = tagService.getTagByName(searchEntry);
+			
+			Set<Post> postsWithcurrentTag = associatedTag.getPosts();
+			searchList.addAll(postsWithcurrentTag);
+		} catch (Exception e) {
+			logger.info(e.getMessage());
 		}
-
 	    return searchList;
 	}
 	
@@ -231,6 +251,20 @@ public class PostService {
 			notificationService.saveNotification(user, activityType, "post", "post/" + postID, receiver);
 			
 		}
+	}
+	
+	public List<Post> sortComments(List<Post> posts) {
+		for (Post post : posts) {
+			TreeSet<Comment> sortedSet = new TreeSet<Comment>(post.getComments());
+			post.setComments(sortedSet.descendingSet());
+		}
+		return posts;
+	}
+	
+	public Post sortComments(Post post) {
+		TreeSet<Comment> sortedSet = new TreeSet<Comment>(post.getComments());
+		post.setComments(sortedSet.descendingSet());
+		return post;
 	}
 	
 	

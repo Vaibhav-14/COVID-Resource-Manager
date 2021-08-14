@@ -1,6 +1,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<link href="${pageContext.request.contextPath }/css/post.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
@@ -22,7 +23,7 @@
         </sec:authorize>
         <sec:authorize access="hasAuthority('ADMIN')">
         <li class="nav-item"> 
-          <a class="nav-link active" href="/createTag">Add Tag</a>
+          <a class="nav-link active" href="/tag/create">Add Tag</a>
         </li>
         </sec:authorize>
         </ul>
@@ -36,14 +37,7 @@
 		      </form>   
 	        </li> 
       	</ul>
-      	
-      	<sec:authorize access="isAuthenticated()">
-	      	<span class="material-icons">
-				<a href="${pageContext.request.contextPath}/notifications/" >notifications</a>	
-			</span>
-		</sec:authorize>  
-		
-      	
+
       	<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
       	<sec:authorize access="!isAuthenticated()">
         <li class="nav-item">
@@ -57,6 +51,9 @@
         
 
       	<sec:authorize access="isAuthenticated()">
+          <li class="nav-item">
+            <a class="nav-link active" href="${pageContext.request.contextPath}/notifications/"><i class="material-icons align-middle">notifications</i> </a>
+          </li>  
         <li class="nav-item">
           <a class="nav-link active" href="/user/profile"><i class="material-icons align-middle">account_circle</i> ${pageContext.request.userPrincipal.name}</a>
         </li>

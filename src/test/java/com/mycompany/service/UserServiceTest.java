@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.SimpleDateFormat;
@@ -29,6 +30,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.User;
+import com.mycompany.exception.IncorrectUserException;
 
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation.class)
@@ -82,12 +84,6 @@ public class UserServiceTest {
 	
 	@Test
 	@Order(4)
-	public void getUser() {
-		assertEquals(userService.getUser("Champ").getUsername() , "Champ");
-	}
-	
-	@Test
-	@Order(5)
 	public void displayProfileTest() {
 		List<Post> posts = userService.displayProfile("Champ") ; 
 		assertTrue(posts.size() >= 0 );
@@ -110,20 +106,20 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	@Order(6)
+	@Order(5)
 	public void getUsersFromStringTest() {
 		Set<User> users = userService.getUsersFromString("@Champ") ; 
 		assertTrue(users.size() >= 1 );
 	}
 	
 	@Test
-	@Order(7)
+	@Order(6)
 	public void getListOfAllUsernamesTest() {
 		assertTrue(userService.getListOfAllUsernames().size() >= 1 ) ; 
 	}
 	
 	@Test
-	@Order(8)
+	@Order(7)
 	public void updatUserTest() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
@@ -138,18 +134,18 @@ public class UserServiceTest {
 					    
 		SecurityContext sc = SecurityContextHolder.getContext();
 		sc.setAuthentication(auth.authenticate(authReq));
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUserFromUsername("Champ") ; 
 		assertDoesNotThrow(() -> userService.updateUser(user));
 	}
 	
 	@Test
-	@Order(9)
+	@Order(8)
 	public void testGetterSetter() {
 		assertDoesNotThrow(() -> userService.setUserDao(userService.getUserDao()));
 	}
 	
 	@Test
-	@Order(10)
+	@Order(9)
 	public void testSetDao() {
 		UserService userService = new UserService();
 		userService.setUserDao(userDao);
@@ -157,7 +153,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	@Order(11)
+	@Order(10)
 	public void testGetDao() {
 		UserService userService = new UserService();
 		userService.setUserDao(userDao);
@@ -165,16 +161,64 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	@Order(12)
+	@Order(11)
 	public void updateUserProfile() {
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUserFromUsername("Champ") ; 
 		assertDoesNotThrow(() -> userService.updateUserProfile(user));
 	}
 	
 	@Test
-	@Order(13)
+	@Order(12)
 	public void searchUsersByKeyWordTest() {
 		assertTrue(userService.searchUsersByKeyWord("Champ").size() >= 1 ) ; 
+	}
+	
+	@Test
+	@Order(13)
+	public void deleteUserAccountNegative() {
+		User user = new User() ; 
+		user.setId(2);
+		user.setUsername("Thor");
+		user.setEmail("Champ@gmail.com");
+		user.setFirstname("Champ");
+		user.setLastname("OK");
+		user.setPassword("Thor");
+		user.setMobile("1123456789") ; 
+		user.setWarnings(0);
+		try {
+		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		    Date parsedDate = dateFormat.parse(String.valueOf("2000-01-01"));
+		    user.setDateOfBirth(parsedDate);
+		} catch(Exception e) { 
+			System.out.println("Error : In Allocation of DOB to user");
+			e.printStackTrace();
+		}
+		user.setGender("male");
+		user.setEnabled(1);
+		
+		// Saving User in Database 
+		assertDoesNotThrow(() -> userService.addUser(user));
+		
+		// User Authentication
+				UsernamePasswordAuthenticationToken authReq
+									      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
+				AuthenticationManager auth = new AuthenticationManager() {
+											
+					@Override
+					public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+							return authentication;
+					}
+				};
+									    
+				SecurityContext sc = SecurityContextHolder.getContext();
+				sc.setAuthentication(auth.authenticate(authReq));
+				
+				// Delete User Account
+				assertThrows(IncorrectUserException.class , () -> userService.deleteUserAccount("Thor")) ; 
+				User u = userService.getUserFromUsername("Thor") ; 
+				if (u != null) {
+					userDao.delete(u);
+				}
 	}
 	
 	@Test
@@ -196,7 +240,7 @@ public class UserServiceTest {
 		
 		// Delete User Account
 		userService.deleteUserAccount("Champ");
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUserFromUsername("Champ") ; 
 		if (user != null) {
 			userDao.delete(user);
 		}

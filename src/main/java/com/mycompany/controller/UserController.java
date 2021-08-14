@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,6 +36,13 @@ public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	//URL:  http://localhost:8080/user/register
+	
+	private String createRedirectViewPath(String requestMapping) {
+        StringBuilder redirectViewPath = new StringBuilder();
+        redirectViewPath.append("redirect:");
+        redirectViewPath.append(requestMapping);
+        return redirectViewPath.toString();
+    }
 	
 	@GetMapping(value = "/register")
 	public String register(Model model) {
@@ -83,9 +91,13 @@ public class UserController {
 	}
 	
 	@GetMapping(value = "/profile")
-	public String displayProfile(@RequestParam(required = false) String username, Model model) {
+	public String displayProfile(@RequestParam(required=false) String username, Model model) {
 		List<Post> posts = userService.displayProfile(username);
-		User user = userService.getUser(username);
+		User user;
+		if (username != null)
+			user = userService.getUserFromUsername(username);
+		else
+			user = userService.getLoggedInUser();
 		model.addAttribute("IsUsername", username);
 		model.addAttribute("username", user.getUsername());
 		model.addAttribute("tag", null);
@@ -97,7 +109,7 @@ public class UserController {
 	
 	@GetMapping(value = "/block/{username}")
 	public String blockUser(@PathVariable String username) {
-		User user = userService.getUser(username);
+		User user = userService.getUserFromUsername(username);
 		user.setEnabled(0);
 		userService.updateUser(user);
 		logger.info("Admin has suspended the account of " + username);
@@ -107,7 +119,7 @@ public class UserController {
 	
 	@GetMapping(value = "/unblock/{username}")
 	public String unblockUser(@PathVariable String username) {
-		User user = userService.getUser(username);
+		User user = userService.getUserFromUsername(username);
 		user.setEnabled(1);
 		userService.updateUser(user);
 		logger.info("Admin has removed suspension on account of " + username);
@@ -119,6 +131,7 @@ public class UserController {
 	public String deleteUserAccount(@RequestParam(name="username") String username)
 	{
 		userService.deleteUserAccount(username);	
+		//return "redirect:/user/logout";
 		return "redirect:/user/logout";
 	}
 	
@@ -131,8 +144,8 @@ public class UserController {
 	}
 	
 	@GetMapping("/update")
-	public String updateProfile(@RequestParam(required = false) String username, Model model) throws Exception {
-		User user = userService.getUser(username);
+	public String updateProfile(Model model) throws Exception {
+		User user = userService.getLoggedInUser();
 		model.addAttribute("user", user);
 		return "update-profile";
 	}
@@ -140,13 +153,11 @@ public class UserController {
 
 	@PostMapping("/update") 
 	public String updateProfile(@ModelAttribute("user") User user, Model model, BindingResult results) {
-		System.out.println(user);
-		if(!user.getPassword().equals(user.getRetypepassword()))
-			  results.rejectValue("retypepassword", "error.user","Confirmed Password is not the same");
+	
 		if(results.hasErrors())
 			return "update-profile";
 		userService.updateUserProfile(user);
-		return "redirect:/home";
+		return "redirect:/user/profile";
 	}
 
 	

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mycompany.entity.Comment;
@@ -21,8 +22,9 @@ public class HomeController {
 	private UserService userService;
 	
 	@GetMapping({"/", "/home"})
-	public String showHomePage(Model model) {
-		User user = userService.getUser(null);
+	public String showHomePage(Model model, @RequestParam(defaultValue = "0") Integer pageNumber) {
+		User user = userService.getLoggedInUser();
+
 		String username;
 		if(user == null) {
 			username = null;
@@ -31,7 +33,17 @@ public class HomeController {
 			username = user.getUsername();
 		}
 		model.addAttribute("username", username);
-		model.addAttribute("posts", postService.getAllPost());
+		
+		//posts fetched per page
+		int pageSize=5;
+		
+		//sorted on the basis of dateTime attribute
+		String sortBy= "dateTime";
+		
+		//retrieving results
+		model.addAttribute("posts", postService.getAllPostsFromPageable(pageNumber, pageSize, sortBy));
+		
+		
 		model.addAttribute("comment", new Comment());
 		return "home";
 	}
@@ -44,6 +56,11 @@ public class HomeController {
 			return "redirect:/tag/search?term=" + term.substring(1);
 		else
 			throw new Exception();
+	}
+	
+	@RequestMapping("/403")
+	public String accessDenied() {
+		return "403";
 	}
 	
 }

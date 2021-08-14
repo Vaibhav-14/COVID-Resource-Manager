@@ -115,7 +115,7 @@ public class NotificationServiceTest {
 				SecurityContext sc = SecurityContextHolder.getContext();
 				sc.setAuthentication(auth.authenticate(authReq));
 				
-		User user= userService.getUser("Champ");
+		User user= userService.getUserFromUsername("Champ");
 		List<Notification> notifications = notificationService.getNotifications() ; 
 		
 		
@@ -125,7 +125,7 @@ public class NotificationServiceTest {
 	public void deleteNotificationTest() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
-					      = new UsernamePasswordAuthenticationToken("Thor", "Thor");
+					      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
 		AuthenticationManager auth = new AuthenticationManager() {
 							
 		@Override
@@ -144,7 +144,7 @@ public class NotificationServiceTest {
 		
 		// Delete User Account
 		userService.deleteUserAccount("Thor");
-		User user = userService.getUser("Thor") ; 
+		User user = userService.getUserFromUsername("Thor") ; 
 		if (user != null) {
 			userDao.delete(user);
 		}
@@ -169,7 +169,7 @@ public class NotificationServiceTest {
 				
 				// Delete User Account
 				userService.deleteUserAccount("Champ");
-				User user = userService.getUser("Champ") ; 
+				User user = userService.getUserFromUsername("Champ") ; 
 				if (user != null) {
 					userDao.delete(user);
 				}

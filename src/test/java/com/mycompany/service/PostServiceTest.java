@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Timestamp;
@@ -33,8 +34,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.mycompany.dao.IPostFunctionDAO;
+import com.mycompany.dao.IRoleFunctionDAO;
 import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.Post;
+import com.mycompany.entity.Role;
 import com.mycompany.entity.Tag;
 import com.mycompany.entity.User;
 import com.mycompany.exception.IncorrectUserException;
@@ -55,6 +58,9 @@ public class PostServiceTest{
 	@Autowired
 	private IPostFunctionDAO postDao;
 	
+	@Autowired
+	private IRoleFunctionDAO roleDao ; 
+	
 	
 	@Test
 	@Order(1)
@@ -62,6 +68,13 @@ public class PostServiceTest{
 		assertThat(userService).isNotNull() ; 
 		assertThat(postService).isNotNull() ; 
 		assertThat(postDao).isNotNull() ; 
+		Role role = new Role() ; 
+		role.setId(1);
+		role.setRole("USER");
+		roleDao.save(role) ; 
+		role.setId(2);
+		role.setRole("ADMIN");
+		roleDao.save(role) ; 
 	}
 	
 	@Test
@@ -147,6 +160,7 @@ public class PostServiceTest{
 	@Transactional
 	@Order(3)
 	public void updatePost() {
+		
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
 			      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
@@ -167,6 +181,57 @@ public class PostServiceTest{
 		post.setTagStr("Urgent, ");
 		postService.updatePost(post);
 		
+		
+
+	
+	}
+	
+	@Test
+	@Transactional
+	@Order(3)
+	public void updatePostNegative() {
+		// Negative Test Case
+		// Creating Another User ---> Thor 
+						User user = new User() ; 
+						user.setUsername("Thor");
+						user.setEmail("Champ@gmail.com");
+						user.setFirstname("Champ");
+						user.setLastname("OK");
+						user.setPassword("Thor");
+						user.setMobile("1123456789") ; 
+						try {
+						    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+						    Date parsedDate = dateFormat.parse(String.valueOf("2000-01-01"));
+						    user.setDateOfBirth(parsedDate);
+						} catch(Exception e) { 
+							System.out.println("Error : In Allocation of DOB to user");
+							e.printStackTrace();
+						}
+						user.setGender("male");
+						user.setEnabled(1);
+						user.setWarnings(0);
+						// Saving User in Database 
+						userService.addUser(user);
+						
+						// User Authentication
+						UsernamePasswordAuthenticationToken authReq
+							      = new UsernamePasswordAuthenticationToken("Thor", "Thor");
+						AuthenticationManager auth = new AuthenticationManager() {
+									
+						@Override
+						public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+								return authentication;
+							}
+						};    
+						SecurityContext sc = SecurityContextHolder.getContext();
+						sc.setAuthentication(auth.authenticate(authReq));
+						List<Post> posts = postService.findPostByUsername("Champ") ; 
+						Post post = posts.get(0) ; 
+						System.out.println(post);
+						String message = "All Fine" ; 
+						post.setMessage(message);
+						post.setTagStr("Urgent, ");
+						assertThrows(IncorrectUserException.class , () -> postService.updatePost(post)) ; 
 	}
 
 	@Test 
@@ -198,28 +263,7 @@ public class PostServiceTest{
 
 	}
 
-	@Order(7)
-	@Test
-	public void testPostUpdate() throws Exception {
-       String type = "Required";
-       Post post = new Post("Urgent", new Timestamp(System.currentTimeMillis()) , "urgent oxygen cyclinders requirement at ...");
-       User user= new User("a","b","abc","abc@test.com","12345abcd","7410084485", 0,new SimpleDateFormat("dd/MM/yyyy").parse("12/04/2010"),"male",0);
-       post.setUser(user);
-       post.setId(1);
-       assertNotNull(post);
-       //Updating Type.....
-       post.setType(type);
-       Post savedPost = postDao.save(post);
-       assertThat(savedPost.getType()).isEqualTo(type);
-       
-       //updating Message.....
-       String message = "All Fine" ; 
-       post.setMessage(message);
-       savedPost = postDao.save(post);
-       assertThat(savedPost.getMessage()).isEqualTo(message);
-
-  
-   }
+	
 	
 	@Test
 	@Order(7)
@@ -257,7 +301,7 @@ public class PostServiceTest{
 	public void reportPostTest() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
-					      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
+					      = new UsernamePasswordAuthenticationToken("Thor", "Thor");
 		AuthenticationManager auth = new AuthenticationManager() {
 							
 		@Override
@@ -270,8 +314,36 @@ public class PostServiceTest{
 		sc.setAuthentication(auth.authenticate(authReq));
 				
 		List<Post> posts = postService.findPostByUsername("Champ") ; 
-		Post post = posts.get(0) ; 
-		assertDoesNotThrow(() -> postService.reportPost(post.getId()));
+		System.out.println("Champ");
+		for(Post post : posts) {
+			assertDoesNotThrow(() -> postService.reportPost(post.getId()));
+		}
+		
+	}
+	
+	@Test
+	@Transactional
+	@Order(12)
+	public void sharePostTest() {
+		// User Authentication
+				UsernamePasswordAuthenticationToken authReq
+							      = new UsernamePasswordAuthenticationToken("Champ", "Thor");
+				AuthenticationManager auth = new AuthenticationManager() {
+									
+				@Override
+				public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+						return authentication;
+					}
+				};
+							    
+				SecurityContext sc = SecurityContextHolder.getContext();
+				sc.setAuthentication(auth.authenticate(authReq));
+						
+				List<Post> posts = postService.findPostByUsername("Champ") ; 
+				System.out.println(posts);
+				for(Post post : posts) {
+					assertDoesNotThrow(() -> postService.sharePost(post.getId() , "Champ" ));
+				}
 	}
 	
 	@Test
@@ -297,11 +369,42 @@ public class PostServiceTest{
 		}
 		
 		userService.deleteUserAccount("Champ");
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUserFromUsername("Champ") ; 
 		if (user != null) {
 			userDao.delete(user);
 		}
 	}
+	
+	@Test
+	@Transactional
+	@Order(14)
+	public void deletePostAdmin() {
+		addPost() ; 
+		// User Authentication
+				UsernamePasswordAuthenticationToken authReq
+					      = new UsernamePasswordAuthenticationToken("Thor", "Thor");
+				AuthenticationManager auth = new AuthenticationManager() {
+							
+					@Override
+					public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+							return authentication;
+						}
+					};
+					    
+				SecurityContext sc = SecurityContextHolder.getContext();
+				sc.setAuthentication(auth.authenticate(authReq));
+				
+				List<Post> posts = postService.findPostByUsername("Champ") ; 
+				System.out.println(posts);
+				for(Post post : posts) {
+					assertThrows(IncorrectUserException.class , () -> postService.deletePost(post.getId())) ; 
+				}
+				
+				userService.deleteUserAccount("Thor");
+				deletePostTest();
+	}
+	
+	
 	
 	
 	

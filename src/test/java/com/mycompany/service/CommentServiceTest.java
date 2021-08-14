@@ -13,6 +13,7 @@ import javax.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Order;
@@ -27,12 +28,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.mycompany.dao.IRoleFunctionDAO;
 import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.Comment;
 import com.mycompany.entity.Post;
+import com.mycompany.entity.Role;
 import com.mycompany.entity.Tag;
 import com.mycompany.entity.User;
+import com.mycompany.exception.IncorrectUserException;
 
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation.class)
@@ -50,10 +55,20 @@ public class CommentServiceTest {
 	@Autowired
 	private PostService postService; 
 	
+	@Autowired
+	private IRoleFunctionDAO roleDao ; 
+	
 	@Test
 	@Order(1)
 	public void contextLoads() {
 		assertThat(commentService).isNotNull() ; 
+		Role role = new Role() ; 
+		role.setId(1);
+		role.setRole("USER");
+		roleDao.save(role) ; 
+		role.setId(2);
+		role.setRole("ADMIN");
+		roleDao.save(role) ; 
 	}
 	
 	@Test
@@ -150,13 +165,64 @@ public class CommentServiceTest {
 	@Test
 	@Order(3)
 	public void findAllCommentsByUserID() {
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUserFromUsername("Champ") ; 
 		List<Comment> comments = commentService.findAllCommentsByUserID(user.getId()) ; 
 		assertTrue(comments.size() > 0 ) ;
 	}
 	
 	@Test
 	@Order(4)
+	public void deleteCommentNotValidUser() {
+		User user = new User() ; 
+		user.setUsername("Thor");
+		user.setEmail("Champ@gmail.com");
+		user.setFirstname("Champ");
+		user.setLastname("OK");
+		user.setPassword("Thor");
+		user.setMobile("1123456789") ; 
+		try {
+		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		    Date parsedDate = dateFormat.parse(String.valueOf("2000-01-01"));
+		    user.setDateOfBirth(parsedDate);
+		} catch(Exception e) { 
+			System.out.println("Error : In Allocation of DOB to user");
+			e.printStackTrace();
+		}
+		user.setGender("male");
+		user.setEnabled(1);
+		user.setWarnings(0);
+//		Set<Role> roles = new HashSet<>() ; 
+//		roles.add(roleDao.findByName("ADMIN")) ;
+//		user.setRoles(roles);
+		// Saving User in Database 
+		userService.addUser(user);
+		
+		// User Authentication
+		UsernamePasswordAuthenticationToken authReq
+			      = new UsernamePasswordAuthenticationToken("Thor", "Thor");
+		AuthenticationManager auth = new AuthenticationManager() {
+					
+		@Override
+		public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+				return authentication;
+			}
+		};    
+		SecurityContext sc = SecurityContextHolder.getContext();
+		sc.setAuthentication(auth.authenticate(authReq));
+		
+		// Find All Comments
+		user = userService.getUserFromUsername("Champ") ; 
+		List<Comment> comments = commentService.findAllCommentsByUserID(user.getId()) ; 
+		for (Comment comment : comments) {
+			assertThrows(IncorrectUserException.class , () -> commentService.deleteComment(comment.getId())) ; 
+		}
+		
+		userService.deleteUserAccount("Thor");
+	}
+	
+	
+	@Test
+	@Order(5)
 	public void deleteCommentTest() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
@@ -172,16 +238,17 @@ public class CommentServiceTest {
 		SecurityContext sc = SecurityContextHolder.getContext();
 		sc.setAuthentication(auth.authenticate(authReq));
 		
-		User user = userService.getUser("Champ") ; 
+		User user = userService.getUserFromUsername("Champ") ; 
 		commentService.deleteComment(user.getId());
 		List<Comment> comments = commentService.findAllCommentsByUserID(user.getId()) ; 
 		assertTrue(comments.size() == 0 ) ;
 		
 		userService.deleteUserAccount("Champ");
-		User user1 = userService.getUser("Champ") ; 
+		User user1 = userService.getUserFromUsername("Champ") ; 
 		if (user1 != null) {
 			userDao.delete(user1);
 		}
 	}
-
+	
 }
+

@@ -37,6 +37,10 @@ public class Tag {
 		this.posts = posts;
 	}
 
+	public Tag(String tag) {
+		this.name = tag;
+	}
+
 	public String getName() {
 		return name;
 	}

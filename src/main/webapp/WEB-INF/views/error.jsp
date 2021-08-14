@@ -1,10 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<%@ include file="parts/meta.jsp"%>
+<title>Ugh!</title>
 </head>
 <body>
 	<%
@@ -12,5 +7,6 @@
 	%>
 <h1>Something went wrong</h1>
 <p>${error.message }</p>
+<a href="/home">HomePage</a>
 </body>
 </html>

@@ -1,19 +1,26 @@
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
 	<div class="p-2 w-50 bd-highlight" style="min-width: 500px;">
 		<c:choose>
 			<c:when test="${empty posts}">
-				<h3>No posts available</h3>
+				<h3 style=" text-align: center;" >No more posts available for now</h3>
 			</c:when>
 			<c:otherwise>
-				<c:forEach items="${posts }" var="post" varStatus="tagStatus">
+				<c:forEach items="${posts }" var="post" varStatus="vs">
 					<br>
 					<c:if test="${post.user.enabled == true}">
 
 						<div class="card p-2 shadow-sm p-3 mb-5 bg-body rounded">
 							<div class="card-body">
-								<div class="bg-light p-2">
+								<!-- here -->
+
+								<c:if test = "${post.type == 'Required'}">
+									<div class="p-2" style="background-color: #FFEBEE;">
+								</c:if>
+								<c:if test = "${post.type == 'Available'}">
+									<div class="p-2" style="background-color: #E0F2F1;">
+								</c:if>
+								
 
 
 									<div class="container">
@@ -22,6 +29,7 @@
 
 
 												<c:if test="${username != post.user.username }">
+													
 													<a class="card-link"
 														href="/user/profile?username=${post.user.username }"
 														style="text-decoration: none;">
@@ -30,6 +38,7 @@
 																style="font-size: 36px; ">account_circle</i>${post.user.username
 															}</h3>
 													</a>
+													
 												</c:if>
 												<c:if test="${username == post.user.username }">
 													<a class="card-link" href="/user/profile?"
@@ -48,15 +57,15 @@
 												test="${pageContext.request.userPrincipal.name == post.user.username }">
 												<div class="col">
 													<div class="dropdown">
-														<button
-															class="btn btn-secondary btn-sm dropdown-toggle float-end bg-primary bg-gradient"
-															style="border-radius: 35px;" type="button"
-															data-bs-toggle="dropdown" aria-expanded="false">
-														</button>
+														<div class="float-end" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+															<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+  																<path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+															</svg>
+														</div>
 														<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 
 															<li>
-																<form method="post" action="/post/updatepost">
+																<form method="GET" action="/post/update">
 																	<input type="hidden" name="${_csrf.parameterName}"
 																		value="${_csrf.token}" />
 																	<input type="hidden" name="id"
@@ -74,7 +83,7 @@
 																<button type="button"
 																	class="btn btn-primary dropdown-item"
 																	data-bs-toggle="modal"
-																	data-bs-target="#deletePostModal">
+																	data-bs-target="#deletePostModal${vs.index }">
 																	Delete Post
 																</button>
 
@@ -120,7 +129,7 @@
 																	<button type="button"
 																		class="btn btn-primary dropdown-item"
 																		data-bs-toggle="modal"
-																		data-bs-target="#reportPostModal">
+																		data-bs-target="#reportPostModal${vs.index }">
 																		Report Post
 																	</button>
 
@@ -134,7 +143,7 @@
 																	<button type="button"
 																		class="btn btn-primary dropdown-item"
 																		data-bs-toggle="modal"
-																		data-bs-target="#deletePostModal">
+																		data-bs-target="#deletePostModal${vs.index }">
 																		Delete Post
 																	</button>
 																</li>
@@ -156,12 +165,14 @@
 										
 										<div class="row">
 											<div class="col">
-												<p class="card-subtitle mb-2 text-muted fw-lighter">Posted At: <fmt:formatDate type = "time" value = "${post.dateTime}" /> On <fmt:formatDate value="${post.dateTime}" pattern="dd-MM-yyyy" /></p>
-											</div>
-
 											
+												<p class="card-subtitle mb-2 text-muted fw-lighter" style="text-align: right;">Posted At:<cite title="Source Title"> <fmt:formatDate type = "time" value = "${post.dateTime}" /> On <fmt:formatDate value="${post.dateTime}" pattern="dd-MM-yyyy" /></cite></p>
+											
+											</div>	
 										</div>
+										<br>
 
+										
 
 										<div class="row">
 											<div class="col">
@@ -173,6 +184,8 @@
 												</c:if>
 											</div>
 										</div>
+										
+
 										<div class="row">
 											<div class="col">
 												<p class="card-text">${post.message }</p>
@@ -183,13 +196,16 @@
 											<div class="col">
 												<p class="card-text">
 													<small class="text-muted">
+													<div class="conatiner">
 														<c:forEach items="${post.tags }" var="tag" varStatus="tagStatus">
+															
 															<span style="padding:3px">
 															  <a href="<c:url value="/post/searchresult" ><c:param name="searchentry" value="#${tag.name }" /></c:url>">
 															  	#${tag.name }
 															  </a>
 														  </span>
 														</c:forEach>
+														</div>
 													</small>
 												</p>
 											</div>
@@ -201,14 +217,15 @@
 
 
 								<div class="container p-2">
-									<div class="row">									
-										<div class="col">
-											<p class="text-center p-2"><i
-													class="p-1 material-icons align-middle">comment</i>Comments</p>
+									<div class="row justify-content-md-center">
+										<div class="col col-md-auto">
+													<button class="btn btn-light text-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseComments${vs.index }">
+														<i class="p-1 material-icons align-middle">comment</i>Comments 
+													</button>			
 										</div>
-										
-										
 									</div>
+									<div class="row collapse" id="collapseComments${vs.index }">
+
 									<c:forEach items="${post.comments }" var="comment" varStatus="tagStatus">
 										<c:if test="${comment.user.enabled == true}">
 											<c:if
@@ -216,23 +233,34 @@
 
 
 												<div class="row p-2">
-													<div class="col-9">
+													<div class="col-10">
 														<a href="/user/profile?username=${comment.user.username }"
 															style="text-decoration: none;"><b>${comment.user.username
 																}</b></a> :&nbsp;${comment.content }
 													</div>
 												
-												<sec:authorize access="hasAuthority('ADMIN')">
-													<div class="col-1">
-														<!-- Button trigger modal -->
-														<button type="button" class="btn btn-sm btn-outline-danger"
-															data-bs-toggle="modal"
-															data-bs-target="#deleteCommentModal">
-															<i class="material-icons align-middle "
-																style="font-size: 16px; ">delete</i>
-														</button>
-													</div>
-												</sec:authorize>
+													<sec:authorize access="hasAuthority('ADMIN')">
+														<div class="col">
+
+															<div class="d-flex flex-row-reverse bd-highlight">
+																<div class="bd-highlight">
+
+																	<!-- Button trigger modal -->
+																	<button type="button"
+																		class="btn btn-sm btn-outline-danger"
+																		data-bs-toggle="modal"
+																		data-bs-target="#deleteCommentModal">
+																		<i class="material-icons align-middle "
+																			style="font-size: 16px; ">delete</i>
+																	</button>
+
+
+																</div>
+															</div>
+
+
+														</div>
+													</sec:authorize>
 
 												</div>
 
@@ -241,20 +269,31 @@
 											<c:if
 												test="${pageContext.request.userPrincipal.name == comment.user.username }">
 												<div class="row p-2">
-													<div class="col-9">
+													<div class="col-10">
 														<a href="/user/profile"
 															style="text-decoration: none;"><b>${comment.user.username
 																}</b> </a> :&nbsp; ${comment.content }
 													</div>
 													<sec:authorize access="hasAuthority('USER')">
-														<div class="col-1">
-															<!-- Button trigger modal -->
-															<button type="button" class="btn btn-sm btn-outline-danger"
-																data-bs-toggle="modal"
-																data-bs-target="#deleteCommentModal">
-																<i class="material-icons align-middle "
-																	style="font-size: 16px; ">delete</i>
-															</button>
+														<div class="col">
+
+															<div class="d-flex flex-row-reverse bd-highlight">
+																<div class="bd-highlight">
+
+																	<!-- Button trigger modal -->
+																	<button type="button"
+																		class="btn btn-sm btn-outline-danger"
+																		data-bs-toggle="modal"
+																		data-bs-target="#deleteCommentModal">
+																		<i class="material-icons align-middle "
+																			style="font-size: 16px; ">delete</i>
+																	</button>
+
+
+																</div>
+															</div>
+
+
 														</div>
 													</sec:authorize>
 												</div>
@@ -293,7 +332,10 @@
 											</div>
 										</div>
 									</c:forEach>
+									</div>
 
+									<br>
+									<br>
 									<c:if test="${pageContext.request.userPrincipal.name != null}">
 										<sf:form modelAttribute="comment" action="/comment/create" method="post">
 
@@ -318,7 +360,7 @@
 
 
 						<!-- Post Delete Modal -->
-						<div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+						<div class="modal fade" id="deletePostModal${vs.index }" tabindex="-1" aria-labelledby="exampleModalLabel"
 							aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
@@ -345,7 +387,7 @@
 						</div>
 
 						<!-- Report Modal -->
-						<div class="modal fade" id="reportPostModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+						<div class="modal fade" id="reportPostModal${vs.index }" tabindex="-1" aria-labelledby="exampleModalLabel"
 							aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">

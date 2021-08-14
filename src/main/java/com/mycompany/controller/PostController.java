@@ -1,10 +1,7 @@
 package com.mycompany.controller;
 
 import java.security.ProviderException;
-import java.util.LinkedList;
 import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +22,6 @@ import com.mycompany.exception.IncorrectUserException;
 
 import com.mycompany.service.PostService;
 import com.mycompany.service.UserService;
-
 
 @Controller
 @RequestMapping("/post")
@@ -51,7 +47,7 @@ public class PostController {
 		return "redirect:/home";
 	}
 	
-	@PostMapping("/updatepost")
+	@GetMapping("/update")
 	public String updatePost(@RequestParam(name = "id") int id, Model model) throws ProviderException {
 		
 		Post post = postService.getPostById(id);
@@ -61,38 +57,43 @@ public class PostController {
 	
 	@PostMapping("/update") 
 	public String updatePost(@ModelAttribute("post") Post post, Model model) {
-		
+		System.out.println(post.getComments().size());
 		postService.updatePost(post);
 		return "redirect:/home";
 	}
 	
 	
 	@RequestMapping(value="/searchresult", method = {RequestMethod.GET, RequestMethod.POST})
-	public String searchPostResult(Model model, @RequestParam(name = "searchentry") String searchEntry) {
-		User user = null;
-		String[] searchBy = searchEntry.split(" ");
-		if (searchEntry.startsWith("#")) {
-			model.addAttribute("tag", searchBy[0]);
-		}
-		else {
-			user = userService.getUser(searchBy[0].substring(1));
-			model.addAttribute("tag", null);
-		}
-		if( userService.getUser(null) == null) {
-			model.addAttribute("isLoggedIn", false);
-		}
-		else {
-			model.addAttribute("isLoggedIn", true);
-		}
-		model.addAttribute("comment", new Comment());
-		model.addAttribute("username", searchBy[0]);
-		model.addAttribute("IsUsername", null);
-		model.addAttribute("user", user);
-		
+	public String searchPostResult(Model model, @RequestParam(name = "searchentry", required=false) String searchEntry) {
+		try {
+			User user = null;
+			String[] searchBy = searchEntry.split(" ");
+			if (searchEntry.startsWith("#")) {
+				model.addAttribute("tag", searchBy[0]);
+			}
+			else {
+				user = userService.getUserFromUsername(searchBy[0].substring(1));
+				model.addAttribute("tag", null);
+			}
+			if( userService.getLoggedInUser() == null) {
+				model.addAttribute("isLoggedIn", false);
+			}
+			else {
+				model.addAttribute("isLoggedIn", true);
+			}
+			model.addAttribute("comment", new Comment());
+			model.addAttribute("username", searchBy[0]);
+			model.addAttribute("IsUsername", null);
+			model.addAttribute("user", user);
+			
 
-		Set<Post> searchList = postService.getPostOnSearch(searchBy[0].substring(1));
-		model.addAttribute("posts", searchList);
-		return "profile";	
+			Set<Post> searchList = postService.getPostOnSearch(searchBy[0].substring(1));
+			model.addAttribute("posts", searchList);
+			return "profile";
+		} catch (Exception e) {
+			return "redirect:/home";
+		}
+			
 	}
 	
 	@PostMapping("/delete")
@@ -103,7 +104,7 @@ public class PostController {
 	
 	@GetMapping("/{id}")
 	public String showPost(@PathVariable int id, Model model) {
-		User user = userService.getUser(null);
+		User user = userService.getLoggedInUser();
 		String username;
 		if(user == null) {
 			username = null;
@@ -124,8 +125,7 @@ public class PostController {
 	}
 	
 	@PostMapping("/share")
-	public String sharePost(@RequestParam(name="username") String username,@RequestParam(name="postID") int postID)
-	{
+	public String sharePost(@RequestParam(name="username") String username,@RequestParam(name="postID") int postID) {
 
 		postService.sharePost(postID, username);
 		return "redirect:/";

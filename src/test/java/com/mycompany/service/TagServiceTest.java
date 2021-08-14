@@ -1,4 +1,4 @@
-	package com.mycompany.service;
+package com.mycompany.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -48,8 +48,8 @@ public class TagServiceTest {
 	}
 	
 	@Test
-	public void getAllTagsByNameTest1() {
-		List<Tag> tags = tagService.getAllTagsByName("OK") ; 
+	public void getTagByNameTest1() {
+		Tag tags = tagService.getTagByName("OK") ; 
 		
 	}
 	

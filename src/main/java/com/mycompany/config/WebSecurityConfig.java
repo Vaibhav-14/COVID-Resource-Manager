@@ -67,9 +67,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         	.antMatchers("/post/searchresult").permitAll()
         	.antMatchers("/user/register").permitAll()
             .antMatchers("/home").permitAll()
-            .antMatchers("/post/create").hasAuthority("USER")
             .antMatchers("/user/login").permitAll()
             .antMatchers("/user/profile").permitAll()
+            .antMatchers("/post/create").hasAuthority("USER")
+            .regexMatchers("\\/user\\/block\\/([^\\\\s]+)").hasAuthority("ADMIN")
+            .regexMatchers("\\/user\\/unblock\\/([^\\\\s]+)").hasAuthority("ADMIN")
+            .antMatchers("/tag/create").hasAuthority("ADMIN")
+            
+            .antMatchers("/vaccination").permitAll()
             .anyRequest().authenticated()
             .and()
             .formLogin()
@@ -120,6 +125,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						
 					}
 				})
-            	.permitAll();
+            	.permitAll()
+            .and()
+            .exceptionHandling().accessDeniedPage("/403");
     }
 }
