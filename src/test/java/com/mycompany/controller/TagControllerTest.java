@@ -2,7 +2,7 @@ package com.mycompany.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.any;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,6 +56,7 @@ public class TagControllerTest {
 		tag.setPosts(null);
 		assertEquals("create-tag", tagController.addTags(model));
 		assertEquals("redirect:/", tagController.saveTags(tag));
+		tagController.getTagsByKeyword("vaccine") ; 
 	}
 
 }
