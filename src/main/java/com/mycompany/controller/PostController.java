@@ -23,7 +23,6 @@ import com.mycompany.exception.IncorrectUserException;
 import com.mycompany.service.PostService;
 import com.mycompany.service.UserService;
 
-
 @Controller
 @RequestMapping("/post")
 public class PostController {

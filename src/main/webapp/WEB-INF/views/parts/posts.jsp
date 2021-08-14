@@ -1,4 +1,3 @@
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
 	<div class="p-2 w-50 bd-highlight" style="min-width: 500px;">
@@ -218,14 +217,15 @@
 
 
 								<div class="container p-2">
-									<div class="row">									
-										<div class="col">
-											<p class="text-center p-2"><i
-													class="p-1 material-icons align-middle">comment</i>Comments</p>
+									<div class="row justify-content-md-center">
+										<div class="col col-md-auto">
+													<button class="btn btn-light text-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseComments${vs.index }">
+														<i class="p-1 material-icons align-middle">comment</i>Comments 
+													</button>			
 										</div>
-										
-										
 									</div>
+									<div class="row collapse" id="collapseComments${vs.index }">
+
 									<c:forEach items="${post.comments }" var="comment" varStatus="tagStatus">
 										<c:if test="${comment.user.enabled == true}">
 											<c:if
@@ -233,23 +233,34 @@
 
 
 												<div class="row p-2">
-													<div class="col-9">
+													<div class="col-10">
 														<a href="/user/profile?username=${comment.user.username }"
 															style="text-decoration: none;"><b>${comment.user.username
 																}</b></a> :&nbsp;${comment.content }
 													</div>
 												
-												<sec:authorize access="hasAuthority('ADMIN')">
-													<div class="col-1">
-														<!-- Button trigger modal -->
-														<button type="button" class="btn btn-sm btn-outline-danger"
-															data-bs-toggle="modal"
-															data-bs-target="#deleteCommentModal">
-															<i class="material-icons align-middle "
-																style="font-size: 16px; ">delete</i>
-														</button>
-													</div>
-												</sec:authorize>
+													<sec:authorize access="hasAuthority('ADMIN')">
+														<div class="col">
+
+															<div class="d-flex flex-row-reverse bd-highlight">
+																<div class="bd-highlight">
+
+																	<!-- Button trigger modal -->
+																	<button type="button"
+																		class="btn btn-sm btn-outline-danger"
+																		data-bs-toggle="modal"
+																		data-bs-target="#deleteCommentModal">
+																		<i class="material-icons align-middle "
+																			style="font-size: 16px; ">delete</i>
+																	</button>
+
+
+																</div>
+															</div>
+
+
+														</div>
+													</sec:authorize>
 
 												</div>
 
@@ -258,20 +269,31 @@
 											<c:if
 												test="${pageContext.request.userPrincipal.name == comment.user.username }">
 												<div class="row p-2">
-													<div class="col-9">
+													<div class="col-10">
 														<a href="/user/profile"
 															style="text-decoration: none;"><b>${comment.user.username
 																}</b> </a> :&nbsp; ${comment.content }
 													</div>
 													<sec:authorize access="hasAuthority('USER')">
-														<div class="col-1">
-															<!-- Button trigger modal -->
-															<button type="button" class="btn btn-sm btn-outline-danger"
-																data-bs-toggle="modal"
-																data-bs-target="#deleteCommentModal">
-																<i class="material-icons align-middle "
-																	style="font-size: 16px; ">delete</i>
-															</button>
+														<div class="col">
+
+															<div class="d-flex flex-row-reverse bd-highlight">
+																<div class="bd-highlight">
+
+																	<!-- Button trigger modal -->
+																	<button type="button"
+																		class="btn btn-sm btn-outline-danger"
+																		data-bs-toggle="modal"
+																		data-bs-target="#deleteCommentModal">
+																		<i class="material-icons align-middle "
+																			style="font-size: 16px; ">delete</i>
+																	</button>
+
+
+																</div>
+															</div>
+
+
 														</div>
 													</sec:authorize>
 												</div>
@@ -310,7 +332,10 @@
 											</div>
 										</div>
 									</c:forEach>
+									</div>
 
+									<br>
+									<br>
 									<c:if test="${pageContext.request.userPrincipal.name != null}">
 										<sf:form modelAttribute="comment" action="/comment/create" method="post">
 
