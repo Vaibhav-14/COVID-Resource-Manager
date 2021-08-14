@@ -91,8 +91,8 @@ public class UserService {
 	
 	public void changePassword(User user) {
 		user.setEnabled(1);
-		Role role = roleDao.findByName("USER");
-		user.getRoles().add(role);
+		User userOld = getUserFromUsername(user.getUsername());
+		user.setRoles(userOld.getRoles());
 		userDao.save(user);
 		logger.info("User : " + user.getUsername() + " has changed the password.");
 	}
