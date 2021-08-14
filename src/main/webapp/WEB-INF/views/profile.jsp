@@ -2,6 +2,7 @@
 <title>Profile</title>
 <%@ include file="parts/header.jsp"%>
 
+
 	<%
 		Object IsUsername = request.getAttribute("IsUsername");
 		Object tag = request.getAttribute("tag");
@@ -44,7 +45,9 @@
 		<form method="post" action = "/user/delete">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		<input type="hidden" name="username" value="${user.username }"/>
+		<div class="sweetalert">
 		<button name="submit" type="submit" class ="btn btn-primary btn-danger">Delete Account</button>
+		</div>
 	</form>
 		</div>
 		<br>
