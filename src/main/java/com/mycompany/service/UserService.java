@@ -83,7 +83,8 @@ public class UserService {
 	
 	public void updateUserProfile(User user) {
 		user.setEnabled(1);
-		Role role = roleDao.findByName("USER");
+		User userOld = getUserFromUsername(user.getUsername());
+		user.setRoles(userOld.getRoles());
 		user.getRoles().add(role);
 		userDao.save(user);
 		logger.info("User : " + user.getUsername() + " has updated the profile information.");
