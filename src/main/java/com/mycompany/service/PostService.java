@@ -74,28 +74,31 @@ public class PostService {
 	private void addTagsToPost(Post post) {
 		Set<Tag> tags = new HashSet<Tag>();
 		Iterable<Tag> db_tags = tagService.getAllTags();
-		for (String tagString : post.getTagStr().replaceAll("#", "").split(" ")) {
-			int flag = 0;
-			for (Tag tag : db_tags) {
-				if(tag.getName().equals(tagString)) {
-					flag = 1;
+		String tagStr = post.getTagStr();
+		if (tagStr.length() > 0) {
+			for (String tagString : tagStr.replaceAll("#", "").split(" ")) {
+				int flag = 0;
+				for (Tag tag : db_tags) {
+					if(tag.getName().equals(tagString)) {
+						flag = 1;
+						tags.add(tag);
+						break;
+					}
+				}
+				if(flag == 0) {
+					Tag tag = new Tag();
+					tag.setName(tagString);
+					Set<Post> tag_post = new HashSet<Post>();
+					tag_post.add(post);
 					tags.add(tag);
-					break;
 				}
 			}
-			if(flag == 0) {
-				Tag tag = new Tag();
-				tag.setName(tagString);
-				Set<Post> tag_post = new HashSet<Post>();
-				tag_post.add(post);
-				tags.add(tag);
-			}
 		}
+		
 		if (post.getType().equals("Available"))
 			tags.add(tagService.getTagByName("Available"));
 		else if (post.getType().equals("Required"))
 			tags.add(tagService.getTagByName("Required"));
-		
 		post.setTags(tags); 
 	}
 
@@ -108,7 +111,7 @@ public class PostService {
 			for (Tag tag : post.getTags()) {
 				str.append("#" + tag.getName() + " ");
 				post.setTagStr(str.toString()); 
-      }
+			}
 		} catch (Exception e) {
 			post = null;
 		}		
@@ -172,7 +175,7 @@ public class PostService {
 	
 	public List<Post> getAllPostsFromPageable(int pageNumber,int pageSize,String sortBy)
 	{
-		Pageable paging = PageRequest.of(pageNumber, pageSize, org.springframework.data.domain.Sort.by(sortBy));
+		Pageable paging = PageRequest.of(pageNumber, pageSize, org.springframework.data.domain.Sort.by(sortBy).descending());
 		 
         Page<Post> pagedResult = postDao.findAll(paging);
          
