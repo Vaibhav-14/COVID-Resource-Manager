@@ -34,7 +34,7 @@ public class PostController {
 	@Autowired
 	private UserService userService;
 		
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/create")
 	public String createPost(Model model) {
 		Post post = new Post();
@@ -42,14 +42,14 @@ public class PostController {
 		return "create-post";
 	}
 	
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/create")
 	public String savePost(@ModelAttribute("post") Post post) {
 		postService.addPost(post);
 		return "redirect:/home";
 	}
 	
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/update")
 	public String updatePost(@RequestParam(name = "id") int id, Model model) throws ProviderException {
 		
@@ -58,7 +58,7 @@ public class PostController {
 		return "update-post";
 	}
 	
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/update") 
 	public String updatePost(@ModelAttribute("post") Post post, Model model) {
 		System.out.println(post.getComments().size());
@@ -122,14 +122,14 @@ public class PostController {
 		return "post";
 	}
 	
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/report")
 	public String reportPost(@RequestParam(name = "id") int id ) {
 		postService.reportPost(id);
 		return "redirect:/";
 	}
 	
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/share")
 	public String sharePost(@RequestParam(name="username") String username,@RequestParam(name="postID") int postID) {
 

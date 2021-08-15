@@ -30,7 +30,7 @@ public class TagController {
 		return tagService.searchTagsByKeyWord(term);
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/create")
 	public String addTags(Model model) {
 		model.addAttribute("tag", new Tag());
@@ -38,14 +38,14 @@ public class TagController {
 		return "create-tag";
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@PostMapping("/create")
 	public String saveTags(@ModelAttribute("tag") Tag tag) {
 		tagService.addTags(tag);
 		return "redirect:/tag/create";
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/delete/{name}")
 	public String deleteTag(@PathVariable String name) {
 		Tag tag = tagService.getTagByName(name);
