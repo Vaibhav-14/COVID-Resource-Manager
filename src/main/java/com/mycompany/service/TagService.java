@@ -32,6 +32,10 @@ public class TagService {
 		return tagDao.getTagByName(passedtag);
 	}
 	
+	public void deleteTag(Tag tag) {
+		tagDao.delete(tag);
+	}
+	
 	public void addTags(Tag tag) {
 		String[] tagStr = tag.getName().replace("#", "").split(" ");
 		for (String tag_: tagStr) {

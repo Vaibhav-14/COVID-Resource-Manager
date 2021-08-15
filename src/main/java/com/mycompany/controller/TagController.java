@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,13 +36,23 @@ public class TagController {
 	@GetMapping("/create")
 	public String addTags(Model model) {
 		model.addAttribute("tag", new Tag());
+		model.addAttribute("tags", tagService.getAllTags());
 		return "create-tag";
 	}
 	
 	@PostMapping("/create")
 	public String saveTags(@ModelAttribute("tag") Tag tag) {
 		tagService.addTags(tag);
-		return "redirect:/";
+		return "redirect:/tag/create";
+	}
+
+	@GetMapping("/delete/{name}")
+	public String deleteTag(@PathVariable String name) {
+		Tag tag = tagService.getTagByName(name);
+		tagService.deleteTag(tag);
+		
+		return "redirect:/tag/create";
+		
 	}
 	
 }
