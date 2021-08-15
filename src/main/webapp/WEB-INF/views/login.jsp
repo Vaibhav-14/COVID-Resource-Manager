@@ -27,7 +27,9 @@
 			</c:if>
 			
 			<c:if test="${param.notfound != null}">
+				<div class="text-center" style="color:red;">
 				<b>No Such User exists</b>
+				</div>
 			</c:if>
 
 			<c:if test="${param.logout != null}">
@@ -42,7 +44,8 @@
 					name="username" class="form-control" id="username">
 				<div id="username" class="form-text"></div>
 			</div>
-
+			
+			
 			<div class="row p-2">
 
 				<label for="Password" class="form-label">Password</label> <input type="password"
