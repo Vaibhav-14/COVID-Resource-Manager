@@ -46,14 +46,6 @@ public class TagController {
 		return "redirect:/tag/create";
 	}
 
-	
-//	@GetMapping("/delete")//@ModelAttribute("tag") Tag tag,Model model
-//	public String deleteTag(@RequestParam(name = "tags") Tag tags, Model model) {
-//		tagService.deleteTag(tags);
-//		Iterable<Tag> tagList = tagService.getAllTags();
-//		model.addAttribute("tags", tagList);
-//		return "redirect:/tag/create";
-//	}
 	@GetMapping("/delete/{name}")
 	public String deleteTag(@PathVariable String name) {
 		Tag tag = tagService.getTagByName(name);
