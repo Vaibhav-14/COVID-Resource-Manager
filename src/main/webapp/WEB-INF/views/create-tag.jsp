@@ -1,9 +1,10 @@
 <%@ include file="parts/meta.jsp" %> 
-	<title>Add Tag</title>
+
+	<title>Add Post</title>
+	<script src="${pageContext.request.contextPath }/js/jquery-3.6.0.min.js"></script>
+	<script src="${pageContext.request.contextPath }/js/jquery-ui.min.js"></script>
 <%@ include file="parts/header.jsp" %> 
-
-
-
+	
 	<div class="formcontainer w-100 d-flex justify-content-center">
 		<div class="container bg-white rounded shadow-lg ">
 	<div class = "row">
@@ -16,36 +17,17 @@
 	<div class="text-center">
 	<sf:form id="form1" modelAttribute="tag" method= "POST" >
 		<div class="form-floating">
-		<sf:textarea class="autocomplete form-control" style="height: 100px" path="name"/>
+		<sf:textarea id="tags" class="autocomplete form-control" style="height: 100px" path="name"/>
 		<label for="floatingTextarea2">Add tags here</label>
 		</div>
 		<br>
-		<sf:button type="button" class="btn btn-primary" style="margin-bottom:20px" value="Submit">Add Tags</sf:button>
+		<sf:button class="btn btn-primary" style="margin-bottom:20px" value="Submit">Add Tags</sf:button>
 	</sf:form>
 	</div>
 	</div>
 	</div>
 	
 	
-	 <br/>
-		<h6> AllTags</h6>
-		
-		
-	<table>
-	<thead>
-		<tr>
-			<th>Tag</th>
-		</tr>
-	</thead>
-	<tbody>
-		<c:forEach var="tag" items="${tags}">
-		<tr>
-			<td>${tag.name}</td>
-			<td> <a href="/tag/delete/${tag.name}">Delete Tag</a>
-		</tr>
-		</c:forEach>
-		</tbody>
-	</table>
 	
 	
 	
