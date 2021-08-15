@@ -1,10 +1,7 @@
 <%@ include file="parts/meta.jsp" %> 
 
 	<title>Update Profile</title>
-	<script src="${pageContext.request.contextPath }/js/jquery-3.6.0.min.js"></script>
-	<script src="${pageContext.request.contextPath }/js/jquery-ui.min.js"></script>
 <%@ include file="parts/header.jsp" %> 
-	<%@ include file="parts/auto.jsp" %>
 
 <%@ include file="parts/meta.jsp" %> 
 <title>Profile Updation</title>

@@ -1,4 +1,3 @@
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
 	<div class="p-2 w-50 bd-highlight" style="min-width: 500px;">
@@ -345,7 +344,7 @@
 													<input type="hidden" name="${_csrf.parameterName}"
 														value="${_csrf.token}" />
 													<sf:input type="hidden" path="post" value="${ post.id}" />
-													<sf:input path="content" class="form-control autocomplete" />
+													<sf:input path="content" class="form-control autocomplete" required="required"/>
 												</div>
 												<div class="col-1">
 													<sf:button type="submit" class="btn btn-primary">Comment</sf:button>

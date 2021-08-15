@@ -1,6 +1,4 @@
 <%@ include file="parts/meta.jsp" %> 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-	
 	<title>Add Tag</title>
 <%@ include file="parts/header.jsp" %> 
 	<h6>Create New Tag</h6>
