@@ -111,6 +111,7 @@ public class UserController {
 		return "profile";
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = "/block/{username}")
 	public String blockUser(@PathVariable String username) {
 		User user = userService.getUserFromUsername(username);
@@ -121,6 +122,7 @@ public class UserController {
 		
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")	
 	@GetMapping(value = "/unblock/{username}")
 	public String unblockUser(@PathVariable String username) {
 		User user = userService.getUserFromUsername(username);

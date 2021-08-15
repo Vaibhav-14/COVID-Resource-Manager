@@ -68,13 +68,7 @@ public class PostServiceTest{
 		assertThat(userService).isNotNull() ; 
 		assertThat(postService).isNotNull() ; 
 		assertThat(postDao).isNotNull() ; 
-		Role role = new Role() ; 
-		role.setId(1);
-		role.setRole("USER");
-		roleDao.save(role) ; 
-		role.setId(2);
-		role.setRole("ADMIN");
-		roleDao.save(role) ; 
+		 
 	}
 	
 	@Test

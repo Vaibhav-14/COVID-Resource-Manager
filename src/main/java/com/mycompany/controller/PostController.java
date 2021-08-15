@@ -4,6 +4,7 @@ import java.security.ProviderException;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ public class PostController {
 	@Autowired
 	private UserService userService;
 		
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/create")
 	public String createPost(Model model) {
 		Post post = new Post();
@@ -40,13 +42,14 @@ public class PostController {
 		return "create-post";
 	}
 	
-	
+	@PreAuthorize("hasRole('USER')")
 	@PostMapping("/create")
 	public String savePost(@ModelAttribute("post") Post post) {
 		postService.addPost(post);
 		return "redirect:/home";
 	}
 	
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/update")
 	public String updatePost(@RequestParam(name = "id") int id, Model model) throws ProviderException {
 		
@@ -55,6 +58,7 @@ public class PostController {
 		return "update-post";
 	}
 	
+	@PreAuthorize("hasRole('USER')")
 	@PostMapping("/update") 
 	public String updatePost(@ModelAttribute("post") Post post, Model model) {
 		System.out.println(post.getComments().size());
@@ -118,12 +122,14 @@ public class PostController {
 		return "post";
 	}
 	
+	@PreAuthorize("hasRole('USER')")
 	@PostMapping("/report")
 	public String reportPost(@RequestParam(name = "id") int id ) {
 		postService.reportPost(id);
 		return "redirect:/";
 	}
 	
+	@PreAuthorize("hasRole('USER')")
 	@PostMapping("/share")
 	public String sharePost(@RequestParam(name="username") String username,@RequestParam(name="postID") int postID) {
 

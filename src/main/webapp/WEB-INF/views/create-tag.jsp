@@ -26,5 +26,28 @@
 	</div>
 	</div>
 	
+	
+	 <br/>
+		<h6> AllTags</h6>
+		
+		
+	<table>
+	<thead>
+		<tr>
+			<th>Tag</th>
+		</tr>
+	</thead>
+	<tbody>
+		<c:forEach var="tag" items="${tags}">
+		<tr>
+			<td>${tag.name}</td>
+			<td> <a href="/tag/delete/${tag.name}">Delete Tag</a>
+		</tr>
+		</c:forEach>
+		</tbody>
+	</table>
+	
+	
+	
 	<%@ include file="parts/auto.jsp" %> 
 <%@ include file="parts/footer.jsp" %> 
