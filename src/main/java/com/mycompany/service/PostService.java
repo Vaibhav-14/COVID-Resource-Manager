@@ -175,7 +175,7 @@ public class PostService {
 	
 	public List<Post> getAllPostsFromPageable(int pageNumber,int pageSize,String sortBy)
 	{
-		Pageable paging = PageRequest.of(pageNumber, pageSize, org.springframework.data.domain.Sort.by(sortBy));
+		Pageable paging = PageRequest.of(pageNumber, pageSize, org.springframework.data.domain.Sort.by(sortBy).descending());
 		 
         Page<Post> pagedResult = postDao.findAll(paging);
          
