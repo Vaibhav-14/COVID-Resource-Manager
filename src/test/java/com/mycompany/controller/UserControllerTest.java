@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -38,7 +39,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.ui.Model;
 
+import com.mycompany.dao.IRoleFunctionDAO;
+import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.Post;
+import com.mycompany.entity.Role;
 import com.mycompany.entity.User;
 import com.mycompany.service.UserService;
 
@@ -52,6 +56,10 @@ public class UserControllerTest {
 	private MockMvc mockMvc;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private IRoleFunctionDAO roleDao ; 
+	@Autowired
+	private IUserFunctionDAO userDao ; 
 	
 	@Mock
 	Model model;
@@ -64,6 +72,14 @@ public class UserControllerTest {
 	@Test
 	public void contextLoads() throws Exception{
 		assertThat(userController).isNotNull();
+		Role role = new Role() ; 
+		role.setId(1);
+		role.setRole("USER");
+		roleDao.save(role) ; 
+		Role role1 = new Role() ; 
+		role1.setId(2);
+		role1.setRole("ADMIN");
+		roleDao.save(role1) ; 
 	}
 	
 	@Test
@@ -123,10 +139,16 @@ public class UserControllerTest {
 		request = get("/user/profile").param("username", user.getUsername()) ;
 		this.mockMvc.perform(request).andDo(print()).andExpect(status().isOk()) ; 
 		
+		user.setUsername("Thor") ; 
+		Set<Role> roles = user.getRoles() ;
+		roles.add(roleDao.findById(2)) ; 
+		user.setRoles(roles) ; 
+		userDao.save(user) ; 
+		
 		// Block User 
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
-					      = new UsernamePasswordAuthenticationToken("Champ", "1123456789");
+					      = new UsernamePasswordAuthenticationToken("Thor", "1123456789");
 		AuthenticationManager auth = new AuthenticationManager() {
 									
 				@Override
