@@ -67,7 +67,7 @@ public class CommentService {
 		boolean isAdmin = false;
 		Comment comment = commentDao.findById(id).get();
 		User commentUser = comment.getUser();
-		if(commentUser.getId() == user.getId() || (isAdmin = user.getRoles().contains(role))) {
+		if(commentUser.getId() == user.getId() || comment.getPost().getUser().getId() == user.getId() || (isAdmin = user.getRoles().contains(role))) {
 			commentDao.deleteById(id);
 			if (isAdmin) {
 				logger.warn("Admin has deleted comment of user : " + commentUser.getUsername());
