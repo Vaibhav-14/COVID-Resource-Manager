@@ -109,7 +109,6 @@ public Session() {
 * @param allowAllAge
 */
 public Session(int centerId, String name, String address, String stateName, String districtName, String blockName, int pincode, String from, String to, int lat, int _long, String feeType, String sessionId, String date, int availableCapacity, int availableCapacityDose1, int availableCapacityDose2, String fee, int minAgeLimit, boolean allowAllAge, String vaccine, List<String> slots) {
-super();
 this.centerId = centerId;
 this.name = name;
 this.address = address;

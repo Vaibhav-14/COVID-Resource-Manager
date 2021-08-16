@@ -2,7 +2,6 @@
 <%@ include file="parts/meta.jsp"%>
 
 <title>Vaccination Slots</title>
-
 <%@ include file="parts/header.jsp"%>
 
 <div class= "p-3">
@@ -59,9 +58,6 @@
   </table>
 
   </div>
-
-
-
 
 <%@ include file="parts/footer.jsp"%>
 
