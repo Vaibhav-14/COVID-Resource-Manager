@@ -89,6 +89,14 @@ public class UserService {
 		logger.info("User : " + user.getUsername() + " has updated the profile information.");
 	}
 	
+	public void changePassword(User user) {
+		user.setEnabled(1);
+		User userOld = getUserFromUsername(user.getUsername());
+		user.setRoles(userOld.getRoles());
+		userDao.save(user);
+		logger.info("User : " + user.getUsername() + " has changed the password.");
+	}
+	
 	public List<String> searchUsersByKeyWord(String keyword) {
 		return userDao.searchUserByKeyWord(keyword);	
 	}

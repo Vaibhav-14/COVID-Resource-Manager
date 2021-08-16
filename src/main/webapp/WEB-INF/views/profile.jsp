@@ -41,6 +41,12 @@
 		</div>
 		<br>
 		<div class="d-grid gap-2 d-md-block text-center">
+			<a href="/user/checkPassword">
+				<button class="btn btn-primary" type="button">Change Password</button>
+			</a>
+		</div>
+		<br>
+		<div class="d-grid gap-2 d-md-block text-center">
 		<form method="post" action = "/user/delete">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		<input type="hidden" name="username" value="${user.username }"/>

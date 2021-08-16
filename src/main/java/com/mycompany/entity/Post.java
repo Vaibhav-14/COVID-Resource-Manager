@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -38,7 +39,8 @@ public class Post {
 	@DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
 	private Timestamp dateTime;
 	
-	@Column 
+	@Column
+	@NotBlank(message= "Please enter message")
 	private String message;
 	
 	@Transient

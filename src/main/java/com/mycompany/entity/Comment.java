@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name="comments")
@@ -21,6 +22,7 @@ public class Comment implements Comparable<Comment>{
 	@Column(name="id")
 	private int id;
 	
+	@NotBlank(message= "Please enter comment message")
 	private String content;
 	
 	@Column(name="created_at")
