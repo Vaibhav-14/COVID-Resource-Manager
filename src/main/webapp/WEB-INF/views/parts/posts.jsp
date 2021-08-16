@@ -20,6 +20,9 @@
 								<c:if test = "${post.type == 'Available'}">
 									<div class="p-2" style="background-color: #E0F2F1;">
 								</c:if>
+								<c:if test = "${post.type == 'Other'}">
+									<div class="p-2">
+								</c:if>
 								
 
 

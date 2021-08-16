@@ -1,5 +1,7 @@
 package com.mycompany.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,8 @@ public class VaccinationController {
 	@GetMapping("/vaccination")
 	public ModelAndView getDetailsByPin(@RequestParam String pincode) {
 
-		String date= "16-08-2021";
+
+		String date= new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 		String url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode="+ pincode + "&date=" + date;
 		List<Session> vaccines = restTemplate.getForEntity(url, CenterDetails.class).getBody().getSessions();
 

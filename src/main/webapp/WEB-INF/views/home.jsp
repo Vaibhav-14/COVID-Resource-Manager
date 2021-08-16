@@ -44,7 +44,7 @@
 
 					<!-- //http://localhost:8080/vaccination?pincode=492001&date=31-06-2021 -->
 					<div class = "p-2 border shadow-sm" style="margin-top: 25px;">
-						Find The Nearest Vaccination Centers to You by entering your Pincode here:
+						Find The Nearest Vaccination Centers to You today by entering your Pincode here:
 						<br> 
 						<form class="d-flex"  method = "GET" action = "/vaccination">
 							<input name="pincode" class="form-control" placeholder="Enter Pincode" required>
