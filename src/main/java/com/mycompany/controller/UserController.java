@@ -164,6 +164,7 @@ public class UserController {
 		User user = userService.getLoggedInUser();
 		user.setPassword(null);
 		model.addAttribute("user", user);
+		model.addAttribute("isOldPasswordCorrect", false);
 		return "change-password-1";
 	}
 	
@@ -175,11 +176,13 @@ public class UserController {
 			results.rejectValue("password", "error.user", "Password Doesn't match");
 		}
 		if(results.hasErrors()) {
-			return "change-password-1";
+			model.addAttribute("isOldPasswordCorrect", false);
+			return "change-password";
 		}
 		loggedInUser.setPassword(null);
+		model.addAttribute("isOldPasswordCorrect", true);
 		model.addAttribute("user",  loggedInUser);
-		return "change-password-2";
+		return "change-password";
 	}
 	
 	@PostMapping("/changePassword")
@@ -191,8 +194,10 @@ public class UserController {
 		}
 		if(!user.getPassword().equals(user.getRetypepassword())) 
 			results.rejectValue("retypepassword", "error.user","Confirmed Password is not the same");
-		if(results.hasErrors())
-			return "change-password-2";
+		if(results.hasErrors()) {
+			model.addAttribute("isOldPasswordCorrect", true);
+			return "change-password";
+		}
 		user.setPassword(encoder.encode(user.getPassword()));
 		userService.changePassword(user);
 		System.out.println(user.getPassword());

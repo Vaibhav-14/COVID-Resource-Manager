@@ -343,6 +343,7 @@
 									<br>
 									<br>
 									<c:if test="${pageContext.request.userPrincipal.name != null}">
+									<sec:authorize access="hasAuthority('USER')">
 										<sf:form modelAttribute="comment" action="/comment/create" method="post">
 
 											<div class="row">
@@ -357,6 +358,7 @@
 												</div>
 											</div>
 										</sf:form>
+									</sec:authorize>
 									</c:if>
 
 								</div>
