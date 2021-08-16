@@ -169,7 +169,7 @@ public class UserController {
 		user.setPassword(null);
 		model.addAttribute("user", user);
 		model.addAttribute("isOldPasswordCorrect", false);
-		return "change-password-1";
+		return "change-password";
 	}
 	
 	@PostMapping("/checkPassword")
