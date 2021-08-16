@@ -1,9 +1,8 @@
 <%@ include file="parts/meta.jsp" %> 
 
-	<title>Add Post</title>
-	<script src="${pageContext.request.contextPath }/js/jquery-3.6.0.min.js"></script>
-	<script src="${pageContext.request.contextPath }/js/jquery-ui.min.js"></script>
+	<title>Add Tag</title>
 <%@ include file="parts/header.jsp" %> 
+	
 	
 	<div class="formcontainer w-100 d-flex justify-content-center">
 		<div class="container bg-white rounded shadow-lg ">
@@ -25,6 +24,34 @@
 	</sf:form>
 	</div>
 	</div>
+	</div>
+	
+	<br>
+	<br>
+	<br>
+	<br>
+	
+	<h2 class="text-center"> All Available Tags</h2>
+	<br>
+	<br>
+	
+	<div class="conatiner w-50 p-3 text-center" style = "horizontal-align: middle;margin-left: auto;
+    margin-right: auto;">
+	
+	<table class="table table-dark table-striped">
+	<thead>
+		<tr>
+		</tr>
+	</thead>
+	<tbody>
+		<c:forEach var="tag" items="${tags}">
+		<tr>
+			<td>${tag.name}</td>
+			<td> <a href="/tag/delete/${tag.name}"><i class="material-icons align-middle">delete</i></a>
+		</tr>
+		</c:forEach>
+		</tbody>
+	</table>
 	</div>
 	
 	

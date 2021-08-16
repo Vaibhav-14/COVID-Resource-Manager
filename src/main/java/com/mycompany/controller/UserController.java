@@ -90,7 +90,13 @@ public class UserController {
 
 	@GetMapping(value = "/login")
 	public String showLoginForm() {
-		return "login";
+		//return "login";
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+            return "login";
+        }
+ 
+        return "redirect:/";
 		
 	}
 	
