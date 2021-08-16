@@ -2,11 +2,16 @@ package com.mycompany.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.any;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -26,6 +31,10 @@ import org.springframework.ui.Model;
 
 import com.mycompany.entity.Tag;
 
+import com.mycompany.dao.ITagFunctionDAO;
+import com.mycompany.entity.Tag;
+import com.mycompany.service.TagService;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class TagControllerTest {
@@ -34,6 +43,8 @@ public class TagControllerTest {
 	private TagController tagController ; 
 	@Autowired
 	private MockMvc mockMvc;
+	@Autowired 
+	private TagService tagService;
 	
 	@Mock
 	private Model model;
@@ -56,6 +67,18 @@ public class TagControllerTest {
 		tag.setPosts(null);
 		assertEquals("create-tag", tagController.addTags(model));
 		assertEquals("redirect:/", tagController.saveTags(tag));
+		tagController.getTagsByKeyword("vaccine") ; 
+
+	}
+	
+	
+	@Test
+	public void deleteTagTest() {
+		Tag tag = new Tag();
+		tag.setName("Available");
+		tagService.deleteTag(tag);
+		
+		
 	}
 
 }

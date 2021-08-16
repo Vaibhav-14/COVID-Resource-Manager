@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,7 +27,6 @@ import com.mycompany.exception.IncorrectUserException;
 import com.mycompany.service.PostService;
 import com.mycompany.service.UserService;
 
-
 @Controller
 @RequestMapping("/post")
 public class PostController {
@@ -37,6 +37,7 @@ public class PostController {
 	@Autowired
 	private UserService userService;
 		
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/create")
 	public String createPost(Model model) {
 		Post post = new Post();
@@ -44,7 +45,7 @@ public class PostController {
 		return "create-post";
 	}
 	
-	
+	@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/create")
 	public String savePost(@Valid @ModelAttribute("post") Post post, BindingResult result) {
 		if(result.hasErrors())
@@ -53,6 +54,7 @@ public class PostController {
 		return "redirect:/home";
 	}
 	
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/update")
 	public String updatePost(@RequestParam(name = "id") int id, Model model) throws ProviderException {
 		
@@ -61,6 +63,7 @@ public class PostController {
 		return "update-post";
 	}
 	
+	@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/update") 
 	public String updatePost(@ModelAttribute("post") Post post, Model model) {
 		System.out.println(post.getComments().size());
@@ -124,12 +127,14 @@ public class PostController {
 		return "post";
 	}
 	
+	@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/report")
 	public String reportPost(@RequestParam(name = "id") int id ) {
 		postService.reportPost(id);
 		return "redirect:/";
 	}
 	
+	@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/share")
 	public String sharePost(@RequestParam(name="username") String username,@RequestParam(name="postID") int postID) {
 

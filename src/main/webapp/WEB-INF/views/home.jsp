@@ -8,6 +8,50 @@
 	<div class="row">
 
 	  <div class="col">
+
+		<div class="d-none d-lg-block h-100" style="position:fixed; width:25%;">
+
+			<div class="container d-flex h-100">
+				<div class="row justify-content-center align-self-start">
+
+					<div id="carouselControls" class="carousel carousel-dark slide border" data-bs-ride="carousel">
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<img src="https://www.who.int/images/default-source/health-topics/coronavirus/infographics/are-you-a-healthworker_8_3.png?sfvrsn=910144da_5"
+									class="d-block w-100">
+							</div>
+							<div class="carousel-item">
+								<img src="https://www.who.int/images/default-source/health-topics/coronavirus/infographics/are-you-pregnant_11_3.png?sfvrsn=71ea572b_5"
+									class="d-block w-100">
+							</div>
+							<div class="carousel-item">
+								<img src="https://www.who.int/images/default-source/health-topics/coronavirus/infographics/do-you-have-chronic-health-conditions_8_3.png?sfvrsn=6d8ddaa3_5"
+									class="d-block w-100">
+							</div>
+						</div>
+						<button class="carousel-control-prev" type="button"
+							data-bs-target="#carouselControls" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon"></span>
+							<span class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button"
+							data-bs-target="#carouselControls" data-bs-slide="next">
+							<span class="carousel-control-next-icon"></span>
+							<span class="visually-hidden">Next</span>
+						</button>
+					</div>
+
+
+				</div>
+			</div>
+
+
+		</div>
+		
+		
+
+	  </div>
+	  <div class="col-9">
 		<%@ include file="parts/posts.jsp"%>
 	  </div>
 

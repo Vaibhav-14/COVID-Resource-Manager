@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -107,6 +108,7 @@ public class UserController {
 		return "profile";
 	}
 	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping(value = "/block/{username}")
 	public String blockUser(@PathVariable String username) {
 		User user = userService.getUserFromUsername(username);
@@ -117,6 +119,7 @@ public class UserController {
 		
 	}
 	
+	@PreAuthorize("hasAuthority('ADMIN')")	
 	@GetMapping(value = "/unblock/{username}")
 	public String unblockUser(@PathVariable String username) {
 		User user = userService.getUserFromUsername(username);
@@ -153,10 +156,11 @@ public class UserController {
 
 	@PostMapping("/update") 
 	public String updateProfile(@ModelAttribute("user") User user, Model model, BindingResult results) {
+	
 		if(results.hasErrors())
 			return "update-profile";
 		userService.updateUserProfile(user);
-		return "redirect:/home";
+		return "redirect:/user/profile";
 	}
 	
 	@GetMapping("/checkPassword")

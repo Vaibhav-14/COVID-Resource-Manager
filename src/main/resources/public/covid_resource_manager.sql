@@ -27,7 +27,7 @@ CREATE TABLE `posts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(255) NOT NULL,
   `date_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `message` varchar(255) NOT NULL,
+  `message` varchar(1020) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`user_id`),
@@ -128,7 +128,8 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Champ','champ123','champ@gmail.com','champ@123','+910000011111','active','2000-01-01','male',1,'');
+INSERT INTO `users` VALUES (1,'Champ','champ123','champ@gmail.com','champ@123','+910000011111','0','2000-01-01','male',1,'');
+INSERT INTO `users` VALUES (2,'Tony','iron_man','iron_man@avengers.com','iron_man@123','+910000011111','0','2000-01-01','male',1,'Stark');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,7 +156,7 @@ CREATE TABLE `users_roles` (
 
 LOCK TABLES `users_roles` WRITE;
 /*!40000 ALTER TABLE `users_roles` DISABLE KEYS */;
-INSERT INTO `users_roles` VALUES (1,1),(1,2);
+INSERT INTO `users_roles` VALUES (1,1),(1,2), (2, 2);
 /*!40000 ALTER TABLE `users_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
