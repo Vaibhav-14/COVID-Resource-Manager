@@ -3,9 +3,13 @@ package com.mycompany.controller;
 import java.security.ProviderException;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +37,7 @@ public class PostController {
 	@Autowired
 	private UserService userService;
 		
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/create")
 	public String createPost(Model model) {
 		Post post = new Post();
@@ -40,13 +45,16 @@ public class PostController {
 		return "create-post";
 	}
 	
-	
+	@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/create")
-	public String savePost(@ModelAttribute("post") Post post) {
+	public String savePost(@Valid @ModelAttribute("post") Post post, BindingResult result) {
+		if(result.hasErrors())
+			return "create-post";
 		postService.addPost(post);
 		return "redirect:/home";
 	}
 	
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/update")
 	public String updatePost(@RequestParam(name = "id") int id, Model model) throws ProviderException {
 		
@@ -55,6 +63,7 @@ public class PostController {
 		return "update-post";
 	}
 	
+	@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/update") 
 	public String updatePost(@ModelAttribute("post") Post post, Model model) {
 		System.out.println(post.getComments().size());
@@ -118,12 +127,14 @@ public class PostController {
 		return "post";
 	}
 	
+	@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/report")
 	public String reportPost(@RequestParam(name = "id") int id ) {
 		postService.reportPost(id);
 		return "redirect:/";
 	}
 	
+	@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/share")
 	public String sharePost(@RequestParam(name="username") String username,@RequestParam(name="postID") int postID) {
 

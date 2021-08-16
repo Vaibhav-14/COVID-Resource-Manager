@@ -33,7 +33,7 @@
 	        <li class="nav-item">
 		      <form class="d-flex"  method = "POST" action = "/post/searchresult">
 		        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-		        <input name="searchentry" class="form-control autocomplete" type="search" placeholder="Search">
+		        <input name="searchentry" class="form-control autocomplete" type="search" placeholder="Search" required>
 		        <button class="btn btn-outline-success" type="submit">Search</button>  
 		      </form>   
 	        </li> 
@@ -53,7 +53,11 @@
 
       	<sec:authorize access="isAuthenticated()">
           <li class="nav-item">
-            <a class="nav-link active" href="${pageContext.request.contextPath}/notifications/"><i class="material-icons align-middle">notifications</i> </a>
+            <a class="nav-link active" href="${pageContext.request.contextPath}/notifications/">
+            <i class="material-icons align-middle">
+			  notifications
+            </i> 
+            </a>
           </li>  
         <li class="nav-item">
           <a class="nav-link active" href="/user/profile"><i class="material-icons align-middle">account_circle</i> ${pageContext.request.userPrincipal.name}</a>
