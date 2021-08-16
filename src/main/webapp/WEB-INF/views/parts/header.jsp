@@ -52,7 +52,11 @@
 
       	<sec:authorize access="isAuthenticated()">
           <li class="nav-item">
-            <a class="nav-link active" href="${pageContext.request.contextPath}/notifications/"><i class="material-icons align-middle">notifications</i> </a>
+            <a class="nav-link active" href="${pageContext.request.contextPath}/notifications/">
+            <i class="material-icons align-middle">
+			  notifications
+            </i> 
+            </a>
           </li>  
         <li class="nav-item">
           <a class="nav-link active" href="/user/profile"><i class="material-icons align-middle">account_circle</i> ${pageContext.request.userPrincipal.name}</a>
