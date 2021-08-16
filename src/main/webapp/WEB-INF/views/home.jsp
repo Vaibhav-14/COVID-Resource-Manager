@@ -9,10 +9,11 @@
 
 	  <div class="col">
 
-		<div class="d-none d-lg-block h-100" style="position:fixed; width:25%;">
+		<div class="d-none d-lg-block h-100 sticky-top" style="position:fixed; width:25%;">
 
 			<div class="container d-flex h-100">
-				<div class="row justify-content-center align-self-start">
+				<div class="row  align-self-start" style="margin-top: 100px;">
+
 
 					<div id="carouselControls" class="carousel carousel-dark slide border" data-bs-ride="carousel">
 						<div class="carousel-inner">
@@ -41,8 +42,22 @@
 						</button>
 					</div>
 
+					<!-- //http://localhost:8080/vaccination?pincode=492001&date=31-06-2021 -->
+					<div class = "p-2 border shadow-sm" style="margin-top: 25px;">
+						Find The Nearest Vaccination Centers to You today by entering your Pincode here:
+						<br> 
+						<form class="d-flex"  method = "GET" action = "/vaccination">
+							<input name="pincode" class="form-control" placeholder="Enter Pincode" required>
+							<button class="btn btn-outline-success" type="submit">Search</button>  
+						  </form> 
+	
+					</div>
+
 
 				</div>
+		
+
+
 			</div>
 
 
