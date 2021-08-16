@@ -203,7 +203,7 @@
 															  <a href="<c:url value="/post/searchresult" ><c:param name="searchentry" value="#${tag.name }" /></c:url>">
 															  	#${tag.name }
 															  </a>
-														  </span>
+														  	</span>
 														</c:forEach>
 														</div>
 													</small>

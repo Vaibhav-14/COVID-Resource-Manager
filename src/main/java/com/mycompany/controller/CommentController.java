@@ -17,7 +17,7 @@ public class CommentController {
 	@Autowired
 	private CommentService commentService;
 	
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasAuthority('USER')")
 	@PostMapping("/create")
 	public String saveComment(@ModelAttribute("comment") Comment comment) {
 		commentService.addComment(comment);
