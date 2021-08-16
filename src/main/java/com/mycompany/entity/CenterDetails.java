@@ -16,10 +16,6 @@ public class CenterDetails {
 @JsonProperty("sessions")
 private List<Session> sessions = null;
 
-/**
-* No args constructor for use in serialization
-*
-*/
 public CenterDetails() {
 }
 

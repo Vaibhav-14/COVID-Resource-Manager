@@ -1,6 +1,5 @@
 package com.mycompany.entity;
 
-import java.io.Serializable;
 import java.util.List;
 import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -33,8 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 "slots"
 })
 @Generated("jsonschema2pojo")
-public class Session implements Serializable
-{
+public class Session{
 
 @JsonProperty("center_id")
 private int centerId;
@@ -80,12 +78,8 @@ private boolean allowAllAge;
 private String vaccine;
 @JsonProperty("slots")
 private List<String> slots = null;
-private final static long serialVersionUID = -6817111731790064881L;
 
-/**
-* No args constructor for use in serialization
-*
-*/
+
 public Session() {
 }
 
