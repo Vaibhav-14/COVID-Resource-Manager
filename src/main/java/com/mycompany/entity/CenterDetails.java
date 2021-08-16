@@ -19,10 +19,6 @@ private List<Session> sessions = null;
 public CenterDetails() {
 }
 
-/**
-*
-* @param sessions
-*/
 public CenterDetails(List<Session> sessions) {
 super();
 this.sessions = sessions;
