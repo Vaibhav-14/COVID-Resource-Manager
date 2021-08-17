@@ -3,6 +3,16 @@
 <%@ include file="parts/header.jsp"%>
 
 
+<script type="text/javascript">
+function confirmation() {
+    var answer = confirm("Are you sure you want to delete your account?")
+    if (!answer){
+        return false;
+    }
+}
+</script>
+
+
 	<%
 		Object IsUsername = request.getAttribute("IsUsername");
 		Object tag = request.getAttribute("tag");
@@ -51,9 +61,7 @@
 		<form method="post" action = "/user/delete">
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		<input type="hidden" name="username" value="${user.username }"/>
-		<div class="sweetalert">
-		<button name="submit" type="submit" class ="btn btn-primary btn-danger">Delete Account</button>
-		</div>
+		<button onclick="return confirmation()" name="submit" type="submit" class ="btn btn-primary btn-danger">Delete Account</button>
 	</form>
 		</div>
 		<br>
