@@ -36,8 +36,6 @@ public class VaccinationController {
 
 		List<Session> vaccines = restTemplate.getForEntity(url, CenterDetails.class).getBody().getSessions();
 		
-		System.out.println(vaccines);
-
 		return new ModelAndView("vaccine","vaccines",vaccines);
 
 	}
