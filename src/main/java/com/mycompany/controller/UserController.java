@@ -134,6 +134,7 @@ public class UserController {
 	public String unblockUser(@PathVariable String username) {
 		User user = userService.getUserFromUsername(username);
 		user.setEnabled(1);
+		user.setWarnings(0);
 		userService.updateUser(user);
 		logger.info("Admin has removed suspension on account of " + username);
 		return "redirect:/user/profile?username="+username;
