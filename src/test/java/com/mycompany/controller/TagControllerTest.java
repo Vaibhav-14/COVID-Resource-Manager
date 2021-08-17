@@ -1,6 +1,7 @@
 package com.mycompany.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.hamcrest.CoreMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

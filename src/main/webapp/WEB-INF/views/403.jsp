@@ -3,10 +3,14 @@
 <title>Access Denied</title>
 </head>
 <body>
+<br>
 <center>
 
-<br><a href="/">HOMEPAGE</a>
+<a class="btn btn-primary" href="/" role="button">HOMEPAGE</a>
+
 <br><br>
+<div>
+<h2>
 <%
 	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -14,6 +18,9 @@
 		out.println("User '" + auth.getName() + "' attempted to access the protected URL: ");
 	}
 %>
+</h2>
+
+</div>
 </center>
 </body>
 </html>

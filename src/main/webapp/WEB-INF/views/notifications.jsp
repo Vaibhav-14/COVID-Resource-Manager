@@ -3,6 +3,11 @@
 <title>Notifications</title>
 <%@ include file="parts/header.jsp" %> 
 
+<%--
+<div class="container bg-secondary text-white text-center" style="height:300px">
+<h1 style=font-size:5vw>NOTIFICATIONS</h1>
+</div> --%>
+
 <div class="container">
 	<div class="row justify-content-md-center p-2">
 	  <div class="col-md-auto">
