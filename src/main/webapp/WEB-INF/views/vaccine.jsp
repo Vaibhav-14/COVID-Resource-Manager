@@ -1,8 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="parts/meta.jsp"%>
 
-<title>Vaccination</title>
-
+<title>Vaccination Slots</title>
 <%@ include file="parts/header.jsp"%>
 
 <div class= "p-3">
@@ -60,7 +59,5 @@
 
   </div>
 
-
-
-
 <%@ include file="parts/footer.jsp"%>
+

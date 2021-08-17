@@ -11,12 +11,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -34,11 +36,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.ui.Model;
 
+import com.mycompany.dao.IRoleFunctionDAO;
+import com.mycompany.dao.IUserFunctionDAO;
 import com.mycompany.entity.Post;
+import com.mycompany.entity.Role;
 import com.mycompany.entity.User;
 import com.mycompany.service.UserService;
 
@@ -52,6 +58,10 @@ public class UserControllerTest {
 	private MockMvc mockMvc;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private IRoleFunctionDAO roleDao ; 
+	@Autowired
+	private IUserFunctionDAO userDao ; 
 	
 	@Mock
 	Model model;
@@ -60,20 +70,32 @@ public class UserControllerTest {
 	public void setupAuthentication(){
 	    SecurityContextHolder.getContext().setAuthentication(new AnonymousAuthenticationToken("GUEST","USERNAME", AuthorityUtils.createAuthorityList("USER", "ADMIN")));
 	}
-	
+
 	@Test
 	public void contextLoads() throws Exception{
 		assertThat(userController).isNotNull();
+		Role role = new Role() ; 
+		role.setId(1);
+		role.setRole("USER");
+		roleDao.save(role) ; 
+		Role role1 = new Role() ; 
+		role1.setId(2);
+		role1.setRole("ADMIN");
+		roleDao.save(role1) ; 
 	}
 	
 	@Test
 	public void userControllerTest() throws Exception {
-	
 		//when(userService.updateUserProfile(user)).thenReturn(user);
 		
 		mockMvc.perform(get("/user/register")).andExpect(status().isOk()).andExpect(view().name("signup"));
 		
 		mockMvc.perform(get("/user/login")).andExpect(status().isOk()).andExpect(view().name("login"));
+		
+		mockMvc.perform(post("/user/changePassword")).andExpect(status().is3xxRedirection());
+		
+		mockMvc.perform(get("/user/checkPassword")).andExpect(status().is3xxRedirection());
+		
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -87,13 +109,14 @@ public class UserControllerTest {
 		user.setFirstname("Champ");
 		user.setLastname("OK");
 		user.setPassword("1123456789");
+		user.setRetypepassword(user.getPassword());
 		user.setMobile("1123456789") ; 
 		user.setWarnings(0);
 		
 		
 		try {
 		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		    Date parsedDate = dateFormat.parse(String.valueOf("2020-01-01"));
+		    Date parsedDate = dateFormat.parse(String.valueOf("2000-01-01"));
 		    user.setDateOfBirth(parsedDate);
 		} catch(Exception e) { 
 			System.out.println("Error : In Allocation of DOB to user");
@@ -102,31 +125,22 @@ public class UserControllerTest {
 		user.setGender("male");
 		user.setEnabled(1);
 		MockHttpServletRequestBuilder request = post("/user/register").flashAttr("user", user) ;
-		this.mockMvc.perform(request).andDo(print()).andExpect(status().isOk()) ; 
-		
-		try {
-		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		    Date parsedDate = dateFormat.parse(String.valueOf("1999-01-01"));
-		    user.setDateOfBirth(parsedDate);
-		} catch(Exception e) { 
-			System.out.println("Error : In Allocation of DOB to user");
-			e.printStackTrace();
-		}
-		request = post("/user/register").flashAttr("user", user) ;
-		this.mockMvc.perform(request).andDo(print()).andExpect(status().isOk()) ; 
-		
-		user.setRetypepassword("1123456789");
-		request = post("/user/register").flashAttr("user", user) ;
-		this.mockMvc.perform(request).andDo(print()).andExpect(status().isOk()) ; 
-		
+		this.mockMvc.perform(request).andDo(print()).andExpect(redirectedUrl("/user/login")).andExpect(view().name("redirect:/user/login")) ; 
+	
 		// Display Profile 
 		request = get("/user/profile").param("username", user.getUsername()) ;
 		this.mockMvc.perform(request).andDo(print()).andExpect(status().isOk()) ; 
 		
+		user.setUsername("Thor") ; 
+		Set<Role> roles = user.getRoles() ;
+		roles.add(roleDao.findById(2)) ; 
+		user.setRoles(roles) ; 
+		userDao.save(user) ; 
+		
 		// Block User 
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
-					      = new UsernamePasswordAuthenticationToken("Champ", "1123456789");
+					      = new UsernamePasswordAuthenticationToken("Thor", "1123456789");
 		AuthenticationManager auth = new AuthenticationManager() {
 									
 				@Override
@@ -142,12 +156,15 @@ public class UserControllerTest {
 		// UnBlock User
 		userController.unblockUser("Champ") ; 
 		
-		// Search User by Keyword
-		userController.getUsersByKeyword("Champ") ;
-		
 		// Update User
 		request = post("/user/update") ;
 		this.mockMvc.perform(request).andDo(print()).andExpect(status().is3xxRedirection()) ; 
+		System.out.println(user);
+		
+		// Search User by Keyword
+		userController.getUsersByKeyword("Champ") ;
+		
+		
 		
 		//Update User 
 		request = post("/user/update").flashAttr("user",  user) ;

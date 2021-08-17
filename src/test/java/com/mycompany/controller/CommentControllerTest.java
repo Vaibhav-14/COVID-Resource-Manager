@@ -1,17 +1,20 @@
 package com.mycompany.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.beans.PropertyEditor;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -19,6 +22,7 @@ import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.springframework.beans.PropertyEditorRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -36,6 +40,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 
 import com.mycompany.config.MyUserDetails;
 import com.mycompany.dao.IRoleFunctionDAO;
@@ -172,8 +180,233 @@ public class CommentControllerTest {
 		
 		// Adding Comment 
 		System.out.println(comment);
-		
-		assertDoesNotThrow( () -> commentController.saveComment(comment)) ;
+
+		BindingResult result = new BindingResult() {
+			
+			@Override
+			public void setNestedPath(String nestedPath) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void rejectValue(String field, String errorCode, Object[] errorArgs, String defaultMessage) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void rejectValue(String field, String errorCode, String defaultMessage) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void rejectValue(String field, String errorCode) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void reject(String errorCode, Object[] errorArgs, String defaultMessage) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void reject(String errorCode, String defaultMessage) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void reject(String errorCode) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void pushNestedPath(String subPath) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void popNestedPath() throws IllegalStateException {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public boolean hasGlobalErrors() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public boolean hasFieldErrors(String field) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public boolean hasFieldErrors() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public boolean hasErrors() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public String getObjectName() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public String getNestedPath() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public List<ObjectError> getGlobalErrors() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public int getGlobalErrorCount() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public ObjectError getGlobalError() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public Object getFieldValue(String field) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public Class<?> getFieldType(String field) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public List<FieldError> getFieldErrors(String field) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public List<FieldError> getFieldErrors() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public int getFieldErrorCount(String field) {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public int getFieldErrorCount() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public FieldError getFieldError(String field) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public FieldError getFieldError() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public int getErrorCount() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public List<ObjectError> getAllErrors() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public void addAllErrors(Errors errors) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public String[] resolveMessageCodes(String errorCode, String field) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public String[] resolveMessageCodes(String errorCode) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public Object getTarget() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public Object getRawFieldValue(String field) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public PropertyEditorRegistry getPropertyEditorRegistry() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public Map<String, Object> getModel() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public PropertyEditor findEditor(String field, Class<?> valueType) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public void addError(ObjectError error) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
+		System.out.println(comment);
+		assertDoesNotThrow( () -> commentController.saveComment(comment ,result )) ;
 		
 	}
 	
