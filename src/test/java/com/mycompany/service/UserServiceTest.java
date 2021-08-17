@@ -24,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.mycompany.entity.Post;
 import org.springframework.context.ApplicationContext;
@@ -52,13 +53,15 @@ public class UserServiceTest {
 	@Order(2)
 	@Test//(expected=Exception.class)
 	public void addUser() {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		User user = new User() ; 
 		user.setId(1);
 		user.setUsername("Champ");
 		user.setEmail("Champ@gmail.com");
 		user.setFirstname("Champ");
 		user.setLastname("OK");
-		user.setPassword("Thor");
+		user.setPassword(encoder.encode("Thor"));
+		user.setRetypepassword(encoder.encode("Thor"));
 		user.setMobile("1123456789") ; 
 		user.setWarnings(0);
 		try {
@@ -175,14 +178,36 @@ public class UserServiceTest {
 	
 	@Test
 	@Order(13)
+	public void changePassword() {
+		UsernamePasswordAuthenticationToken authReq
+		= new UsernamePasswordAuthenticationToken("Champ", "Thor");
+		AuthenticationManager auth = new AuthenticationManager() {
+
+			@Override
+			public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+				return authentication;
+			}
+		};
+		
+		SecurityContext sc = SecurityContextHolder.getContext();
+		sc.setAuthentication(auth.authenticate(authReq));
+		User user = userService.getUserFromUsername("Champ") ; 
+		assertDoesNotThrow(() -> userService.changePassword(user));
+		
+	}
+	
+	@Test
+	@Order(14)
 	public void deleteUserAccountNegative() {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		User user = new User() ; 
 		user.setId(2);
 		user.setUsername("Thor");
 		user.setEmail("Champ@gmail.com");
 		user.setFirstname("Champ");
 		user.setLastname("OK");
-		user.setPassword("Thor");
+		user.setPassword(encoder.encode("Thor"));
+		user.setRetypepassword(encoder.encode("Thor"));
 		user.setMobile("1123456789") ; 
 		user.setWarnings(0);
 		try {
@@ -222,7 +247,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	@Order(14)
+	@Order(15)
 	public void deleteUserAccount() {
 		// User Authentication
 		UsernamePasswordAuthenticationToken authReq
@@ -244,14 +269,6 @@ public class UserServiceTest {
 		if (user != null) {
 			userDao.delete(user);
 		}
-		
-	}
-	
-	@Test
-	@Order(15)
-	public void changePassword() {
-		User user = userService.getUserFromUsername("Champ") ; 
-		assertDoesNotThrow(() -> userService.changePassword(user));
 		
 	}
 	
