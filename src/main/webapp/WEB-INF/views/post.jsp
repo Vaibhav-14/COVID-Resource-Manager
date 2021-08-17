@@ -7,7 +7,7 @@
 	    <div class= "bg-light p-2">
 
 <c:choose>
-	<c:when test="${post == null}">
+	<c:when test="${empty post}">
 		<h3>Post is no longer available</h3>
 	</c:when>
 	<c:otherwise>
@@ -21,7 +21,6 @@
 							<div class="p-2" style="background-color: #E0F2F1;">
 						</c:if>
 						
-
 
 							<div class="container">
 								<div class="row">
@@ -96,7 +95,7 @@
 									<c:if
 										test="${pageContext.request.userPrincipal.name != post.user.username }">
 
-										<sec:authorize access="hasAuthority('USER')">
+										<sec:authorize access="hasAuthority('USER') or hasAuthority('ADMIN')">
 
 
 											<!-- Stuff goes here -->
@@ -109,15 +108,16 @@
 												</div>
 													<ul class="dropdown-menu"
 														aria-labelledby="dropdownMenuButton1">
-
+														<sec:authorize access="hasAuthority('USER')">
+														
 														<li>
 															
-																<form method="post" action = "/post/share">
-																	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-																	<input type="hidden" name="username" value="${pageContext.request.userPrincipal.name}"/>
-																	<input type="hidden" name="postID" value="${post.id}"/>
-																	<button name="submit" type="submit" class ="btn btn-light dropdown-item"> <i class="p-1 material-icons align-middle">share</i> Share</button>
-																</form>	
+															<form method="post" action = "/post/share">
+																<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+																<input type="hidden" name="username" value="${pageContext.request.userPrincipal.name}"/>
+																<input type="hidden" name="postID" value="${post.id}"/>
+																<button name="submit" type="submit" class ="btn btn-light dropdown-item"> <i class="p-1 material-icons align-middle">share</i> Share</button>
+															</form>	
 																
 														</li>
 
@@ -134,7 +134,7 @@
 															</button>
 
 														</li>
-
+														</sec:authorize>
 
 														<sec:authorize access="hasAuthority('ADMIN')">
 														<li>

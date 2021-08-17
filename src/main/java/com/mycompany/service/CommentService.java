@@ -77,7 +77,7 @@ public class CommentService {
 						" out of 5. After 5 warnings your account will get suspended.";
 
 				notificationService.saveNotification(null, activityType, "post", 
-									"/user/profile" + id, commentUser);
+									"/user/profile", commentUser);
 				if(commentUser.getWarnings()>5) {
 					logger.warn("The account of user : " + commentUser.getUsername() + " is suspended autometically due to 5 warnings");
 					commentUser.setEnabled(0);

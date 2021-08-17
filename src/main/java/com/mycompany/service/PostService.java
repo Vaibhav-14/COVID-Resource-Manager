@@ -110,12 +110,13 @@ public class PostService {
 			post = postDao.findById(id).get();
 			for (Tag tag : post.getTags()) {
 				str.append("#" + tag.getName() + " ");
-				post.setTagStr(str.toString()); 
+				post.setTagStr(str.toString());
+				sortComments(post);
 			}
 		} catch (Exception e) {
 			post = null;
 		}		
-		return sortComments(post);
+		return post;
 	}
 	
 
