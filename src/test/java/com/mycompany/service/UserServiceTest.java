@@ -247,5 +247,13 @@ public class UserServiceTest {
 		
 	}
 	
+	@Test
+	@Order(15)
+	public void changePassword() {
+		User user = userService.getUserFromUsername("Champ") ; 
+		assertDoesNotThrow(() -> userService.changePassword(user));
+		
+	}
+	
 
 }

@@ -35,6 +35,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.ui.Model;
@@ -90,19 +91,37 @@ public class UserControllerTest {
 		mockMvc.perform(get("/user/register")).andExpect(status().isOk()).andExpect(view().name("signup"));
 		
 		mockMvc.perform(get("/user/login")).andExpect(status().isOk()).andExpect(view().name("login"));
+		
+		UsernamePasswordAuthenticationToken authReq
+		= new UsernamePasswordAuthenticationToken("Thor", "1123456789");
+		AuthenticationManager auth = new AuthenticationManager() {
+
+			@Override
+			public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+				return authentication;
+			}
+		};
+		
+		SecurityContext sc = SecurityContextHolder.getContext();
+		sc.setAuthentication(auth.authenticate(authReq));
+		mockMvc.perform(get("/user/checkPassword")).andExpect(status().isOk()).andExpect(view().name("change-password"));
+		
+		mockMvc.perform(get("/user/changePassword")).andExpect(status().is3xxRedirection());
+		
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Test
 	@Transactional
 	public void registerUserTest() throws Exception {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		User user = new User() ; 
 		user.setId(1);
 		user.setUsername("Champ");
 		user.setEmail("Champ@gmail.com");
 		user.setFirstname("Champ");
 		user.setLastname("OK");
-		user.setPassword("1123456789");
+		user.setPassword(encoder.encode("1123456789"));
 		user.setMobile("1123456789") ; 
 		user.setWarnings(0);
 		
@@ -131,7 +150,7 @@ public class UserControllerTest {
 		request = post("/user/register").flashAttr("user", user) ;
 		this.mockMvc.perform(request).andDo(print()).andExpect(status().isOk()) ; 
 		
-		user.setRetypepassword("1123456789");
+		user.setRetypepassword(encoder.encode("1123456789"));
 		request = post("/user/register").flashAttr("user", user) ;
 		this.mockMvc.perform(request).andDo(print()).andExpect(status().isOk()) ; 
 		
