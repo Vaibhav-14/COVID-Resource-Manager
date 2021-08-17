@@ -50,7 +50,6 @@ public class TagController {
 	public String deleteTag(@PathVariable String name) {
 		Tag tag = tagService.getTagByName(name);
 		tagService.deleteTag(tag);
-		
 		return "redirect:/tag/create";
 		
 	}
