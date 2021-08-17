@@ -64,7 +64,7 @@ Kindly enter your old password to continue
 <div class="form-group row">
     <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg text-dark">Retype Password</label>
     <div class="col-sm-10">
-      <sf:input type="password" class="input form-control form-control-lg" id="password" placeholder="Enter new password" path = "retypepassword"/>
+      <sf:input type="password" class="input form-control form-control-lg" id="password" placeholder="Retype password" path = "retypepassword"/>
 	</div>
 </div>
 

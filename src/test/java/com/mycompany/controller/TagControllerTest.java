@@ -67,7 +67,7 @@ public class TagControllerTest {
 		tag.setName("vaccine");
 		tag.setPosts(null);
 		assertEquals("create-tag", tagController.addTags(model));
-		assertEquals("redirect:/", tagController.saveTags(tag));
+		assertEquals("redirect:/tag/create", tagController.saveTags(tag));
 		tagController.getTagsByKeyword("vaccine") ; 
 
 	}
