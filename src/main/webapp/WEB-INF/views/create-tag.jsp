@@ -5,7 +5,7 @@
 	
 	
 	<div class="formcontainer w-100 d-flex justify-content-center">
-		<div class="container bg-white rounded shadow-lg ">
+		<div class="container w-50 p-3 bg-white rounded shadow-lg ">
 	<div class = "row">
 		<div class="col text-center">
 			<h1> Create New Tag </h1>

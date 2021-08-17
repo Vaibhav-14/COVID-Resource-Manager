@@ -8,8 +8,10 @@
 <h1 class="text-center">Reset Password</h1>
 <br>
 <br>
-<div class="conatiner w-75 p-3 text-center bg-secondary" style = "horizontal-align: middle;margin-left: auto;
-    margin-right: auto;">
+
+<div
+	class="formcontainer w-100 h-100 p-5 d-flex justify-content-center vh-200">
+	<div class="container w-50 p-3 text-center bg-secondary rounded shadow-lg ">
 <sf:form modelAttribute="user" method="POST" action = "/user/checkPassword">
 
 <%-- Old Password : <sf:input path = "password"/> --%>
@@ -40,12 +42,15 @@ Kindly enter your old password to continue
 <sf:button class="btn btn-primary" type="submit" name="submit" value="submit">Continue</sf:button>
 </sf:form>
 </div>
+</div>
 </c:if>
 <c:if test="${isOldPasswordCorrect == true}">
 <h1 class="text-center">Change Password</h1>
 <br>
 <br>
-<div class="conatiner w-75 p-3 text-center bg-light" style = "horizontal-align: middle;margin-left: auto;
+<div
+	class="formcontainer w-100 h-100 p-5 d-flex justify-content-center vh-200">
+<div class="conatiner w-50 p-3 text-center bg-secondary" style = "horizontal-align: middle;margin-left: auto;
     margin-right: auto;">
 <sf:form modelAttribute="user" method="POST" action="/user/changePassword">
 
@@ -81,6 +86,7 @@ Kindly enter your old password to continue
 <sf:hidden path="dateOfBirth"/>
 <sf:button class="btn btn-primary" type="submit" name="submit" value="submit">Change Password</sf:button>
 </sf:form>
+</div>
 </div>
 </c:if>
 <%@ include file="parts/footer.jsp"%>
