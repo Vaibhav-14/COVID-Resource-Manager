@@ -35,6 +35,8 @@ public class VaccinationController {
 		String url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode="+ pincode + "&date="+ LocalDate.parse(date, formatter2).format(formatter);
 
 		List<Session> vaccines = restTemplate.getForEntity(url, CenterDetails.class).getBody().getSessions();
+		
+		System.out.println(vaccines);
 
 		return new ModelAndView("vaccine","vaccines",vaccines);
 

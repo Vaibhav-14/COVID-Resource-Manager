@@ -98,7 +98,7 @@ public class UserControllerTest {
 		
 	}
 	
-	@SuppressWarnings("deprecation")
+
 	@Test
 	@Transactional
 	public void registerUserTest() throws Exception {
