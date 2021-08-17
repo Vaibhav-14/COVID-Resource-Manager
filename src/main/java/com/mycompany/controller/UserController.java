@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -169,6 +170,51 @@ public class UserController {
 		if(results.hasErrors())
 			return "update-profile";
 		userService.updateUserProfile(user);
+		return "redirect:/user/profile";
+	}
+	
+	@GetMapping("/checkPassword")
+	public String enterOldPassword(Model model) {
+		User user = userService.getLoggedInUser();
+		user.setPassword(null);
+		model.addAttribute("user", user);
+		model.addAttribute("isOldPasswordCorrect", false);
+		return "change-password";
+	}
+	
+	@PostMapping("/checkPassword")
+	public String checkOldPassword(Model model, @Valid @ModelAttribute("user") User user, BindingResult results) {
+		User loggedInUser = userService.getLoggedInUser();
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		if(!encoder.matches(user.getPassword(), loggedInUser.getPassword())) {
+			results.rejectValue("password", "error.user", "Password Doesn't match");
+		}
+		if(results.hasErrors()) {
+			model.addAttribute("isOldPasswordCorrect", false);
+			return "change-password";
+		}
+		loggedInUser.setPassword(null);
+		model.addAttribute("isOldPasswordCorrect", true);
+		model.addAttribute("user",  loggedInUser);
+		return "change-password";
+	}
+	
+	@PostMapping("/changePassword")
+	public String saveNewPassword(Model model, @Valid @ModelAttribute("user") User user, BindingResult results) {
+		User loggedInUser = userService.getLoggedInUser();
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		if(encoder.matches(user.getPassword(), loggedInUser.getPassword())) {
+			results.rejectValue("password", "error.user", "New Password can't be same as Old Password");
+		}
+		if(!user.getPassword().equals(user.getRetypepassword())) 
+			results.rejectValue("retypepassword", "error.user","Confirmed Password is not the same");
+		if(results.hasErrors()) {
+			model.addAttribute("isOldPasswordCorrect", true);
+			return "change-password";
+		}
+		user.setPassword(encoder.encode(user.getPassword()));
+		userService.changePassword(user);
+		System.out.println(user.getPassword());
 		return "redirect:/user/profile";
 	}
 
