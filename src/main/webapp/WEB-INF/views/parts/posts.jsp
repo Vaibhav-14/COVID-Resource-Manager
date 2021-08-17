@@ -99,7 +99,7 @@
 											<c:if
 												test="${pageContext.request.userPrincipal.name != post.user.username }">
 
-												<sec:authorize access="hasAuthority('USER')">
+												<sec:authorize access="hasAuthority('USER') or hasAuthority('ADMIN')">
 
 
 													<!-- Stuff goes here -->
@@ -112,6 +112,7 @@
 														</div>
 															<ul class="dropdown-menu"
 																aria-labelledby="dropdownMenuButton1">
+																<sec:authorize access="hasAuthority('USER')">
 
 																<li>
 																	
@@ -137,6 +138,7 @@
 																	</button>
 
 																</li>
+																</sec:authorize>
 
 
 																<sec:authorize access="hasAuthority('ADMIN')">
