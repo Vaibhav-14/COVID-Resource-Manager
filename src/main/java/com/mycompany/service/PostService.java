@@ -39,6 +39,9 @@ public class PostService {
 	private UserService userService;
 	
 	@Autowired
+	private CommentService commentService;
+	
+	@Autowired
 	private TagService tagService;
 		
 	@Autowired
@@ -234,7 +237,7 @@ public class PostService {
 			
 			//copying values
 			
-			String referURL =   shareThisPost.getMessage()+"<br><a href= '/post/"+postID+"'>Go to Source Post</a>" ;
+			String referURL =   shareThisPost.getMessage();
 			
 			newPost.setMessage(referURL);
 			newPost.setTags(new HashSet<Tag>(shareThisPost.getTags()));
@@ -243,8 +246,14 @@ public class PostService {
 			newPost.setUser(user);
 			newPost.setDateTime(new Timestamp(System.currentTimeMillis()));
 			
+			
 			//saving the shared post as a new post in the db
 			postDao.save(newPost);
+			
+			Comment comment = new Comment();
+			comment.setPost(newPost);
+			comment.setContent("<a href= '/post/"+postID+"'>Go to Source Post</a>" );
+			commentService.addComment(comment);
 			
 			
 			//setting up a notification for sharing the post
